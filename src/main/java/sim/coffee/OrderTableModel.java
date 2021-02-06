@@ -6,19 +6,19 @@ import javax.swing.table.AbstractTableModel;
 public class OrderTableModel extends AbstractTableModel {
 
     private String[] columns = new String[] { "ID", "Item", "Price" };
-    OrderList orders;
+    OrderList orderList;
 
     OrderTableModel() {
         this(new OrderList());
     }
 
     OrderTableModel(OrderList orders) {
-        this.orders = orders;
+        this.orderList = orders;
     }
 
     @Override
     public int getRowCount() {
-        return orders.size();
+        return orderList.size();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class OrderTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Order rowOrder = orders.get(rowIndex);
+        Order rowOrder = orderList.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
