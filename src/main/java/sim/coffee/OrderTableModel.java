@@ -16,6 +16,11 @@ public class OrderTableModel extends AbstractTableModel {
         this.orderList = orders;
     }
 
+	@Override
+    public String getColumnName(int column) {
+        return columns[column];
+    }
+
     @Override
     public int getRowCount() {
         return orderList.size();
