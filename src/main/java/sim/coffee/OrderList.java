@@ -16,7 +16,7 @@ public void readFile() {
 			for(int i=0;scannerObject.hasNextLine();i++) {
 				lines[i]=scannerObject.nextLine();
 			}
-			//chessPlayerList.readChessPlayerListFile(lines);
+			//XXList.readxxListFile(lines);
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
