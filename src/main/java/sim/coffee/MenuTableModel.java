@@ -1,7 +1,5 @@
 package sim.coffee;
 
-import java.util.Set;
-
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial") // Not planning on serializing this
