@@ -1,14 +1,15 @@
 package sim.coffee;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test for MenuTableModel.
  */
-public class MenuTableModelTest {
+public class OrderTableModelTest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
@@ -16,11 +17,10 @@ public class MenuTableModelTest {
      * Ensure invalid column indexes throw an exception.
      */
     @Test
-    public void invalidIndexThrowsException()
-    {
-        Menu testMenu = new Menu();
-        testMenu.readFile("data/test/menu.csv");
-        MenuTableModel testModel = new MenuTableModel(testMenu);
+    public void invalidIndexThrowsException() {
+        OrderList testList = new OrderList();
+        testList.readFile("data/test/orders.csv");
+        OrderTableModel testModel = new OrderTableModel(testList);
 
         // Next method call should throw the exception
         exceptionRule.expect(IndexOutOfBoundsException.class);
@@ -30,13 +30,13 @@ public class MenuTableModelTest {
     }
 
     /**
-     * Ensure table model captures correct number of entries in the menu.
+     * Ensure table model captures correct number of entries in the order list.
      */
     @Test
     public void rowCount() {
-        Menu testMenu = new Menu();
-        testMenu.readFile("data/test/menu.csv");
-        MenuTableModel testModel = new MenuTableModel(testMenu);
+        OrderList testList = new OrderList();
+        testList.readFile("data/test/orders.csv");
+        OrderTableModel testModel = new OrderTableModel(testList);
 
         int count = testModel.getRowCount();
         assertEquals(3, count);
