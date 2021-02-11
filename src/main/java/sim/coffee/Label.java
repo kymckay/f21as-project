@@ -6,7 +6,7 @@ public enum Label {
 	COFFEE (1.5);
 	
 	private final double addOnPrice; //in pounds (£)
-									 //final price of a merchandise item is calculated by adding the addOnPrice to the base price
+					//final price of a merchandise item is calculated by adding the addOnPrice to the base price
 	
 	private Label(double addOnPrice) {
 		this.addOnPrice = addOnPrice;
