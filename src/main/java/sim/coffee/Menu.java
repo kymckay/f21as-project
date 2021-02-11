@@ -56,18 +56,18 @@ public class Menu {
 		try {
 			String details [] = line.split(","); // a local array list with object from the input line separated by a comma
 			
-			String id = details[0];
-			String description = details[1];
+			String id            = details[0];
+			String description   = details[1];
 			BigDecimal basePrice = new BigDecimal(details[2]);
 			
-			if (details[0].matches("^B")) {
+			if (details[0].matches("^B")) { //identify which MenuItem subclass the input line belongs to based on the id
 				
-				boolean isHot = Boolean.parseBoolean(details[3]);
+				boolean isHot = Boolean.parseBoolean(details[3]); //need to add boolean isHot values to the sample data
 				
-				String[] size    = details[4].split("|");
+				String[] size    = details[4].split("|"); // a local array list with object from the input line separated by |
 				Size[] sizeEnums = new Size[size.length - 1];
-				for(int i = 0; i < size.length; i++) {
-					sizeEnums[i] = Size.valueOf(size[i].toUpperCase());
+				for(int i = 0; i < size.length; i++) { //iterate through all the size array's elements and add them to sizeEnums array
+					sizeEnums[i] = Size.valueOf(size[i].toUpperCase()); //
 				}
 				
 				String[] milk      = details[5].split("|");
@@ -77,15 +77,17 @@ public class Menu {
 				}
 				
 				Beverage beverage = new Beverage(sizeEnums, isHot, milkEnums, id, basePrice, description);
+				//need to add .add() method
 				
 			} else if (details[0].matches("^F")) {
 				String[] dietaryClass = details[3].split("|");
 				DietaryClass[] dietaryEnums = new DietaryClass[dietaryClass.length - 1];
 				for(int i = 0; i < dietaryClass.length; i++) {
-					dietaryEnums[i] = DietaryClass.valueOf(dietaryClass[i].replace("\\s","").toUpperCase());
+					dietaryEnums[i] = DietaryClass.valueOf(dietaryClass[i].replace("\\s","").toUpperCase()); //remove whitespace in the input
 				}
 				
 				Food food = new Food(dietaryEnums, id, basePrice, description);
+				//need to add .add() method
 				
 			} else if (details[0].matches("^M")) {
 				String[] label = details[3].split("|");
@@ -101,6 +103,7 @@ public class Menu {
 				}
 				
 				Merchandise merch = new Merchandise(labelEnums, colourEnums, id, basePrice, description);
+				//need to add .add() method
 			} 
 
 		}
@@ -122,9 +125,6 @@ public class Menu {
 			System.exit(2);
 		}
 		
-		catch (IllegalIDException iie) {
-			System.out.println(iie.getMessage());
-		}
 	}
 
 }
