@@ -5,6 +5,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,6 +43,19 @@ public class CustomerGUI {
     private void setupMenu() {
         // Menu categories switched via panel of buttons at top of UI
         JPanel buttonPanel = new JPanel();
+        JButton foodButton = new JButton("Food");
+        JButton drinkButton = new JButton("Beverages");
+        JButton merchButton = new JButton("Merchandise");
+
+        // Buttons filter menu by item type
+        foodButton.addActionListener(e -> filterMenu("F"));
+        foodButton.addActionListener(e -> filterMenu("B"));
+        foodButton.addActionListener(e -> filterMenu("M"));
+
+        buttonPanel.add(foodButton);
+        buttonPanel.add(drinkButton);
+        buttonPanel.add(merchButton);
+        guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
 
         // Table element will list menu items available to add to cart
         JTable menuTable = new JTable(menu);
@@ -56,7 +70,6 @@ public class CustomerGUI {
         JScrollPane menuPane = new JScrollPane();
         menuPane.setViewportView(menuTable);
 
-        guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
         guiFrame.add(menuPane, BorderLayout.CENTER); // Section with menu table
     }
 
@@ -77,5 +90,9 @@ public class CustomerGUI {
         if (!e.getValueIsAdjusting()) {
             // TODO: Update menu item related controls here
         }
+    }
+
+    private void filterMenu(String itemType) {
+        // TODO: Filter the menu table and update the category controls
     }
 }
