@@ -1,5 +1,7 @@
 package sim.coffee;
 
+import java.math.BigDecimal;
+
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial") // Not planning on serializing this
@@ -19,6 +21,18 @@ public class OrderTableModel extends AbstractTableModel {
 	@Override
     public String getColumnName(int column) {
         return columns[column];
+    }
+
+    @Override
+    public Class<?> getColumnClass(int column) {
+        // Column class determines row sorting behaviour
+        // Without this, prices would incorrectly sort as strings
+        if (columns[column].equals("Price")) {
+            return BigDecimal.class;
+        }
+
+        // Any other column can safely be treated as a string
+        return String.class;
     }
 
     @Override
