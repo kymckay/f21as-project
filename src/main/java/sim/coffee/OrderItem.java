@@ -1,6 +1,6 @@
 package sim.coffee;
 
-public class OrderItem {
+public abstract class OrderItem {
 
 	public String displayString() {
 		return null;
