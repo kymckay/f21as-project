@@ -6,8 +6,8 @@ public abstract class OrderItem {
 
     private MenuItem menuItem;
 
-    public OrderItem(MenuItem m) {
-        menuItem = m;
+    public OrderItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
     }
     
     abstract BigDecimal getPrice();
