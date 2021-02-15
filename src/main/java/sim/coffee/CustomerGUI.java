@@ -22,10 +22,16 @@ public class CustomerGUI {
     private OrderList processed;
     private OrderTableModel basket;
 
+    // Menu table will be filterable by category using an applied row sorter
+    private TableRowSorter<MenuTableModel> menuSorter;
+
     CustomerGUI(MenuTableModel menu, OrderList processed, OrderTableModel basket) {
         this.menu = menu;
         this.processed = processed;
         this.basket = basket;
+
+        // Row sorter requires the table model to function correctly
+        menuSorter = new TableRowSorter<>(menu);
 
         guiFrame = new JFrame("Order Processing");
 
@@ -53,8 +59,7 @@ public class CustomerGUI {
         menuTable.getSelectionModel().addListSelectionListener(this::updateMenuControls);
 
         // Row sorter is used to apply filters to the table
-        TableRowSorter<MenuTableModel> sorter = new TableRowSorter<>(menu);
-        menuTable.setRowSorter(sorter);
+        menuTable.setRowSorter(menuSorter);
 
         // Scroll pane contains table to enable scrollbar
         JScrollPane menuPane = new JScrollPane();
@@ -70,9 +75,9 @@ public class CustomerGUI {
         JButton merchButton = new JButton("Merchandise");
 
         // Buttons filter menu by item type
-        foodButton.addActionListener(e -> filterMenu(sorter, "F"));
-        drinkButton.addActionListener(e -> filterMenu(sorter, "B"));
-        merchButton.addActionListener(e -> filterMenu(sorter, "M"));
+        foodButton.addActionListener(e -> filterMenu("F"));
+        drinkButton.addActionListener(e -> filterMenu("B"));
+        merchButton.addActionListener(e -> filterMenu("M"));
 
         buttonPanel.add(foodButton);
         buttonPanel.add(drinkButton);
@@ -99,8 +104,8 @@ public class CustomerGUI {
         }
     }
 
-    private void filterMenu(TableRowSorter<MenuTableModel> sorter, String idPrefix) {
+    private void filterMenu(String idPrefix) {
         // Categories can be differentiated by leading character of item ID (column 0)
-        sorter.setRowFilter(RowFilter.regexFilter("^" + idPrefix, 0));
+        menuSorter.setRowFilter(RowFilter.regexFilter("^" + idPrefix, 0));
     }
 }
