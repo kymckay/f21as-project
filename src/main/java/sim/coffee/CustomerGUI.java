@@ -11,7 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableRowSorter;
 
 public class CustomerGUI {
     private JFrame guiFrame;
@@ -41,22 +43,6 @@ public class CustomerGUI {
     }
 
     private void setupMenu() {
-        // Menu categories switched via panel of buttons at top of UI
-        JPanel buttonPanel = new JPanel();
-        JButton foodButton = new JButton("Food");
-        JButton drinkButton = new JButton("Beverages");
-        JButton merchButton = new JButton("Merchandise");
-
-        // Buttons filter menu by item type
-        foodButton.addActionListener(e -> filterMenu("F"));
-        drinkButton.addActionListener(e -> filterMenu("B"));
-        merchButton.addActionListener(e -> filterMenu("M"));
-
-        buttonPanel.add(foodButton);
-        buttonPanel.add(drinkButton);
-        buttonPanel.add(merchButton);
-        guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
-
         // Table element will list menu items available to add to cart
         JTable menuTable = new JTable(menu);
 
@@ -66,11 +52,32 @@ public class CustomerGUI {
         // Menu item controls differ per item, updated when list selection changes
         menuTable.getSelectionModel().addListSelectionListener(this::updateMenuControls);
 
+        // Row sorter is used to apply filters to the table
+        TableRowSorter<MenuTableModel> sorter = new TableRowSorter<>(menu);
+        menuTable.setRowSorter(sorter);
+
         // Scroll pane contains table to enable scrollbar
         JScrollPane menuPane = new JScrollPane();
         menuPane.setViewportView(menuTable);
 
-        guiFrame.add(menuPane, BorderLayout.CENTER); // Section with menu table
+        // Section with menu table
+        guiFrame.add(menuPane, BorderLayout.CENTER);
+
+        // Menu categories switched via panel of buttons at top of UI
+        JPanel buttonPanel = new JPanel();
+        JButton foodButton = new JButton("Food");
+        JButton drinkButton = new JButton("Beverages");
+        JButton merchButton = new JButton("Merchandise");
+
+        // Buttons filter menu by item type
+        foodButton.addActionListener(e -> filterMenu(sorter, "F"));
+        drinkButton.addActionListener(e -> filterMenu(sorter, "B"));
+        merchButton.addActionListener(e -> filterMenu(sorter, "M"));
+
+        buttonPanel.add(foodButton);
+        buttonPanel.add(drinkButton);
+        buttonPanel.add(merchButton);
+        guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
     }
 
     private void setupCheckout() {
@@ -92,7 +99,8 @@ public class CustomerGUI {
         }
     }
 
-    private void filterMenu(String itemType) {
-        // TODO: Filter the menu table and update the category controls
+    private void filterMenu(TableRowSorter<MenuTableModel> sorter, String idPrefix) {
+        // Categories can be differentiated by leading character of item ID (column 0)
+        sorter.setRowFilter(RowFilter.regexFilter("^" + idPrefix, 0));
     }
 }
