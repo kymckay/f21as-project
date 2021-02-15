@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-public class Menu {
-	
+public class Menu{
+		
 	public static void main(String args[]) 
 	{
 	
@@ -19,28 +19,39 @@ public class Menu {
 		menu.put(null, null);
 		menu.put(null, null);
 		
-		System.out.println("Keyset:" + menu.keySet());
+	}
 	
-		/*	public Set<Integer> keySet() {
-	    return menu.keySet();
-	  	}	*/
 	
-		//	Set<String> keys = hmap.keySet();
-	
-		/*	Iterator<Integer> it = keys.iterator();
-	  	while(it.hasNext()){
-	  	System.out.print(it.next());	*/
+	public void Menu()
+	{
 	
 	}
-    
+	
+	public Set<Integer> keySet()  //For keySet
+    {  
+	return menu.keySet();
+	}	
+
+/*	Set<String> keys = hmap.keySet();		//For keySet
+	System.out.println("keySet is:");
+	Iterator<Integer> it = keys.iterator();
+		while(it.hasNext()){
+		System.out.print(it.next());	*/
 	
 	
-	public void readFile() throws FileNotFoundException
+	
+	public void add(MenuItem m)
 	{
 		
-		File file = new File("input.txt");
+	}
+	
+	
+	public void readFile(String fileName) throws FileNotFoundException
+	{
+		
+		File menu = new File("input.txt");
 		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(file);
+		Scanner scan = new Scanner(menu);
 		
 		while(scan.hasNextLine()) 
 		{
@@ -48,5 +59,21 @@ public class Menu {
 		}
 	
 	}	
-
+	
+	
+	public void processLine(String line)
+	{
+		
+	}
+	
+	public String getReport()
+	{
+		return null;		
+	}
+	
+	public MenuItem getKey(String key)
+	{
+		return null;
+		
+	}
 }
