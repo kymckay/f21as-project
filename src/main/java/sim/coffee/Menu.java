@@ -6,43 +6,24 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.HashMap.KeySet;
 
 
 public class Menu{
-		
-	public static void main(String args[]) 
-	{
-	
-		HashMap<Integer, String> menu = new HashMap<Integer, String>();
-	
-		menu.put(null, null);
-		menu.put(null, null);
-		menu.put(null, null);
-		
-	}
-	
-	
-	public void Menu()
-	{
-	
-	}
-	
-	public Set<Integer> keySet()  //For keySet
-    {  
-	return menu.keySet();
-	}	
 
-/*	Set<String> keys = hmap.keySet();		//For keySet
-	System.out.println("keySet is:");
-	Iterator<Integer> it = keys.iterator();
-		while(it.hasNext()){
-		System.out.print(it.next());	*/
+	HashMap<String, MenuItem> Menu;
 	
 	
-	
-	public void add(MenuItem m)
+	public Menu()
 	{
+		Menu = new HashMap<String, MenuItem>();				
+	}
+	
+	
 		
+	public void add(String id, MenuItem m)
+	{
+		Menu.put(id, m);
 	}
 	
 	
@@ -54,8 +35,8 @@ public class Menu{
 		Scanner scan = new Scanner(menu);
 		
 		while(scan.hasNextLine()) 
-		{
-			System.out.println(scan.nextLine());
+		{			
+			processLine(scan.nextLine());
 		}
 	
 	}	
@@ -65,15 +46,24 @@ public class Menu{
 	{
 		
 	}
+
 	
 	public String getReport()
 	{
 		return null;		
 	}
+
 	
 	public MenuItem getKey(String key)
 	{
-		return null;
+		return MenuItem.id;
 		
 	}
+
+	
+	public Set<String> keyset()
+	{
+		return Menu.keySet();
+	}
+
 }
