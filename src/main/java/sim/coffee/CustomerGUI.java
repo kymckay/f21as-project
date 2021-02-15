@@ -49,8 +49,8 @@ public class CustomerGUI {
 
         // Buttons filter menu by item type
         foodButton.addActionListener(e -> filterMenu("F"));
-        foodButton.addActionListener(e -> filterMenu("B"));
-        foodButton.addActionListener(e -> filterMenu("M"));
+        drinkButton.addActionListener(e -> filterMenu("B"));
+        merchButton.addActionListener(e -> filterMenu("M"));
 
         buttonPanel.add(foodButton);
         buttonPanel.add(drinkButton);
