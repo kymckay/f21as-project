@@ -23,8 +23,9 @@ public class OrderMerchandise extends OrderItem {
 
     @Override
     public BigDecimal getPrice() {
-        // TODO generate additional cost feature
-        return menuItem.getBasePrice();
+        // TODO generate additional cost feature & getBasePrice()
+        return null;
+        // return menuItem.getBasePrice();
     }
     
 }
