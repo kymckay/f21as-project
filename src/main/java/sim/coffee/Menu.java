@@ -6,28 +6,27 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.HashMap.KeySet;
+//import java.util.HashMap.KeySet;
 
 
 public class Menu{
 
-	HashMap<String, MenuItem> Menu;
+	HashMap<String, MenuItem> Menu;		//Declared HashMap called Menu
 	
 	
-	public Menu()
+	public Menu()			//Constructor for class Menu
 	{
-		Menu = new HashMap<String, MenuItem>();				
+		Menu = new HashMap<String, MenuItem>();		
 	}
 	
-	
-		
-	public void add(String id, MenuItem m)
+			
+	public void add(String id, MenuItem m)		// Method to add String id(key) and MenuItem m(value)	
 	{
 		Menu.put(id, m);
 	}
 	
 	
-	public void readFile(String fileName) throws FileNotFoundException
+	public void readFile(String fileName) throws FileNotFoundException		//Method to read the csv file
 	{
 		
 		File menu = new File("input.txt");
@@ -36,13 +35,13 @@ public class Menu{
 		
 		while(scan.hasNextLine()) 
 		{			
-			processLine(scan.nextLine());
+			processLine(scan.nextLine());		//This should call the processLine method to process the file
 		}
 	
 	}	
 	
 	
-	public void processLine(String line)
+	public void processLine(String line)		//Code for ProcessLine to be brought over from LRbranch
 	{
 		
 	}
@@ -54,14 +53,14 @@ public class Menu{
 	}
 
 	
-	public MenuItem getKey(String key)
+	public MenuItem getKey(String key)		//Method to get key. Key is the id from MenuItem??
 	{
 		return MenuItem.id;
 		
 	}
 
 	
-	public Set<String> keyset()
+	public Set<String> keyset()		//keyset method to return set of keys.
 	{
 		return Menu.keySet();
 	}
