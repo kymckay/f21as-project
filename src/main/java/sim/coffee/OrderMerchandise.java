@@ -28,5 +28,5 @@ public class OrderMerchandise extends OrderItem {
         result = result.add(BigDecimal.valueOf(label.getAddOnPrice()));
         return result;
     }
-    
+
 }
