@@ -29,9 +29,14 @@ public class OrderBeverages extends OrderItem {
 
     @Override
     public BigDecimal getPrice() {
-        // TODO generate additional cost feature & getBasePrice()
-        return null;
-        // return menuItem.getBasePrice();
+        BigDecimal result = new BigDecimal(0);
+        // Get base price and add result
+        result = result.add(menuItem.getPrice());
+        // Add the addOn price of milk to result
+        result = result.add(BigDecimal.valueOf(milk.getAddOnPrice()));
+        // multiply result by a multiplier for its respectiver sizes
+        result = result.multiply(BigDecimal.valueOf(size.getCoefficient()));
+        return result;
     }
     
 }
