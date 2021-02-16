@@ -8,7 +8,7 @@ public class OrderBeverages extends OrderItem {
     private boolean isHot;
     private Milk milk;
 
-    public OrderBeverages(MenuItem m, Size s, boolean hot, Milk milk) {
+    public OrderBeverages(Size s, boolean hot, Milk milk, MenuItem m) {
         super(m);
         size = s;
         isHot = hot;
