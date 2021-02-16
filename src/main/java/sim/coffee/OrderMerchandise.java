@@ -7,7 +7,7 @@ public class OrderMerchandise extends OrderItem {
     private Label label;
     private Colour colour;
 
-    public OrderMerchandise(MenuItem m, Label lab, Colour col) {
+    public OrderMerchandise(Label lab, Colour col, MenuItem m) {
         super(m);
         label = lab;
         colour = col;
