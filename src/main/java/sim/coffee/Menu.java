@@ -7,47 +7,39 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.Set;
+//import java.util.HashMap.KeySet;
 
 
-public class Menu {
+public class Menu{
+
+	HashMap<String, MenuItem> menu;		//Declared HashMap called Menu
 	
-	public static void main(String args[]) 
+	
+	public Menu()			//Constructor for class Menu
 	{
-	
-		HashMap<Integer, String> menu = new HashMap<Integer, String>();
-	
-		menu.put(null, null);
-		menu.put(null, null);
-		menu.put(null, null);
-		
-		System.out.println("Keyset:" + menu.keySet());
-	
-		/*	public Set<Integer> keySet() {
-	    return menu.keySet();
-	  	}	*/
-	
-		//	Set<String> keys = hmap.keySet();
-	
-		/*	Iterator<Integer> it = keys.iterator();
-	  	while(it.hasNext()){
-	  	System.out.print(it.next());	*/
-	
+		menu = new HashMap<String, MenuItem>();		
 	}
-    
+	
+			
+	public void add(String id, MenuItem m)		// Method to add String id(key) and MenuItem m(value)	
+	{
+		menu.put(id, m);
+	}
 	
 	
-	public void readFile() throws FileNotFoundException
+	public void readFile(String fileName) throws FileNotFoundException		//Method to read the csv file
 	{
 		
-		File file = new File("input.txt");
+		File menu = new File("input.txt");
 		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(file);
+		Scanner scan = new Scanner(menu);
 		
 		while(scan.hasNextLine()) 
-		{
-			System.out.println(scan.nextLine());
+		{			
+			processLine(scan.nextLine());		//This should call the processLine method to process the file
 		}
 	
+
 	}
 	
 	public void processLine (String line) {
@@ -77,7 +69,7 @@ public class Menu {
 				}
 				
 				Beverage beverage = new Beverage(sizeEnums, isHot, milkEnums, id, basePrice, description);
-				menu.add(id, beverage);
+				this.add(id, beverage);
 				
 			} else if (details[0].matches("^F")) {
 				String[] dietaryClass = details[3].split("|");
@@ -87,7 +79,7 @@ public class Menu {
 				}
 				
 				Food food = new Food(dietaryEnums, id, basePrice, description);
-				menu.add(id, food);
+				this.add(id, food);
 				
 			} else if (details[0].matches("^M")) {
 				String[] label = details[3].split("|");
@@ -103,7 +95,7 @@ public class Menu {
 				}
 				
 				Merchandise merch = new Merchandise(labelEnums, colourEnums, id, basePrice, description);
-				menu.add(id, merch);
+				this.add(id, merch);
 			} 
 
 		}
@@ -128,6 +120,25 @@ public class Menu {
 		catch (IllegalIDException iie) {
 			System.out.println(iie.getMessage());
 		}
+	}
+
+	
+	public String getReport()
+	{
+		return null;		
+	}
+
+	
+	public MenuItem getKey(String key)		//Method to get key. Key is the id from MenuItem??
+	{
+		return MenuItem.id;
+		
+	}
+
+	
+	public Set<String> keyset()		//keyset method to return set of keys.
+	{
+		return Menu.keySet();
 	}
 
 }
