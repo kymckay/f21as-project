@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Iterator;
 import java.util.Set;
-//import java.util.HashMap.KeySet;
 
 
 public class Menu{
@@ -27,19 +25,19 @@ public class Menu{
 	}
 
 
-	public void readFile(String fileName) throws FileNotFoundException		//Method to read the csv file
+	public void readFile(String fileName) 		//Method to read the csv file
 	{
-
-		File menu = new File("input.txt");
-		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(menu);
-
-		while(scan.hasNextLine())
-		{
-			processLine(scan.nextLine());		//This should call the processLine method to process the file
+		try (
+			Scanner scan = new Scanner(new File(fileName));
+		) {
+			while (scan.hasNextLine()) {
+				processLine(scan.nextLine()); // This should call the processLine method to process the file
+			}
+		} catch (FileNotFoundException e) {
+			// If input file is missing program can't continue
+			e.printStackTrace();
+			System.exit(1);
 		}
-
-
 	}
 
 	public void processLine (String line) {
