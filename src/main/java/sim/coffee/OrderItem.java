@@ -1,9 +1,15 @@
 package sim.coffee;
 
+import java.math.BigDecimal;
+
 public abstract class OrderItem {
 
-	public String displayString() {
-		return null;
-	}
+    protected MenuItem menuItem;
+
+    public OrderItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
+    }
+
+    abstract BigDecimal getPrice();
 
 }
