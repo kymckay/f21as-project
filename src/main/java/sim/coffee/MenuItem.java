@@ -15,7 +15,7 @@ abstract public class MenuItem {
 		
 		boolean idMatches = id.matches("^[FMB]\\d{3}");
 		if (idMatches) {
-			this.id          = id;
+			this.id      = id;
 		} else {
 			throw new IllegalIDException(id);
 		}

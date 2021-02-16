@@ -60,13 +60,13 @@ public class Menu {
 			String description = details[1];
 			BigDecimal basePrice = new BigDecimal(details[2]);
 			
-			if (details[0].matches("^B")) {
+			if (details[0].matches("^B")) { //identify which MenuItem subclass the input line belongs to based on the id
 				
 				boolean isHot = Boolean.parseBoolean(details[3]);
 				
-				String[] size    = details[4].split("|");
+				String[] size    = details[4].split("|"); // a local array list with object from the input line separated by |
 				Size[] sizeEnums = new Size[size.length - 1];
-				for(int i = 0; i < size.length; i++) {
+				for(int i = 0; i < size.length; i++) { //iterate through all the size array's elements and add them to sizeEnums array
 					sizeEnums[i] = Size.valueOf(size[i].toUpperCase());
 				}
 				
@@ -77,6 +77,7 @@ public class Menu {
 				}
 				
 				Beverage beverage = new Beverage(sizeEnums, isHot, milkEnums, id, basePrice, description);
+				menu.add(id, beverage);
 				
 			} else if (details[0].matches("^F")) {
 				String[] dietaryClass = details[3].split("|");
@@ -86,6 +87,7 @@ public class Menu {
 				}
 				
 				Food food = new Food(dietaryEnums, id, basePrice, description);
+				menu.add(id, food);
 				
 			} else if (details[0].matches("^M")) {
 				String[] label = details[3].split("|");
@@ -101,6 +103,7 @@ public class Menu {
 				}
 				
 				Merchandise merch = new Merchandise(labelEnums, colourEnums, id, basePrice, description);
+				menu.add(id, merch);
 			} 
 
 		}
