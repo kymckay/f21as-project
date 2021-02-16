@@ -22,5 +22,5 @@ public class Merchandise extends MenuItem {
     public Colour[] getColours() {
     	return colours;
     }
-  
+
 }
