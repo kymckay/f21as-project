@@ -5,18 +5,29 @@ import java.math.BigDecimal;
 public class Beverage extends MenuItem {
 	
 	//instance variables
+	
 	private Size[]  sizes;
 	private boolean canBeHot;
 	private Milk[]  milks;
+	private String  id;
 	
 	//constructor
 	public Beverage(Size[] sizes, boolean canBeHot, Milk[] milks, 
 					String id, BigDecimal price, String description) throws IllegalIDException{
 		
-		super(id, price, description);
+		super(price, description);
+		
 		this.sizes    = sizes;
 		this.canBeHot = canBeHot;
 		this.milks    = milks;
+		
+		boolean idMatches = id.matches("^[B]\\d{3}"); //Beverage ID has to match the following regex pattern
+		
+		if (idMatches) {
+			this.id      = id;
+		} else {
+			throw new IllegalIDException(id);
+		}
 	
 	}
 	//getter methods
@@ -30,6 +41,10 @@ public class Beverage extends MenuItem {
 	
 	public Milk[] getMilks() {
 		return milks;
+	}
+	
+	public String getID() {
+		return id;
 	}
 	
 }
