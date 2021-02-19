@@ -10,16 +10,14 @@ import java.util.Scanner;
 
 public class OrderList {
 
-	LinkedList<Order> OrderList;	
-	// LinkedList has been declared
+	LinkedList<Order> orders;	// LinkedList has been declared
 	
 	public OrderList()		// Constructor for orderLisr=t is created
 	{
-		OrderList= new LinkedList<Order>();
+		orders= new LinkedList<Order>();
 	}	
 	
-	public void readFile(String fileName) {  /* 1. Is process line method same as that in menu class
-											    2. Method to read CSV file*/
+	public void readFile(String fileName) {  // Method to read the file
 		
 		File inputFileObject = new File("input.txt"); 
 		Scanner scannerObject;
@@ -27,17 +25,19 @@ public class OrderList {
 		try {
 			
 			scannerObject = new Scanner(inputFileObject);
-			for(int i=0;scannerObject.hasNextLine();i++)
-			{
+			while(scannerObject.hasNextLine()) {
+				
 				processLine(scannerObject.nextLine());
+				
 			}
+	
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} 
 		}
     
-		public void processLine(String Line)
+		public void processLine(String Line) // Method to process the file
 		{
 			try
 			{
@@ -45,18 +45,18 @@ public class OrderList {
 				{
 					String[] words = Line.split(",");
 					
-					if (words[3].matches("^B"))
+					if (words[2].matches("^B"))
 					{
 						OrderBeverage orderBeverage = new OrderBeverage(word[3],word[4],word[5],new MenuItem(word[2],
 															MenuTableModel.getValueAt(word[2],2)),
 															MenuTableModel.getValueAt(word[2],1))
 															)); 
-						OrderList.add(new Order(word[0],word[1],orderBeverage,MenuTableModel.getValueAt(word[2],2))); // use menutable model object and get the price
+						orders.add(new Order(word[0],word[1],orderBeverage,MenuTableModel.getValueAt(word[2],2))); // use menutable model object and get the price
 						
 					}
 					
 					
-					if (words[4].matches("^F"))
+					if (words[2].matches("^F"))
 					{
 
 						OrderFood orderFood = new OrderFood(,new MenuItem(word[2],
@@ -64,12 +64,12 @@ public class OrderList {
 															MenuTableModel.getValueAt(word[2],1))
 															)); 
 						
-						OrderList.add(new Order(word[0],word[1],orderFood,MenuTableModel.getValueAt(word[2],2))); // use menutable model object and get the price
+						orders.add(new Order(word[0],word[1],orderFood,MenuTableModel.getValueAt(word[2],2))); // use menutable model object and get the price
 						
 					}
 
 					
-					if (words[5].matches("^M"))
+					if (words[2].matches("^M"))
 					{
 						
 						OrderMerchandise orderMerchandise = new OrderMerchandise(word[3],word[4],new MenuItem(word[2],
@@ -77,7 +77,7 @@ public class OrderList {
 								MenuTableModel.getValueAt(word[2],1))
 								)); 
 
-						OrderList.add(new Order(word[0],word[1],orderFood,MenuTableModel.getValueAt(word[2],2))); // use menutable model object and get the price
+						orders.add(new Order(word[0],word[1],orderFood,MenuTableModel.getValueAt(word[2],2))); // use menutable model object and get the price
 
 					}
 					
@@ -107,31 +107,32 @@ public class OrderList {
 		
 		public boolean add(Order o)   // Method to add values to the LinkedList
 		{
-			return OrderList.add(o);
+			return orders.add(o);
 			
 		}
 		
-		public String getReport() // What should get report return
+		public String getReport() 
 		{
 			return null;
 			
 		}
 		
 		
-		public BigDecimal getTotalIncome() // Will this be implemented in GUI ?
+		public BigDecimal getTotalIncome() // Method to get the total income
 		{
-			BigDecimal sum = 0;
+			BigDecimal sum = new BigDecimal(0.0);
 			
-			for(int i=0;i<OrderList.size();i++)
-			{
-				sum += Order.getPricePaid(); // sum +?d
+			for (Order o : orders) {
+				
+				sum.add(Order.getPricePaid()); 
 			}
+			
 			return sum;
 			
 		}
 		
-		public int size()
+		public int size() // Getting size of LinkedList
 		{
-			return OrderList.size();
+			return orders.size();
 		}
 }
