@@ -114,8 +114,7 @@ public class OrderList {
 		BigDecimal sum = new BigDecimal(0.0);
 
 		for (Order o : orders) {
-
-			sum.add(Order.getPricePaid());
+			sum = sum.add(o.getPricePaid());
 		}
 
 		return sum;
