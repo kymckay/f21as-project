@@ -2,14 +2,13 @@ package sim.coffee;
 
 import java.math.BigDecimal;
 
-public class OrderBeverages extends OrderItem {
+public class OrderBeverage extends OrderItem {
 
     private Size size;
     private boolean isHot;
     private Milk milk;
 
-    public OrderBeverages(Size s, boolean hot, Milk milk, MenuItem m) {
-        super(m);
+    public OrderBeverage(Size s, boolean hot, Milk milk) {
         size = s;
         isHot = hot;
         this.milk = milk;
@@ -29,14 +28,14 @@ public class OrderBeverages extends OrderItem {
 
     @Override
     public BigDecimal getPrice() {
-        BigDecimal result = new BigDecimal(0);
+        BigDecimal result = new BigDecimal("0");
         // Get base price and add result
-        result = result.add(menuItem.getPrice());
+        result = result.add(new BigDecimal("0"));
         // Add the addOn price of milk to result
         result = result.add(BigDecimal.valueOf(milk.getAddOnPrice()));
         // multiply result by a multiplier for its respectiver sizes
         result = result.multiply(BigDecimal.valueOf(size.getCoefficient()));
         return result;
     }
-    
+
 }

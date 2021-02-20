@@ -39,41 +39,47 @@ public class OrderList {
 	}
 
 		public void processLine(String line) {
-			if (line.split(",").length >= 2) {
-				String[] cols = line.split(",");
+			// Split regex trims excess whitespace near commas
+			String[] cols = line.split("\s*,\s*");
 
+			// 4 properties common to all product types
+			if (cols.length >= 4) {
 				LocalDateTime timestamp = LocalDateTime.parse(cols[0]);
 				String custId = cols[1];
 				String itemId = cols[2];
+				BigDecimal paid = new BigDecimal(cols[3]);
 
+				// OrderItem subclasses store the item permutations ordered
 				OrderItem newItem;
 
 				// First character of item ID diferentiates the types
+				// Each type has different possible properties in remaining file columns
 				switch (itemId.substring(0,1)) {
 					case "B":
-						newItem = new OrderBeverage(cols[3],cols[4],cols[5],new MenuItem(cols[2],
-							MenuTableModel.getValueAt(cols[2],2)),
-							MenuTableModel.getValueAt(cols[2],1))
-							));
+						Size size = Size.valueOf(cols[4]);
+						boolean isHot = Boolean.parseBoolean(cols[5]);
+						Milk milk = Milk.valueOf(cols[6]);
+
+						newItem = new OrderBeverage(size, isHot, milk);
 						break;
 					case "F":
-						newItem = new OrderFood(,new MenuItem(cols[2],
-							MenuTableModel.getValueAt(cols[2],2)),
-							MenuTableModel.getValueAt(cols[2],1))
-							));
+						// Food items are simple
+						newItem = new OrderFood();
 						break;
 					case "M":
-						newItem = new OrderMerchandise(cols[3],cols[4],new MenuItem(cols[2],
-							MenuTableModel.getValueAt(cols[2],2)),
-							MenuTableModel.getValueAt(cols[2],1))
-							));
+						Label label = Label.valueOf(cols[4]);
+						Colour colour = Colour.valueOf(cols[5]);
+
+						newItem = new OrderMerchandise(label, colour);
 						break;
 					default:
 						// TODO: Throw exception here
 						break;
 				}
 
-				orders.add(new Order(timestamp, custId, newItem, new BigDecimal("0")));
+				orders.add(new Order(timestamp, custId, newItem, paid));
+			} else {
+				// TODO: Throw exception here
 			}
 		}
 
