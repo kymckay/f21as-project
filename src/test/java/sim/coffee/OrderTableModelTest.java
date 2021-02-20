@@ -2,6 +2,8 @@ package sim.coffee;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.FileNotFoundException;
+
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,12 +16,17 @@ public class OrderTableModelTest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
-    static OrderList testList = new OrderList();
+    static OrderList testList;
     static OrderTableModel testModel = new OrderTableModel(testList);
 
     @BeforeClass
     public static void init() {
-        testList.readFile("data/test/orders.csv");
+        try {
+            testList = new OrderList("data/test/orders.csv");
+        } catch (FileNotFoundException e) {
+            // Test cannot pass if file was not found
+            System.exit(1);
+        }
     }
 
     /**
