@@ -39,7 +39,7 @@ public class OrderList {
 
 	public void processLine(String line) {
 		// Split regex trims excess whitespace near commas
-		String[] cols = line.split("\s*,\s*");
+		String[] cols = line.split("\\s*,\\s*");
 
 		// 4 properties common to all product types
 		if (cols.length >= 4) {
