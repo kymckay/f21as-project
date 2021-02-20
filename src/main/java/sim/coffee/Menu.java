@@ -10,31 +10,28 @@ import java.util.Set;
 
 public class Menu {
 
-	HashMap<String, MenuItem> menu = new HashMap<>();
+	HashMap<String, MenuItem> menuMap = new HashMap<>();
 
-	public Menu(String filename) {
+	public Menu(String filename) throws FileNotFoundException {
 		readFile(filename);
 	}
 
-	public void add(String id, MenuItem m)		// Method to add String id(key) and MenuItem m(value)
-	{
-		menu.put(id, m);
+	public void add(String id, MenuItem m) {
+		menuMap.put(id, m);
 	}
 
+	// No graceful way to handle a missing file, pass exception up to decide how to
+	// proceed in context
+	public void readFile(String filename) throws FileNotFoundException {
+		File inputFile = new File(filename);
 
-	public void readFile(String fileName) throws FileNotFoundException		//Method to read the csv file
-	{
-
-		File menu = new File("input.txt");
-		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(menu);
-
-		while(scan.hasNextLine())
-		{
-			processLine(scan.nextLine());		//This should call the processLine method to process the file
+		try (
+			Scanner scan = new Scanner(inputFile);
+		) {
+			while (scan.hasNextLine()) {
+				processLine(scan.nextLine());
+			}
 		}
-
-
 	}
 
 	private void processLine (String line) {
@@ -133,13 +130,13 @@ public class Menu {
 
 	public MenuItem getKey(String key)		//Method to get key. Key is the id from MenuItem??
 	{
-		return menu.get(key);
+		return menuMap.get(key);
 	}
 
 
 	public Set<String> keySet()		//keyset method to return set of keys.
 	{
-		return menu.keySet();
+		return menuMap.keySet();
 	}
 
 }

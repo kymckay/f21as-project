@@ -13,11 +13,13 @@ public class OrderList {
 
 	LinkedList<Order> orders = new LinkedList<>();
 
-	public OrderList(String filename) {
+	public OrderList(String filename) throws FileNotFoundException {
 		readFile(filename);
 	}
 
-	public void readFile(String filename) {  // Method to read the file
+	// No graceful way to handle a missing file, pass exception up to decide how to
+	// proceed in context
+	public void readFile(String filename) throws FileNotFoundException {
 		File inputFile = new File(filename);
 
 		try (
@@ -26,8 +28,6 @@ public class OrderList {
 			while (scanner.hasNextLine()) {
 				processLine(scanner.nextLine());
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 
