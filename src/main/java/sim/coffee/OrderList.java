@@ -46,34 +46,34 @@ public class OrderList {
 				String custId = cols[1];
 				String itemId = cols[2];
 
+				OrderItem newItem;
+
+				// First character of item ID diferentiates the types
 				switch (itemId.substring(0,1)) {
 					case "B":
-						OrderBeverage orderBeverage = new OrderBeverage(cols[3],cols[4],cols[5],new MenuItem(cols[2],
-															MenuTableModel.getValueAt(cols[2],2)),
-															MenuTableModel.getValueAt(cols[2],1))
-															));
-						orders.add(new Order(timestamp, cols[1],orderBeverage,MenuTableModel.getValueAt(cols[2],2))); // use menutable model object and get the price
+						newItem = new OrderBeverage(cols[3],cols[4],cols[5],new MenuItem(cols[2],
+							MenuTableModel.getValueAt(cols[2],2)),
+							MenuTableModel.getValueAt(cols[2],1))
+							));
 						break;
 					case "F":
-						OrderFood orderFood = new OrderFood(,new MenuItem(cols[2],
-															MenuTableModel.getValueAt(cols[2],2)),
-															MenuTableModel.getValueAt(cols[2],1))
-															));
-
-						orders.add(new Order(timestamp, cols[1],orderFood,MenuTableModel.getValueAt(cols[2],2))); // use menutable model object and get the price
+						newItem = new OrderFood(,new MenuItem(cols[2],
+							MenuTableModel.getValueAt(cols[2],2)),
+							MenuTableModel.getValueAt(cols[2],1))
+							));
 						break;
 					case "M":
-						OrderMerchandise orderMerchandise = new OrderMerchandise(cols[3],cols[4],new MenuItem(cols[2],
-								MenuTableModel.getValueAt(cols[2],2)),
-								MenuTableModel.getValueAt(cols[2],1))
-								));
-
-						orders.add(new Order(timestamp, cols[1],orderFood,MenuTableModel.getValueAt(cols[2],2))); // use menutable model object and get the price
+						newItem = new OrderMerchandise(cols[3],cols[4],new MenuItem(cols[2],
+							MenuTableModel.getValueAt(cols[2],2)),
+							MenuTableModel.getValueAt(cols[2],1))
+							));
 						break;
 					default:
 						// TODO: Throw exception here
 						break;
 				}
+
+				orders.add(new Order(timestamp, custId, newItem, new BigDecimal("0")));
 			}
 		}
 
