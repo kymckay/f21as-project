@@ -104,7 +104,7 @@ public class OrderList {
 
 	public BigDecimal getTotalIncome() // Method to get the total income
 	{
-		BigDecimal sum = new BigDecimal(0.0);
+		BigDecimal sum = new BigDecimal("0");
 
 		for (Order o : orders) {
 			sum = sum.add(o.getPricePaid());
