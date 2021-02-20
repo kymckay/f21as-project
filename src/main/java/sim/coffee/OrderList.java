@@ -18,20 +18,14 @@ public class OrderList {
 	}
 
 	public void readFile(String filename) {  // Method to read the file
+		File inputFile = new File(filename);
 
-		File inputFileObject = new File(filename);
-		Scanner scannerObject;
-
-		try {
-
-			scannerObject = new Scanner(inputFileObject);
-			while(scannerObject.hasNextLine()) {
-
-				processLine(scannerObject.nextLine());
-
+		try (
+				Scanner scanner = new Scanner(inputFile);
+		) {
+			while (scanner.hasNextLine()) {
+				processLine(scanner.nextLine());
 			}
-
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
