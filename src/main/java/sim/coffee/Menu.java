@@ -5,21 +5,16 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Iterator;
 import java.util.Set;
-//import java.util.HashMap.KeySet;
 
 
-public class Menu{
+public class Menu {
 
-	HashMap<String, MenuItem> menu;		//Declared HashMap called Menu
+	HashMap<String, MenuItem> menu = new HashMap<>();
 
-
-	public Menu()			//Constructor for class Menu
-	{
-		menu = new HashMap<String, MenuItem>();
+	public Menu(String filename) {
+		readFile(filename);
 	}
-
 
 	public void add(String id, MenuItem m)		// Method to add String id(key) and MenuItem m(value)
 	{

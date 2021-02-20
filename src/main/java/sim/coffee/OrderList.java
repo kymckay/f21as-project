@@ -11,11 +11,10 @@ import java.util.Scanner;
 
 public class OrderList {
 
-	LinkedList<Order> orders;	// LinkedList has been declared
+	LinkedList<Order> orders = new LinkedList<>();
 
-	public OrderList()		// Constructor for orderLisr=t is created
-	{
-		orders= new LinkedList<Order>();
+	public OrderList(String filename) {
+		readFile(filename);
 	}
 
 	public void readFile(String fileName) {  // Method to read the file
