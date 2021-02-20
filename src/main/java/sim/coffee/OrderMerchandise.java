@@ -7,8 +7,7 @@ public class OrderMerchandise extends OrderItem {
     private Label label;
     private Colour colour;
 
-    public OrderMerchandise(MenuItem m, Label lab, Colour col) {
-        super(m);
+    public OrderMerchandise(Label lab, Colour col) {
         label = lab;
         colour = col;
     }
@@ -23,9 +22,10 @@ public class OrderMerchandise extends OrderItem {
 
     @Override
     public BigDecimal getPrice() {
-        // TODO generate additional cost feature & getBasePrice()
-        return null;
-        // return menuItem.getBasePrice();
+        BigDecimal result = new BigDecimal(0);
+        result = result.add(new BigDecimal("0"));
+        result = result.add(BigDecimal.valueOf(label.getAddOnPrice()));
+        return result;
     }
-    
+
 }
