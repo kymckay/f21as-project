@@ -72,13 +72,12 @@ public class OrderList {
 					newItem = new OrderMerchandise(label, colour);
 					break;
 				default:
-					// TODO: Throw exception here
-					break;
+					throw new IllegalArgumentException("Line contains invalid Item ID");
 			}
 
 			orders.add(new Order(timestamp, custId, newItem, paid));
 		} else {
-			// TODO: Throw exception here
+			throw new IllegalArgumentException("Line contains too few values");
 		}
 	}
 
