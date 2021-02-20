@@ -17,9 +17,9 @@ public class OrderList {
 		readFile(filename);
 	}
 
-	public void readFile(String fileName) {  // Method to read the file
+	public void readFile(String filename) {  // Method to read the file
 
-		File inputFileObject = new File("input.txt");
+		File inputFileObject = new File(filename);
 		Scanner scannerObject;
 
 		try {
