@@ -37,7 +37,7 @@ public class Menu {
 
 	}
 
-	public void processLine (String line) {
+	private void processLine (String line) {
 
 
 		try {

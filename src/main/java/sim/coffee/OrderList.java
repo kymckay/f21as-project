@@ -31,7 +31,7 @@ public class OrderList {
 		}
 	}
 
-	public void processLine(String line) {
+	private void processLine(String line) {
 		// Split regex trims excess whitespace near commas
 		String[] cols = line.split("\\s*,\\s*");
 
