@@ -14,7 +14,9 @@ public class OrderList {
 
 	LinkedList<Order> orders = new LinkedList<>();
 
-	public OrderList(String filename) throws FileNotFoundException {
+	OrderList() {}
+
+	OrderList(String filename) throws FileNotFoundException {
 		readFile(filename);
 	}
 
