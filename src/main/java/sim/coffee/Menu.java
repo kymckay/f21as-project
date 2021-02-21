@@ -28,16 +28,23 @@ public class Menu {
 	public void readFile(String filename) throws FileNotFoundException {
 		File inputFile = new File(filename);
 
+		// Track parsed lines for useful error output
+		int line = 1;
+
 		try (
 			Scanner scan = new Scanner(inputFile);
 		) {
 			while (scan.hasNextLine()) {
 				processLine(scan.nextLine());
+				line++;
 			}
+		}
+		catch (IllegalIDException e) {
+			System.out.println("Parsing error on line " + line + ": " + e.getMessage());
 		}
 	}
 
-	private void processLine (String line) {
+	private void processLine (String line) throws IllegalIDException {
 		// Splitting with regex trims excess whitespace near commas
 		String details [] = line.split("\\s*,\\s*");
 
