@@ -7,4 +7,9 @@ public class OrderFood extends OrderItem {
     public BigDecimal getPrice() {
         return new BigDecimal("0");
     }
+
+    @Override
+    String detailsString() {
+        return "";
+    }
 }

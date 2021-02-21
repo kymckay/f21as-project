@@ -38,4 +38,9 @@ public class OrderBeverage extends OrderItem {
         return result;
     }
 
+    @Override
+    String detailsString() {
+        return String.format("%s|%b|%s", size, isHot, milk);
+    }
+
 }

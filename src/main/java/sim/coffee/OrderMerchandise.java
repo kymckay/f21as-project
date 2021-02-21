@@ -28,4 +28,8 @@ public class OrderMerchandise extends OrderItem {
         return result;
     }
 
+    @Override
+    String detailsString() {
+        return String.format("%s|%s", label, colour);
+    }
 }
