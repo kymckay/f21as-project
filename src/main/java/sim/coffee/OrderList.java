@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -37,7 +38,7 @@ public class OrderList {
 
 		// 4 properties common to all product types
 		if (cols.length >= 4) {
-			LocalDateTime timestamp = LocalDateTime.parse(cols[0]);
+			LocalDateTime timestamp = LocalDateTime.parse(cols[0], DateTimeFormatter.ISO_DATE_TIME);
 			String custId = cols[1];
 			String itemId = cols[2];
 			BigDecimal paid = new BigDecimal(cols[3]);
@@ -49,9 +50,9 @@ public class OrderList {
 			// Each type has different possible properties in remaining file columns
 			switch (itemId.substring(0,1)) {
 				case "B":
-					Size size = Size.valueOf(cols[4]);
+					Size size = Size.valueOf(cols[4].toUpperCase());
 					boolean isHot = Boolean.parseBoolean(cols[5]);
-					Milk milk = Milk.valueOf(cols[6]);
+					Milk milk = Milk.valueOf(cols[6].toUpperCase());
 
 					newItem = new OrderBeverage(size, isHot, milk);
 					break;
@@ -60,8 +61,8 @@ public class OrderList {
 					newItem = new OrderFood();
 					break;
 				case "M":
-					Label label = Label.valueOf(cols[4]);
-					Colour colour = Colour.valueOf(cols[5]);
+					Label label = Label.valueOf(cols[4].toUpperCase());
+					Colour colour = Colour.valueOf(cols[5].toUpperCase());
 
 					newItem = new OrderMerchandise(label, colour);
 					break;
