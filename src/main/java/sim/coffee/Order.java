@@ -8,7 +8,7 @@ public class Order {
 
     // Instance variables
     private LocalDateTime time;
-    public String customerId;
+    private String customerId;
     private OrderItem itemDetails;
     private BigDecimal pricePaid;
 

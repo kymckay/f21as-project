@@ -2,7 +2,7 @@ package sim.coffee;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-abstract public class MenuItem {
+abstract class MenuItem {
 
 	//instance variables
 	private String     id;
@@ -10,7 +10,7 @@ abstract public class MenuItem {
 	private String     description;
 
 	//constructor
-	public MenuItem (String id, BigDecimal price, String description)
+	MenuItem (String id, BigDecimal price, String description)
 												throws IllegalIDException {
 
 		boolean idMatches = id.matches("^[FMB]\\d{3}");
