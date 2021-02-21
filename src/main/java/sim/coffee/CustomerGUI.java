@@ -3,10 +3,13 @@ package sim.coffee;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,7 +19,15 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 
 public class CustomerGUI {
+    // Strings shown on buttons also correspond to control panel cards
+    private static final String LABEL_F = "Food";
+    private static final String LABEL_B = "Beverage";
+    private static final String LABEL_M = "Merchandise";
+
     private JFrame guiFrame;
+
+    // Control panel needs to be updated in various places
+    private JPanel controlPanel;
 
     private MenuTableModel menu;
     private OrderList processed;
@@ -68,21 +79,56 @@ public class CustomerGUI {
         // Section with menu table
         guiFrame.add(menuPane, BorderLayout.CENTER);
 
+        // Item controls appear on the right of the menu
+        controlPanel = new JPanel(new CardLayout());
+
+        controlPanel.add(foodControls(), LABEL_F);
+        controlPanel.add(beverageControls(), LABEL_B);
+        controlPanel.add(merchandiseControls(), LABEL_M);
+
+        guiFrame.add(controlPanel, BorderLayout.EAST);
+
         // Menu categories switched via panel of buttons at top of UI
         JPanel buttonPanel = new JPanel();
-        JButton foodButton = new JButton("Food");
-        JButton drinkButton = new JButton("Beverages");
-        JButton merchButton = new JButton("Merchandise");
+        JButton foodButton = new JButton(LABEL_F);
+        JButton drinkButton = new JButton(LABEL_B);
+        JButton merchButton = new JButton(LABEL_M);
 
         // Buttons filter menu by item type
-        foodButton.addActionListener(e -> filterMenu("F"));
-        drinkButton.addActionListener(e -> filterMenu("B"));
-        merchButton.addActionListener(e -> filterMenu("M"));
+        foodButton.addActionListener(e -> filterMenu(LABEL_F));
+        drinkButton.addActionListener(e -> filterMenu(LABEL_B));
+        merchButton.addActionListener(e -> filterMenu(LABEL_M));
 
         buttonPanel.add(foodButton);
         buttonPanel.add(drinkButton);
         buttonPanel.add(merchButton);
         guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
+    }
+
+    // TODO: Implement merch controls
+    private JPanel merchandiseControls() {
+        JPanel panel = new JPanel();
+
+        panel.add(new JLabel("Placeholder merchandise controls."));
+
+        return panel;
+    }
+
+    // TODO: Implement beverage controls
+    private JPanel beverageControls() {
+        JPanel panel = new JPanel();
+
+        panel.add(new JLabel("Placeholder beverage controls."));
+
+        return panel;
+    }
+
+    private JPanel foodControls() {
+        JPanel panel = new JPanel();
+
+        panel.add(new JLabel("No food controls to show."));
+
+        return panel;
     }
 
     private void setupCheckout() {
@@ -104,8 +150,13 @@ public class CustomerGUI {
         }
     }
 
-    private void filterMenu(String idPrefix) {
+    private void filterMenu(String label) {
+        String idPrefix = label.substring(0, 1);
+
         // Categories can be differentiated by leading character of item ID (column 0)
         menuSorter.setRowFilter(RowFilter.regexFilter("^" + idPrefix, 0));
+
+        CardLayout cl = (CardLayout) controlPanel.getLayout();
+        cl.show(controlPanel, label);
     }
 }
