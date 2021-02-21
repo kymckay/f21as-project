@@ -10,6 +10,8 @@ import java.util.Set;
 
 
 public class Menu {
+	// Repeatedly used to split pipe seperated strings
+	static final String PIPE_SEP = "\\s*|\\s*";
 
 	HashMap<String, MenuItem> menuMap = new HashMap<>();
 
@@ -51,13 +53,13 @@ public class Menu {
 				boolean isHot = Boolean.parseBoolean(details[3]);
 
 				Size[] sizes =
-					Arrays.stream(details[4].split("\\s*|\\s*"))
+					Arrays.stream(details[4].split(PIPE_SEP))
 						.map(String::toUpperCase)
 						.map(Size::valueOf)
 						.toArray(Size[]::new);
 
 				Milk[] milks =
-					Arrays.stream(details[5].split("\\s*|\\s*"))
+					Arrays.stream(details[5].split(PIPE_SEP))
 						.map(String::toUpperCase)
 						.map(Milk::valueOf)
 						.toArray(Milk[]::new);
@@ -67,7 +69,7 @@ public class Menu {
 				break;
 			case "F":
 				DietaryClass[] dietaryClasses =
-					Arrays.stream(details[3].split("\\s*|\\s*"))
+					Arrays.stream(details[3].split(PIPE_SEP))
 						.map(String::toUpperCase)
 						.map(DietaryClass::valueOf)
 						.toArray(DietaryClass[]::new);
@@ -76,13 +78,13 @@ public class Menu {
 				break;
 			case "M":
 				Label[] labels =
-					Arrays.stream(details[3].split("\\s*|\\s*"))
+					Arrays.stream(details[3].split(PIPE_SEP))
 						.map(String::toUpperCase)
 						.map(Label::valueOf)
 						.toArray(Label[]::new);
 
 				Colour[] colours =
-					Arrays.stream(details[4].split("\\s*|\\s*"))
+					Arrays.stream(details[4].split(PIPE_SEP))
 						.map(String::toUpperCase)
 						.map(Colour::valueOf)
 						.toArray(Colour[]::new);
