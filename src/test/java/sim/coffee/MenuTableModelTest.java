@@ -17,16 +17,13 @@ public class MenuTableModelTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     static Menu testMenu;
-    static MenuTableModel testModel = new MenuTableModel(testMenu);
+    static MenuTableModel testModel;
 
+    // If file isn't found tests fail automatically
     @BeforeClass
-    public static void init() {
-        try {
-            testMenu = new Menu("data/test/menu.csv");
-        } catch (FileNotFoundException e) {
-            // Test cannot pass if file was not found
-            System.exit(1);
-        }
+    public static void init() throws FileNotFoundException {
+        testMenu = new Menu("data/test/menu.csv");
+        testModel = new MenuTableModel(testMenu);
     }
 
     /**
