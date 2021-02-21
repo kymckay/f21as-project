@@ -49,11 +49,11 @@ public class MenuTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                return rowItem.getId();
+                return rowItem.getID();
             case 1:
                 return rowItem.getDescription();
             case 2:
-                return rowItem.getBasePrice();
+                return rowItem.getPrice();
             default:
                 // Should never be reached
                 throw new IndexOutOfBoundsException(columnIndex);
