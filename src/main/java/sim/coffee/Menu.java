@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Menu {
 	// Repeatedly used to split pipe seperated strings
-	static final String PIPE_SEP = "\\s*|\\s*";
+	static final String PIPE_SEP = "\\s*\\|\\s*";
 
 	HashMap<String, MenuItem> menuMap = new HashMap<>();
 
