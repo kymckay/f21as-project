@@ -38,7 +38,8 @@ public class Menu {
 
 
 		try {
-			String details [] = line.split(","); // a local array list with object from the input line separated by a comma
+			// Splitting with regex trims excess whitespace near commas
+			String details [] = line.split("\\s*,\\s*");
 
 			String id            = details[0];
 			String description   = details[1];
