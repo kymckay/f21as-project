@@ -90,10 +90,14 @@ public class OrderList {
 		}
 	}
 
-	public boolean add(Order o)   // Method to add values to the LinkedList
-	{
+	// Simple wrapper method
+	public boolean add(Order o) {
 		return orders.add(o);
+	}
 
+	// Simple wrapper method
+	public Order get(int index) {
+		return orders.get(index);
 	}
 
 	public String getReport()
