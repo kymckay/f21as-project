@@ -9,25 +9,18 @@ public class Beverage extends MenuItem {
 	private Size[]  sizes;
 	private boolean canBeHot;
 	private Milk[]  milks;
-	private String  id;
+	private final static String categoryID = "B";
 	
 	//constructor
 	public Beverage(Size[] sizes, boolean canBeHot, Milk[] milks, 
 					String id, BigDecimal price, String description) throws IllegalIDException{
 		
-		super(price, description);
+		super(categoryID, id, price, description);
 		
 		this.sizes    = sizes;
 		this.canBeHot = canBeHot;
 		this.milks    = milks;
 		
-		boolean idMatches = id.matches("^[B]\\d{3}"); //Beverage ID has to match the following regex pattern
-		
-		if (idMatches) {
-			this.id      = id;
-		} else {
-			throw new IllegalIDException(id);
-		}
 	
 	}
 	//getter methods
@@ -42,9 +35,4 @@ public class Beverage extends MenuItem {
 	public Milk[] getMilks() {
 		return milks;
 	}
-	
-	public String getID() {
-		return id;
-	}
-	
 }
