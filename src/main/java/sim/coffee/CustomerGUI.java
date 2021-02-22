@@ -4,7 +4,6 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
@@ -156,6 +155,7 @@ public class CustomerGUI {
         // Categories can be differentiated by leading character of item ID (column 0)
         menuSorter.setRowFilter(RowFilter.regexFilter("^" + idPrefix, 0));
 
+        // When menu is filtered corresponding controls are available
         CardLayout cl = (CardLayout) controlPanel.getLayout();
         cl.show(controlPanel, label);
     }
