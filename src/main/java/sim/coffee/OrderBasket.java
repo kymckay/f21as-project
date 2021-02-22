@@ -1,5 +1,6 @@
 package sim.coffee;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,14 +14,7 @@ public class OrderBasket extends OrderList {
     // Instantiate Map to track order count
     OrderBasket(Menu m, OrderList o) {
         // Duplicate keys from Menu and replace
-        // new hashmap's keys with the same key
-            // int i = -1;
-            // while (i < m.keySet().size()) {
-            //     i++;
-            //     String key = String.valueOf(m.getKey(String.valueOf(i)));
-            //     int value = 0;
-            //     count.put(key, value);
-            // }
+        // // new hashmap's keys with the same key
         for (String order : m.keySet()) {
             count.put(order, 0);
         }
@@ -35,15 +29,5 @@ public class OrderBasket extends OrderList {
         count.put(a, count.get(a) + 1);
         return true;
     }
-
-    // public static void orderCount() {
-    //     for (Menu i : count.keySet()) {
-    //         if (order.equals(menu.getKey(key))) {
-    //         //If 
-    //         } else {
-                
-    //         }
-    //     }
-    // }
 
 }    
