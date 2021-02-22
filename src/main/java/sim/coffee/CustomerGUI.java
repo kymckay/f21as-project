@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -184,9 +185,19 @@ public class CustomerGUI {
     // TODO: Implement checkout controls
     private JPanel checkoutControls() {
         JPanel panel = new JPanel();
-        panel.add(new JLabel("test"));
+
+        JButton checkout = new JButton("Checkout");
+
+        checkout.addActionListener(this::onCheckout);
+
+        panel.add(checkout);
+
         return panel;
     }
+
+    private void onCheckout(ActionEvent e) {
+        // TODO: Tell basket to checkout
+    };
 
     private void setupCheckout() {
         // Table element will list menu items available to add to cart
