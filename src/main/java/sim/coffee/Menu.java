@@ -5,44 +5,36 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Iterator;
 import java.util.Set;
-//import java.util.HashMap.KeySet;
 
 
-public class Menu{
+public class Menu {
 
-	HashMap<String, MenuItem> menu;		//Declared HashMap called Menu
+	HashMap<String, MenuItem> menuMap = new HashMap<>();
 
-
-	public Menu()			//Constructor for class Menu
-	{
-		menu = new HashMap<String, MenuItem>();
+	public Menu(String filename) throws FileNotFoundException {
+		readFile(filename);
 	}
 
-
-	public void add(String id, MenuItem m)		// Method to add String id(key) and MenuItem m(value)
-	{
-		menu.put(id, m);
+	public void add(String id, MenuItem m) {
+		menuMap.put(id, m);
 	}
 
+	// No graceful way to handle a missing file, pass exception up to decide how to
+	// proceed in context
+	public void readFile(String filename) throws FileNotFoundException {
+		File inputFile = new File(filename);
 
-	public void readFile(String fileName) throws FileNotFoundException		//Method to read the csv file
-	{
-
-		File menu = new File("input.txt");
-		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(menu);
-
-		while(scan.hasNextLine())
-		{
-			processLine(scan.nextLine());		//This should call the processLine method to process the file
+		try (
+			Scanner scan = new Scanner(inputFile);
+		) {
+			while (scan.hasNextLine()) {
+				processLine(scan.nextLine());
+			}
 		}
-
-
 	}
 
-	public void processLine (String line) {
+	private void processLine (String line) {
 
 
 		try {
@@ -138,13 +130,13 @@ public class Menu{
 
 	public MenuItem getKey(String key)		//Method to get key. Key is the id from MenuItem??
 	{
-		return menu.get(key);
+		return menuMap.get(key);
 	}
 
 
 	public Set<String> keySet()		//keyset method to return set of keys.
 	{
-		return menu.keySet();
+		return menuMap.keySet();
 	}
 
 }
