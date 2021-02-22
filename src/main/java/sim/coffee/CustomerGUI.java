@@ -4,8 +4,10 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -108,7 +110,16 @@ public class CustomerGUI {
     private JPanel merchandiseControls() {
         JPanel panel = new JPanel();
 
-        panel.add(new JLabel("Placeholder merchandise controls."));
+        JLabel controls = new JLabel("Placeholder merchandise controls.");
+        JPanel checkout = checkoutControls();
+
+        // Position checkout below item controls
+        controls.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(controls);
+        panel.add(checkout);
 
         return panel;
     }
@@ -117,7 +128,16 @@ public class CustomerGUI {
     private JPanel beverageControls() {
         JPanel panel = new JPanel();
 
-        panel.add(new JLabel("Placeholder beverage controls."));
+        JLabel controls = new JLabel("Placeholder beverage controls.");
+        JPanel checkout = checkoutControls();
+
+        // Position checkout below item controls
+        controls.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(controls);
+        panel.add(checkout);
 
         return panel;
     }
@@ -125,8 +145,24 @@ public class CustomerGUI {
     private JPanel foodControls() {
         JPanel panel = new JPanel();
 
-        panel.add(new JLabel("No food controls to show."));
+        JLabel controls = new JLabel("No food controls to show.");
+        JPanel checkout = checkoutControls();
 
+        // Position checkout below item controls
+        controls.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(controls);
+        panel.add(checkout);
+
+        return panel;
+    }
+
+    // TODO: Implement checkout controls
+    private JPanel checkoutControls() {
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("test"));
         return panel;
     }
 
