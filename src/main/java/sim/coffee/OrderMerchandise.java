@@ -7,7 +7,8 @@ public class OrderMerchandise extends OrderItem {
     private Label label;
     private Colour colour;
 
-    public OrderMerchandise(Label lab, Colour col) {
+    public OrderMerchandise(String id, Label lab, Colour col) {
+        super(id);
         label = lab;
         colour = col;
     }
