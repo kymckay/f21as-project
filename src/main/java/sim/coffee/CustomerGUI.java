@@ -87,6 +87,9 @@ public class CustomerGUI {
         controlPanel.add(beverageControls(), LABEL_B);
         controlPanel.add(merchandiseControls(), LABEL_M);
 
+        // Menu starts on food by default (always filtered to one type at a time)
+        filterMenu(LABEL_F);
+
         guiFrame.add(controlPanel, BorderLayout.EAST);
 
         // Menu categories switched via panel of buttons at top of UI
