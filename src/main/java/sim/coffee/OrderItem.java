@@ -7,7 +7,7 @@ public abstract class OrderItem {
     private String id;
 
     OrderItem (String id) {
-        id = this.id;
+        this.id = id;
     }
 
     public String getId() {
