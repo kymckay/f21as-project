@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public abstract class OrderList {
+public class OrderList {
 
 	LinkedList<Order> orders = new LinkedList<>();
 
