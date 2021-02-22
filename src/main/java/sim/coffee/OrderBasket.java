@@ -1,9 +1,10 @@
 package sim.coffee;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderBasket extends OrderList{
+public class OrderBasket extends OrderList {
 
     private OrderList orderList;
 
@@ -24,14 +25,20 @@ public class OrderBasket extends OrderList{
     }
 
     // adds value to the map
-    // @Override
-    // public boolean add(Order o) {
-    //     super.add(o);
-    //     a = o.getItemDetails().getId();
-    //     if
-    //     a = directaccess //key to access hashmap
-    //     return false;
-    // }
+    @Override
+    public boolean add(Order o) {
+        if (condition) {
+            super.add(o);
+            MenuItem a = o.getItemDetails().getId();
+            // int i = count.get(a);
+            // i++;
+            count.put(a, count.get(a) + 1);
+            a = directaccess //key to access hashmap
+        } else {
+            return false
+        }
+
+    }
 
     // public static void orderCount() {
     //     for (Menu i : count.keySet()) {
