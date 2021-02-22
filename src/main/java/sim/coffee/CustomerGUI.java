@@ -30,15 +30,17 @@ public class CustomerGUI {
 
     private JFrame guiFrame;
 
+    // Table is needed after creation to convert row indices to model
+    private JTable menuTable;
+
+    // Menu table will be filterable by category using an applied row sorter
+    private TableRowSorter<MenuTableModel> menuSorter;
+
     // Control panel needs to be updated in various places
     private JPanel controlPanel;
 
     private MenuTableModel menu;
-    private OrderList processed;
     private OrderTableModel basket;
-
-    // Menu table will be filterable by category using an applied row sorter
-    private TableRowSorter<MenuTableModel> menuSorter;
 
     CustomerGUI(MenuTableModel menu, OrderList processed, OrderTableModel basket) {
         this.menu = menu;
@@ -65,7 +67,7 @@ public class CustomerGUI {
 
     private void setupMenu() {
         // Table element will list menu items available to add to cart
-        JTable menuTable = new JTable(menu);
+        menuTable = new JTable(menu);
 
         // Staff can only add one menu item at a time as their properties differ
         menuTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -214,6 +216,14 @@ public class CustomerGUI {
         // Don't want this event to fire fully if user click + drags
         // Would result in rapid UI changes
         if (!e.getValueIsAdjusting()) {
+            // Single selection mode means there's only ever one index
+            int i =  e.getFirstIndex();
+
+            // Index is in terms of the view, does not correspond to underlying data
+            i = menuTable.convertRowIndexToModel(i);
+
+            MenuItem selected = menu.getRowItem(i);
+            
             // TODO: Update menu item related controls here
         }
     }

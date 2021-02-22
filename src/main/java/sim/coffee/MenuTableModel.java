@@ -45,7 +45,7 @@ public class MenuTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        MenuItem rowItem = menu.getKey(rowIDs[rowIndex]);
+        MenuItem rowItem = getRowItem(rowIndex);
 
         switch (columnIndex) {
             case 0:
@@ -60,4 +60,7 @@ public class MenuTableModel extends AbstractTableModel {
         }
     }
 
+    public MenuItem getRowItem(int index) {
+        return menu.getKey(rowIDs[index]);
+    }
 }
