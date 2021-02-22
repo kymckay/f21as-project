@@ -42,9 +42,8 @@ public class CustomerGUI {
     private MenuTableModel menu;
     private OrderTableModel basket;
 
-    CustomerGUI(MenuTableModel menu, OrderList processed, OrderTableModel basket) {
+    CustomerGUI(MenuTableModel menu, OrderTableModel basket) {
         this.menu = menu;
-        this.processed = processed;
         this.basket = basket;
 
         // Row sorter requires the table model to function correctly
@@ -223,7 +222,7 @@ public class CustomerGUI {
             i = menuTable.convertRowIndexToModel(i);
 
             MenuItem selected = menu.getRowItem(i);
-            
+
             // TODO: Update menu item related controls here
         }
     }

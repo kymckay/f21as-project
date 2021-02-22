@@ -19,7 +19,6 @@ public class Manager {
 
         new CustomerGUI(
             new MenuTableModel(menu),
-            orders,
             new OrderTableModel()
         );
     }
