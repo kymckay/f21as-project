@@ -56,17 +56,17 @@ public abstract class OrderList {
 					boolean isHot = Boolean.parseBoolean(cols[5]);
 					Milk milk = Milk.valueOf(cols[6].toUpperCase());
 
-					newItem = new OrderBeverage(size, isHot, milk);
+					newItem = new OrderBeverage(itemId, size, isHot, milk);
 					break;
 				case "F":
 					// Food items are simple
-					newItem = new OrderFood();
+					newItem = new OrderFood(itemId);
 					break;
 				case "M":
 					Label label = Label.valueOf(cols[4].toUpperCase());
 					Colour colour = Colour.valueOf(cols[5].toUpperCase());
 
-					newItem = new OrderMerchandise(label, colour);
+					newItem = new OrderMerchandise(itemId, label, colour);
 					break;
 				default:
 					throw new IllegalArgumentException("Line contains invalid Item ID");
