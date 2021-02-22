@@ -8,7 +8,8 @@ public class OrderBeverage extends OrderItem {
     private boolean isHot;
     private Milk milk;
 
-    public OrderBeverage(Size s, boolean hot, Milk milk) {
+    public OrderBeverage(String id, Size s, boolean hot, Milk milk) {
+        super(id);
         size = s;
         isHot = hot;
         this.milk = milk;
