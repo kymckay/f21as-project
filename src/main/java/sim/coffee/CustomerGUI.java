@@ -9,6 +9,8 @@ import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -113,7 +115,14 @@ public class CustomerGUI {
     private JPanel merchandiseControls() {
         JPanel panel = new JPanel();
 
-        JLabel controls = new JLabel("Placeholder merchandise controls.");
+        JPanel controls = new JPanel();
+
+        JComboBox<Colour> colours = new JComboBox<>();
+        JComboBox<Label> labels = new JComboBox<>();
+
+        controls.add(colours);
+        controls.add(labels);
+
         JPanel checkout = checkoutControls();
 
         // Position checkout below item controls
@@ -131,7 +140,16 @@ public class CustomerGUI {
     private JPanel beverageControls() {
         JPanel panel = new JPanel();
 
-        JLabel controls = new JLabel("Placeholder beverage controls.");
+        JPanel controls = new JPanel();
+
+        JCheckBox isHot = new JCheckBox();
+        JComboBox<Size> sizes = new JComboBox<>();
+        JComboBox<Milk> milks = new JComboBox<>();
+
+        controls.add(isHot);
+        controls.add(sizes);
+        controls.add(milks);
+
         JPanel checkout = checkoutControls();
 
         // Position checkout below item controls
@@ -148,6 +166,7 @@ public class CustomerGUI {
     private JPanel foodControls() {
         JPanel panel = new JPanel();
 
+        // TODO show dietary classes
         JLabel controls = new JLabel("No food controls to show.");
         JPanel checkout = checkoutControls();
 
