@@ -51,7 +51,6 @@ public class Menu {
 		String id            = details[0];
 		String description   = details[1];
 		BigDecimal basePrice = new BigDecimal(details[2]);
-		int count 			 = 0;
 
 		MenuItem newItem;
 
@@ -72,7 +71,7 @@ public class Menu {
 						.map(Milk::valueOf)
 						.toArray(Milk[]::new);
 
-				newItem = new Beverage(sizes, isHot, milks, id, basePrice, description, count);
+				newItem = new Beverage(sizes, isHot, milks, id, basePrice, description);
 
 				break;
 			case "F":
@@ -82,7 +81,7 @@ public class Menu {
 						.map(DietaryClass::valueOf)
 						.toArray(DietaryClass[]::new);
 
-				newItem = new Food(dietaryClasses, id, basePrice, description, count);
+				newItem = new Food(dietaryClasses, id, basePrice, description);
 				break;
 			case "M":
 				Label[] labels =
@@ -97,7 +96,7 @@ public class Menu {
 						.map(Colour::valueOf)
 						.toArray(Colour[]::new);
 
-				newItem = new Merchandise(labels, colours, id, basePrice, description, count);
+				newItem = new Merchandise(labels, colours, id, basePrice, description);
 				break;
 			default:
 				throw new IllegalArgumentException("Line contains invalid Item ID");
