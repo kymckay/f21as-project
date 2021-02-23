@@ -5,13 +5,15 @@ import java.math.RoundingMode;
 abstract class MenuItem {
 
 	//instance variables
-	private String     id;
+	private String id;
 	private BigDecimal price;
-	private String     description;
-	private int		   orderCount;
+	private String description;
+
+	// Nothing is ordered by default
+	private int orderCount = 0;
 
 	//constructor
-	MenuItem (String categoryID, String id, BigDecimal price, String description, int count) throws IllegalIDException {
+	MenuItem (String categoryID, String id, BigDecimal price, String description) throws IllegalIDException {
     	boolean idMatches 		= id.matches("^[BFM]\\d{3}"); // ID must match the following regex pattern
     	boolean categoryMatches = id.startsWith(categoryID); // ID must start with the correct category ID, defined in each subclass
 
@@ -22,10 +24,8 @@ abstract class MenuItem {
 		this.id = id;
 		this.price = price;
 		this.description = description;
-		orderCount = count;
 	}
 
-	//getter methods
 	public String getID() {
 		return id;
 	}
