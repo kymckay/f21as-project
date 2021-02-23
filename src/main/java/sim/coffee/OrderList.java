@@ -16,25 +16,13 @@ public class OrderList {
 
 	List<Order> orders;
 	
-	// Had doubts about how the ArrayList for OrderBasket would be instantiated (does it have a file associated with it?) 
-	// so just left both constructors in (can be easily removed if it's just me over-thinking things)
-	OrderList(boolean isLinkedList) { //boolean clearly show that only two events are handled, i.e. Linked Lists and Array Lists 
-		
-		if (isLinkedList == true) {
-			orders = new LinkedList<Order>();
-		} else {
-			orders = new ArrayList<Order>();
-		}
+	OrderList(List<Order> list) { // constructor accepts both LinkedList and ArrayList instances
+		orders = list;
 	}
 
-	OrderList(String filename, boolean isLinkedList) throws FileNotFoundException { 
+	OrderList(String filename, List<Order> list) throws FileNotFoundException { 
 		
-		if (isLinkedList == true) {
-			orders = new LinkedList<Order>();
-		} else {
-			orders = new ArrayList<Order>();
-		}
-		
+		orders = list;
 		readFile(filename);
 	}
 
