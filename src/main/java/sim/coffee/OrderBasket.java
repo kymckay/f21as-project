@@ -14,20 +14,9 @@ public class OrderBasket extends OrderList {
 
     // Instantiate Map to track order count
     OrderBasket(Menu m, OrderList o) {
-        // Duplicate keys from Menu and replace
-        // // new hashmap's keys with the same key
-        // // for (String order : m.keySet()) {
-        // //     count.put(order, 0);
-        // // }
         menu = m;
         orderList = o;
     }
-
-    // Updates Order Counter when called
-    // public boolean updateCount(String id) {
-    //     menu.getKey(id).setCount(id);
-    //     return true;
-    // }
 
     // adds value to the map
     @Override
