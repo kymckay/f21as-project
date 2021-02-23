@@ -1,6 +1,7 @@
 package sim.coffee;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,14 +19,29 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
+    // Parses through basket list and checks for discount
+    private BigDecimal applyDiscount() {
+        return null;
+    }
+
+    // dumps basket contents into supplied OrderList
+    private boolean checkout(OrderList o) {
+        o.addAll()
+        return true;
+    }
+
     // adds value to the map
     @Override
     public boolean add(Order o) {
+        applyDiscount();
+        checkout();
         super.add(o);
         String a = o.getItemDetails().getId();
         menu.getKey(a).setCount();
         // count.put(a, count.get(a) + 1);
         return true;
     }
+
+    
 
 }    
