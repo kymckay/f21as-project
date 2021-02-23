@@ -10,17 +10,16 @@ abstract class MenuItem {
 	private String     description;
 
 	//constructor
-	MenuItem (String id, BigDecimal price, String description)
-												throws IllegalIDException {
+	MenuItem (String categoryID, String id, BigDecimal price, String description) throws IllegalIDException {
+    	boolean idMatches 		= id.matches("^[BFM]\\d{3}"); // ID must match the following regex pattern
+    	boolean categoryMatches = id.startsWith(categoryID); // ID must start with the correct category ID, defined in each subclass
 
-		boolean idMatches = id.matches("^[FMB]\\d{3}");
-		if (idMatches) {
-			this.id      = id;
-		} else {
+    	if (!(idMatches && categoryMatches)) {
 			throw new IllegalIDException(id);
 		}
 
-		this.price       = price;
+		this.id = id;
+		this.price = price;
 		this.description = description;
 	}
 
@@ -36,4 +35,5 @@ abstract class MenuItem {
 	public String getDescription() {
 		return description;
 	}
+
 }
