@@ -26,7 +26,7 @@ public class OrderList {
 		File inputFile = new File(filename);
 
 		try (
-				Scanner scanner = new Scanner(inputFile);
+			Scanner scanner = new Scanner(inputFile);
 		) {
 			while (scanner.hasNextLine()) {
 				processLine(scanner.nextLine());
