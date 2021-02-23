@@ -43,11 +43,11 @@ public class CustomerGUI {
     private OrderTableModel basket;
 
     // There's probably a better way to manage this but for now I'm just storing all relevant controls
-    JComboBox<Colour> colours;
-    JComboBox<Label> labels;
-    JCheckBox isHot;
-    JComboBox<Size> sizes;
-    JComboBox<Milk> milks;
+    JComboBox<Colour> colours = new JComboBox<>();
+    JComboBox<Label> labels = new JComboBox<>();
+    JCheckBox isHot = new JCheckBox();
+    JComboBox<Size> sizes = new JComboBox<>();
+    JComboBox<Milk> milks = new JComboBox<>();
 
     CustomerGUI(MenuTableModel menu, OrderTableModel basket) {
         this.menu = menu;
@@ -126,9 +126,6 @@ public class CustomerGUI {
 
         JPanel controls = new JPanel();
 
-        colours = new JComboBox<>();
-        labels = new JComboBox<>();
-
         controls.add(colours);
         controls.add(labels);
 
@@ -150,10 +147,6 @@ public class CustomerGUI {
         JPanel panel = new JPanel();
 
         JPanel controls = new JPanel();
-
-        isHot = new JCheckBox();
-        sizes = new JComboBox<>();
-        milks = new JComboBox<>();
 
         controls.add(isHot);
         controls.add(sizes);
@@ -220,8 +213,6 @@ public class CustomerGUI {
     /**
      * When the menu selection changes the item controls must be populated/disabled
      * to match the item's configuration
-     *
-     * @param e
      */
     private void updateMenuControls(ListSelectionEvent e) {
         // Don't want this event to fire fully if user click + drags
