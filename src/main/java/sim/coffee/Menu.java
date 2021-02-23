@@ -51,7 +51,6 @@ public class Menu {
 		String id            = details[0];
 		String description   = details[1];
 		BigDecimal basePrice = new BigDecimal(details[2]);
-		int count 			 = 0;
 
 		MenuItem newItem;
 
