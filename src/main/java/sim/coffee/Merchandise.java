@@ -9,7 +9,7 @@ public class Merchandise extends MenuItem {
     private final static String categoryID = "M";
     
     
-    public Merchandise(Label[] labels, Colour[] colours, String id, BigDecimal price, int count, String description) 
+    public Merchandise(Label[] labels, Colour[] colours, String id, BigDecimal price, String description, int count) 
     															               throws IllegalIDException {
     	super(categoryID, id, price, description, count);
 
