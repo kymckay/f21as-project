@@ -42,6 +42,13 @@ public class CustomerGUI {
     private MenuTableModel menu;
     private OrderTableModel basket;
 
+    // There's probably a better way to manage this but for now I'm just storing all relevant controls
+    JComboBox<Colour> colours = new JComboBox<>();
+    JComboBox<Label> labels = new JComboBox<>();
+    JCheckBox isHot = new JCheckBox();
+    JComboBox<Size> sizes = new JComboBox<>();
+    JComboBox<Milk> milks = new JComboBox<>();
+
     CustomerGUI(MenuTableModel menu, OrderTableModel basket) {
         this.menu = menu;
         this.basket = basket;
@@ -119,21 +126,18 @@ public class CustomerGUI {
 
         JPanel controls = new JPanel();
 
-        JComboBox<Colour> colours = new JComboBox<>();
-        JComboBox<Label> labels = new JComboBox<>();
-
         controls.add(colours);
         controls.add(labels);
 
-        JPanel checkout = checkoutControls();
+        JPanel submit = cartControls();
 
         // Position checkout below item controls
         controls.setAlignmentX(Component.CENTER_ALIGNMENT);
-        checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         panel.add(controls);
-        panel.add(checkout);
+        panel.add(submit);
 
         return panel;
     }
@@ -144,23 +148,19 @@ public class CustomerGUI {
 
         JPanel controls = new JPanel();
 
-        JCheckBox isHot = new JCheckBox();
-        JComboBox<Size> sizes = new JComboBox<>();
-        JComboBox<Milk> milks = new JComboBox<>();
-
         controls.add(isHot);
         controls.add(sizes);
         controls.add(milks);
 
-        JPanel checkout = checkoutControls();
+        JPanel submit = cartControls();
 
         // Position checkout below item controls
         controls.setAlignmentX(Component.CENTER_ALIGNMENT);
-        checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         panel.add(controls);
-        panel.add(checkout);
+        panel.add(submit);
 
         return panel;
     }
@@ -170,24 +170,23 @@ public class CustomerGUI {
 
         // TODO show dietary classes
         JLabel controls = new JLabel("No food controls to show.");
-        JPanel checkout = checkoutControls();
+        JPanel submit = cartControls();
 
         // Position checkout below item controls
         controls.setAlignmentX(Component.CENTER_ALIGNMENT);
-        checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         panel.add(controls);
-        panel.add(checkout);
+        panel.add(submit);
 
         return panel;
     }
 
-    // TODO: Implement checkout controls
-    private JPanel checkoutControls() {
+    private JPanel cartControls() {
         JPanel panel = new JPanel();
 
-        JButton checkout = new JButton("Checkout");
+        JButton checkout = new JButton("Add to Cart");
 
         checkout.addActionListener(this::onCheckout);
 
@@ -211,6 +210,10 @@ public class CustomerGUI {
         guiFrame.add(ordersPane, BorderLayout.SOUTH); // Section with checkout orders table
     }
 
+    /**
+     * When the menu selection changes the item controls must be populated/disabled
+     * to match the item's configuration
+     */
     private void updateMenuControls(ListSelectionEvent e) {
         // Don't want this event to fire fully if user click + drags
         // Would result in rapid UI changes
@@ -223,7 +226,36 @@ public class CustomerGUI {
 
             MenuItem selected = menu.getRowItem(i);
 
-            // TODO: Update menu item related controls here
+            // Note there is probably a nicer way to do this
+            // It feels very ugly, but it works for now
+            if (selected instanceof Food) {
+                // TODO: Show dietary classes
+            } else if (selected instanceof Beverage) {
+                sizes.removeAllItems();
+                for (Size s : selected.getSizes()) {
+                    sizes.addItem(s);
+                }
+
+                milks.removeAllItems();
+                for (Milk m : selected.getMilks()) {
+                    milks.addItem(m);
+                }
+
+                isHot.setEnabled(selected.canBeHot());
+
+                sizes.setSelectedIndex(0);
+                milks.setSelectedIndex(0);
+            } else {
+                colours.removeAllItems();
+                for (Colour c : selected.getColours()) {
+                    colours.addItem(c);
+                }
+
+                labels.removeAllItems();
+                for (Label l : selected.getLabels()) {
+                    labels.addItem(l);
+                }
+            }
         }
     }
 

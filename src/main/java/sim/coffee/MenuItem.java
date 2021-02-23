@@ -46,4 +46,23 @@ abstract class MenuItem {
 		orderCount++;
 	}
 
+    // The UI needs to be able to tell certain properties about items
+    // These default values are overridden where apropriate in the subclasses
+	// Note there is probably a better design pattern for this, it feels hacky
+	// Works for now though
+    public boolean canBeHot() {
+        return false;
+	}
+	public Size[] getSizes() {
+		return new Size[0];
+	}
+	public Milk[] getMilks() {
+		return new Milk[0];
+	}
+	public Colour[] getColours() {
+		return new Colour[0];
+	}
+	public Label[] getLabels() {
+		return new Label[0];
+	}
 }

@@ -19,6 +19,7 @@ public class Beverage extends MenuItem {
 		this.milks    = milks;
 	}
 
+	@Override
 	public Size[] getSizes() {
 		return sizes;
 	}
@@ -28,6 +29,7 @@ public class Beverage extends MenuItem {
 		return canBeHot;
 	}
 
+	@Override
 	public Milk[] getMilks() {
 		return milks;
 	}
