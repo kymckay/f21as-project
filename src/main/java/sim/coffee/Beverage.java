@@ -13,9 +13,9 @@ public class Beverage extends MenuItem {
 	
 	//constructor
 	public Beverage(Size[] sizes, boolean canBeHot, Milk[] milks, 
-					String id, BigDecimal price, String description) throws IllegalIDException{
+					String id, BigDecimal price, String description, int count) throws IllegalIDException{
 		
-		super(categoryID, id, price, description);
+		super(categoryID, id, price, description, count);
 		
 		this.sizes    = sizes;
 		this.canBeHot = canBeHot;

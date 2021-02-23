@@ -9,9 +9,9 @@ public class Merchandise extends MenuItem {
     private final static String categoryID = "M";
     
     
-    public Merchandise(Label[] labels, Colour[] colours, String id, BigDecimal price, String description) 
+    public Merchandise(Label[] labels, Colour[] colours, String id, BigDecimal price, int count, String description) 
     															               throws IllegalIDException {
-    	super(categoryID, id, price, description);
+    	super(categoryID, id, price, description, count);
 
     	this.labels  = labels;
     	this.colours = colours;

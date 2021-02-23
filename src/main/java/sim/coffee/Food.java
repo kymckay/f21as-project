@@ -10,10 +10,10 @@ public class Food extends MenuItem {
 	
 	
 	//constructor
-	public Food(DietaryClass[] dietaryClasses, String id, BigDecimal price, String description)
+	public Food(DietaryClass[] dietaryClasses, String id, BigDecimal price, String description, int count)
 														             throws IllegalIDException {
 		
-		super(categoryID,id, price, description);
+		super(categoryID,id, price, description, count);
 		this.dietaryClasses = dietaryClasses;
 	
 	}
