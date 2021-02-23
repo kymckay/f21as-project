@@ -17,10 +17,12 @@ public class Merchandise extends MenuItem {
     	this.colours = colours;
     }
 
+    @Override
     public Label[] getLabels() {
     	return labels;
     }
 
+    @Override
     public Colour[] getColours() {
     	return colours;
     }
