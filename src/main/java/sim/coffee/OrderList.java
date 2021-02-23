@@ -7,16 +7,34 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class OrderList {
 
-	LinkedList<Order> orders = new LinkedList<>();
+	List<Order> orders;
+	
+	// Had doubts about how the ArrayList for OrderBasket would be instantiated (does it have a file associated with it?) 
+	// so just left both constructors in (can be easily removed if it's just me over-thinking things)
+	OrderList(boolean isLinkedList) { //boolean clearly show that only two events are handled, i.e. Linked Lists and Array Lists 
+		
+		if (isLinkedList == true) {
+			orders = new LinkedList<Order>();
+		} else {
+			orders = new ArrayList<Order>();
+		}
+	}
 
-	OrderList() {}
-
-	OrderList(String filename) throws FileNotFoundException {
+	OrderList(String filename, boolean isLinkedList) throws FileNotFoundException { 
+		
+		if (isLinkedList == true) {
+			orders = new LinkedList<Order>();
+		} else {
+			orders = new ArrayList<Order>();
+		}
+		
 		readFile(filename);
 	}
 
