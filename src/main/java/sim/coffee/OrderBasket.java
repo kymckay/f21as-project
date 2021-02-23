@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OrderBasket extends OrderList {
@@ -14,7 +15,8 @@ public class OrderBasket extends OrderList {
     // private HashMap<String, Integer> count = new HashMap<>();
 
     // Instantiate Map to track order count
-    OrderBasket(Menu m, OrderList o) {
+    OrderBasket(Menu m, OrderList o, List<Order> list) {
+    	super(list);
         menu = m;
         orderList = o;
     }
