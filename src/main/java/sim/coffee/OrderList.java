@@ -7,21 +7,19 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 public class OrderList {
 
 	List<Order> orders;
-	
+
 	OrderList(List<Order> list) { // constructor accepts both LinkedList and ArrayList instances
 		orders = list;
 	}
 
-	OrderList(String filename, List<Order> list) throws FileNotFoundException { 
-		
+	OrderList(String filename, List<Order> list) throws FileNotFoundException {
+
 		orders = list;
 		readFile(filename);
 	}
