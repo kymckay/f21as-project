@@ -42,10 +42,8 @@ abstract class MenuItem {
 		return orderCount;
 	}
 
-	public void setCount(String id) {
-		if (id == getID()) {
-			orderCount++;
-		}
+	public void setCount() {
+		orderCount++;
 	}
 
 }

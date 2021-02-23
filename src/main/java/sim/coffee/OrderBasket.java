@@ -23,16 +23,18 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
-    public boolean updateCount(String id) {
-        menu.getKey(id).setCount(id);
-        return true;
-    }
+    // Updates Order Counter when called
+    // public boolean updateCount(String id) {
+    //     menu.getKey(id).setCount(id);
+    //     return true;
+    // }
+
     // adds value to the map
     @Override
     public boolean add(Order o) {
         super.add(o);
         String a = o.getItemDetails().getId();
-        updateCount(a);
+        menu.getKey(a).setCount();
         // count.put(a, count.get(a) + 1);
         return true;
     }
