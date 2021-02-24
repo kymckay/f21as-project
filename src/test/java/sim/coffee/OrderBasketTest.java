@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -24,22 +25,16 @@ public class OrderBasketTest {
         testMenu = new Menu("data/test/menu.csv");
         testList = new OrderList(new ArrayList<>());
 
-        testBasket = new OrderBasket(
-            testMenu,
-            testList,
-            new ArrayList<>()
-        );
+        testBasket = new OrderBasket(testMenu, testList, new ArrayList<>());
 
-        testOrder = new Order(
-            LocalDateTime.now(),
-            "JK001",
-            new OrderItem(
-                "F001",
-                "",
-                new BigDecimal("0"),
-                new BigDecimal("0")
-            )
-        );
+        testOrder = new Order(LocalDateTime.now(), "JK001",
+                new OrderItem("F001", "", new BigDecimal("0"), new BigDecimal("0")));
+    }
+
+    // Remove any lingering data between tests
+    @After
+    public void clearBasket() {
+        testBasket.checkout();
     }
 
     /**
@@ -74,6 +69,26 @@ public class OrderBasketTest {
         assertEquals(size, testList.size());
     }
 
+    // Helper method to add orders to basket for discount testing
+    // Always adds a food item and large hot coffee which should cover all discounts
+    // Time of day changes via input
+    private void setupOrder(String isoDate) {
+        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+
+        // These must match the test data menu input
+        OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
+        OrderItem drinkItem = new OrderItem("B001", "L|true|None", drinkPrice, drinkPrice);
+
+        LocalDateTime time = LocalDateTime.parse(isoDate, DateTimeFormatter.ISO_DATE_TIME);
+
+        Order food = new Order(time, "TS001", foodItem);
+        Order drink = new Order(time, "TS001", drinkItem);
+
+        testBasket.add(food);
+        testBasket.add(drink);
+    }
+
     /**
      * Tests that .. TBD
      */
@@ -87,33 +102,33 @@ public class OrderBasketTest {
      */
     @Test
     public void discount2() {
-        // First ensure basket is cleared
-        testBasket.checkout();
-
-        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
-        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
-
-        // These must match the test data menu input
-        OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
-        OrderItem drinkItem = new OrderItem("B001", "M|true|None", drinkPrice, drinkPrice);
-
-        LocalDateTime time = LocalDateTime.parse("2021-03-07T12:15Z", DateTimeFormatter.ISO_DATE_TIME);
-
-        Order food = new Order(time, "TS001", foodItem);
-        Order drink = new Order(time, "TS001", drinkItem);
-
-        testBasket.add(food);
-        testBasket.add(drink);
+        BigDecimal discountPrice = new BigDecimal("4.00");
 
         // Discount should automatically apply once added
-        assertEquals(new BigDecimal("4.00"), testBasket.getTotalIncome());
+        setupOrder("2021-03-07T12:15Z");
+        assertEquals(discountPrice, testBasket.getTotalIncome());
+
+        // Discount should not apply after 14:00
+        setupOrder("2021-03-07T14:01Z");
+        assertNotEquals(discountPrice, testBasket.getTotalIncome());
+
+        // Discount should not apply before 12:00
+        setupOrder("2021-03-07T11:59Z");
+        assertNotEquals(discountPrice, testBasket.getTotalIncome());
     }
 
     /**
      * Tests that all food items are 50% off after 17:00
      */
-    // @Test
-    // public void discount3() {
+    @Test
+    public void discount3() {
+        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
 
-    // }
+        // Find sum if food is 50% off
+        BigDecimal discountPrice = drinkPrice.add(foodPrice.multiply(new BigDecimal("0.5")));
+
+        setupOrder("2021-03-07T18:15Z");
+        assertEquals(discountPrice, testBasket.getTotalIncome());
+    }
 }
