@@ -27,11 +27,15 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
+
+    // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00   
+    // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00  
+    // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00 
     // Parses through basket list and checks for discount
     private void applyDiscount() {
 
         // Create counter to keep track no. of each type of items ordered
-        int[] count = {0, 0, 0, 0}; // {Sandwich, Pastry, 'B', 'M'}
+        int[] count = {0, 0, 0, 0, 0}; // {Sandwich, Pastry, 'B–hot', 'B-cold', 'M'}
         for (Order o : this.orders) {
             switch (o.getItemDetails().charAt(0)) {
                 case 'F':
@@ -49,11 +53,17 @@ public class OrderBasket extends OrderList {
                     break;
 
                 case 'B':
-                    count[2]++;
+                    char bevHot = o.getItemDetails().charAt(2);
+                    if (bevHot == 't') {
+                        count[2]++;
+                    } else {
+                        count[3]++;
+                    }
+                    
                     break;
 
                 default:
-                    count[3]++;
+                    count[4]++;
                     break;
             }
         }
@@ -62,6 +72,7 @@ public class OrderBasket extends OrderList {
 
         // Order has to have more than 1 item
         if (sumCount > 0) {
+
             // Loops through the element - order in orderList
             for (Order o : this.orders) {
 
@@ -69,6 +80,13 @@ public class OrderBasket extends OrderList {
                 BigDecimal price = o.getFullPrice();
                 char id = o.getItemDetails().charAt(0);
                 char bevHot = o.getItemDetails().charAt(2);
+
+                // Use Regex to track the food item and differentiate
+                // // between pastry and sandwich
+                String desc = menu.getKey(o.getItemId()).getDescription();
+                Pattern pattern = Pattern.compile("sandwich", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(desc);
+                boolean matchFound = matcher.find();
 
                 // Switch case for the 3 different discount rules based on the order hour
                 switch (o.getTime().getHour()) {
@@ -78,33 +96,66 @@ public class OrderBasket extends OrderList {
                     // Only applies when count[0] = count[2], count[1] = count[2]
                     // // and count[0], count[1], count[2] > 0
                     case 8: case 9: case 10:
-                        if (count[0] == count[2] && count[1] == count[2]) {
-                            if (bevHot == 'F' || bevHot == 'f') {
-                                // In cases that its a beverage but not hot (no discount)
-                                o.setPricePaid(price);
+
+                        // Applies only if order contains pastry [1] and hot drink [2]
+                        if (count[1] >= 1 && count[2] >= 1) {
+
+                            if (matchFound || bevHot == 'f' || id == 'M') {
                                 
-                            } else {
-                                // Other cases (with discount)
-                                price = price.multiply(new BigDecimal(7));
-                                price = price.divide(new BigDecimal(100), 3, RoundingMode.CEILING);
                                 o.setPricePaid(price);
+
+                            } else {
+
+                                int countDifference = count[2] - count[1];
+                                int discount = 30;
+                                
+                                if (countDifference == 0) {
+
+                                    int factor = (100-discount)/10;
+                                    price = price.multiply(new BigDecimal(factor));
+
+                                } else if (countDifference < 0) {
+
+                                    int num = count[1] - count[2] + 1;
+                                    price = price.multiply(new BigDecimal(unscaledVal, scale))
+                                    
+                                } else {
+
+                                }
+
+                                price = price.divide(new BigDecimal(10), 3, RoundingMode.CEILING);
+                                o.setPricePaid(price);
+
                             }
-                            break;
 
                         } else {
+
                             o.setPricePaid(price);
+                            
                         }
+                        // if (count[0] > 0 && count[1] > 0 && count[2] > 0 &&
+                        // count[0] == count[2] && count[1] == count[2]) {
+                        //     if (bevHot == 'F' || bevHot == 'f') {
+                        //         // In cases that its a beverage but not hot (no discount)
+                        //         o.setPricePaid(price);
+                                
+                        //     } else {
+                        //         // Other cases (with discount)
+                        //         price = price.multiply(new BigDecimal(7));
+                        //         price = price.divide(new BigDecimal(100), 3, RoundingMode.CEILING);
+                        //         o.setPricePaid(price);
+                        //     }
+                        //     break;
+
+                        // } else {
+                        //     o.setPricePaid(price);
+                        // }
                     
                     // For every food + drink combo, final price is 4.00
                     // For orders made between 12.00 p.m. to 13.59 p.m.
                     case 12: case 13:
                         // Sets Meal Deal Price
                         BigDecimal finalPrice = new BigDecimal(4);
-                        if (condition) {
-                            
-                        } else {
-                            
-                        }
 
                         break;
                     case 17: case 18:
