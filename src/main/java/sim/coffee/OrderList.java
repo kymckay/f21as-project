@@ -47,36 +47,14 @@ public class OrderList {
 			LocalDateTime timestamp = LocalDateTime.parse(cols[0], DateTimeFormatter.ISO_DATE_TIME);
 			String custId = cols[1];
 			String itemId = cols[2];
-			BigDecimal paid = new BigDecimal(cols[3]);
+			BigDecimal priceFull = new BigDecimal(cols[3]);
+			BigDecimal pricePaid = new BigDecimal(cols[4]);
+			String itemDetails = cols[5];
 
 			// OrderItem subclasses store the item permutations ordered
-			OrderItem newItem;
+			OrderItem newItem = new OrderItem(itemId, itemDetails, priceFull, pricePaid);
 
-			// First character of item ID diferentiates the types
-			// Each type has different possible properties in remaining file columns
-			switch (itemId.substring(0,1)) {
-				case "B":
-					Size size = Size.valueOf(cols[4].toUpperCase());
-					boolean isHot = Boolean.parseBoolean(cols[5]);
-					Milk milk = Milk.valueOf(cols[6].toUpperCase());
-
-					newItem = new OrderBeverage(itemId, size, isHot, milk);
-					break;
-				case "F":
-					// Food items are simple
-					newItem = new OrderFood(itemId);
-					break;
-				case "M":
-					Label label = Label.valueOf(cols[4].toUpperCase());
-					Colour colour = Colour.valueOf(cols[5].toUpperCase());
-
-					newItem = new OrderMerchandise(itemId, label, colour);
-					break;
-				default:
-					throw new IllegalArgumentException("Line contains invalid Item ID");
-			}
-
-			orders.add(new Order(timestamp, custId, newItem, paid));
+			orders.add(new Order(timestamp, custId, newItem));
 		} else {
 			throw new IllegalArgumentException("Line contains too few values");
 		}
@@ -122,7 +100,7 @@ public class OrderList {
 		BigDecimal sum = new BigDecimal("0");
 
 		for (Order o : orders) {
-			sum = sum.add(o.getPricePaid());
+			sum = sum.add(o.get());
 		}
 
 		return sum;
