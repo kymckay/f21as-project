@@ -64,4 +64,8 @@ public class BasketTableModel extends AbstractTableModel {
     public void checkout() {
         basket.checkout();
     }
+
+    public boolean add(Order o) {
+        return basket.add(o);
+    }
 }

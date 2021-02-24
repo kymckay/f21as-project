@@ -7,6 +7,9 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -38,6 +41,16 @@ public class CustomerGUI {
     JCheckBox isHot = new JCheckBox();
     JComboBox<Size> sizes = new JComboBox<>();
     JComboBox<Milk> milks = new JComboBox<>();
+
+    // The current customer placing orders is tracked here
+    private Random custRand = new Random();
+    private String customer = nextCustomer();
+
+    // State of the UI tracked here for ease of checking elsewhere
+    private String menuView = LABEL_F;
+
+    // Currently selected menu item for ease of access elsewhere
+    private MenuItem selectedItem;
 
     CustomerGUI(MenuTableModel menu, BasketTableModel basket) {
         this.menu = menu;
@@ -186,14 +199,45 @@ public class CustomerGUI {
         return panel;
     }
 
+    // Instantiates a new order from item controls and puts it in the basket
     private void addToCart(ActionEvent e) {
-        // Instantiates a new order and puts it in the basket
-        // TODO: Get current view (food, bev or merch), retrieve control values, use getPrice of menu item, use formatDetails of Merchandise and Beverage
+        OrderItem newItem;
+
+        String itemId = selectedItem.getID();
+        BigDecimal price = selectedItem.getPrice();
+        String details = "";
+
+        // Curent view dictates which item controls are relevant to generate item
+        // details
+        switch (menuView) {
+            case LABEL_B:
+                Size s = (Size)sizes.getSelectedItem();
+                boolean hot = isHot.isSelected();
+                Milk m = (Milk)milks.getSelectedItem();
+
+                details = Beverage.formatDetails(s, hot, m);
+                break;
+            case LABEL_M:
+                Label l = (Label) labels.getSelectedItem();
+                Colour c = (Colour) colours.getSelectedItem();
+
+                details = Merchandise.formatDetails(l, c);
+                break;
+            default:
+                // Simple types (like food) have no specific details
+                break;
+        }
+
+        newItem = new OrderItem(itemId, details, price, price);
+        Order newOrder = new Order(LocalDateTime.now(), customer, newItem);
+
+        basket.add(newOrder);
     }
 
     // Tells the basket to log all orders in the order history
     private void onCheckout(ActionEvent e) {
         basket.checkout();
+        customer = nextCustomer();
     };
 
     private void setupCheckout() {
@@ -221,35 +265,35 @@ public class CustomerGUI {
             // Index is in terms of the view, does not correspond to underlying data
             i = menuTable.convertRowIndexToModel(i);
 
-            MenuItem selected = menu.getRowItem(i);
+            selectedItem = menu.getRowItem(i);
 
             // Note there is probably a nicer way to do this
             // It feels very ugly, but it works for now
-            if (selected instanceof Food) {
+            if (selectedItem instanceof Food) {
                 // TODO: Show dietary classes
-            } else if (selected instanceof Beverage) {
+            } else if (selectedItem instanceof Beverage) {
                 sizes.removeAllItems();
-                for (Size s : selected.getSizes()) {
+                for (Size s : selectedItem.getSizes()) {
                     sizes.addItem(s);
                 }
 
                 milks.removeAllItems();
-                for (Milk m : selected.getMilks()) {
+                for (Milk m : selectedItem.getMilks()) {
                     milks.addItem(m);
                 }
 
-                isHot.setEnabled(selected.canBeHot());
+                isHot.setEnabled(selectedItem.canBeHot());
 
                 sizes.setSelectedIndex(0);
                 milks.setSelectedIndex(0);
             } else {
                 colours.removeAllItems();
-                for (Colour c : selected.getColours()) {
+                for (Colour c : selectedItem.getColours()) {
                     colours.addItem(c);
                 }
 
                 labels.removeAllItems();
-                for (Label l : selected.getLabels()) {
+                for (Label l : selectedItem.getLabels()) {
                     labels.addItem(l);
                 }
             }
@@ -265,5 +309,20 @@ public class CustomerGUI {
         // When menu is filtered corresponding controls are available
         CardLayout cl = (CardLayout) controlPanel.getLayout();
         cl.show(controlPanel, label);
+
+        // Track state of menu for ease of checking elsewhere
+        menuView = label;
+    }
+
+    // Generates a random customer ID to represent next customer in queue
+    private String nextCustomer() {
+        char c1 = (char) (custRand.nextInt(26) + 'a');
+        char c2 = (char) (custRand.nextInt(26) + 'a');
+
+        int d1 = custRand.nextInt(10);
+        int d2 = custRand.nextInt(10);
+        int d3 = custRand.nextInt(10);
+
+        return String.format("%c%c%d%d%d", c1, c2, d1, d2, d3);
     }
 }
