@@ -110,7 +110,6 @@ public class CustomerGUI {
         guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
     }
 
-    // TODO: Implement merch controls
     private JPanel merchandiseControls() {
         JPanel panel = new JPanel();
 
@@ -132,7 +131,6 @@ public class CustomerGUI {
         return panel;
     }
 
-    // TODO: Implement beverage controls
     private JPanel beverageControls() {
         JPanel panel = new JPanel();
 
@@ -176,13 +174,21 @@ public class CustomerGUI {
     private JPanel cartControls() {
         JPanel panel = new JPanel();
 
-        JButton checkout = new JButton("Add to Cart");
+        JButton add = new JButton("Add to Cart");
+        JButton checkout = new JButton("Checkout");
 
+        add.addActionListener(this::addToCart);
         checkout.addActionListener(this::onCheckout);
 
+        panel.add(add);
         panel.add(checkout);
 
         return panel;
+    }
+
+    private void addToCart(ActionEvent e) {
+        // Instantiates a new order and puts it in the basket
+        // TODO: Get current view (food, bev or merch), retrieve control values, use getPrice of menu item, use formatDetails of Merchandise and Beverage
     }
 
     // Tells the basket to log all orders in the order history

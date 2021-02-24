@@ -8,6 +8,11 @@ public class Merchandise extends MenuItem {
     private Colour[] colours;
     private static final String CAT_ID = "M";
 
+    // Ensures details across merch orders are consistently formatted
+    public static String formatDetails(Label l, Colour c) {
+        return String.format("%s|%s", l, c);
+    }
+
     public Merchandise(Label[] labels, Colour[] colours, String id, BigDecimal price, String description)
             throws IllegalIDException {
 

@@ -9,6 +9,11 @@ public class Beverage extends MenuItem {
 	private Milk[]  milks;
 	private static final String CAT_ID = "B";
 
+	// Ensures details across beverage orders are consistently formatted
+	public static String formatDetails(Size s, boolean hot, Milk m) {
+		return String.format("%s|%b|%s", s, hot, m);
+	}
+
 	public Beverage(Size[] sizes, boolean canBeHot, Milk[] milks, String id, BigDecimal price, String description)
 			throws IllegalIDException {
 
