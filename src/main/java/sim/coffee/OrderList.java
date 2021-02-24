@@ -29,12 +29,17 @@ public class OrderList {
 	public void readFile(String filename) throws FileNotFoundException {
 		File inputFile = new File(filename);
 
+		int line = 1;
+
 		try (
 			Scanner scanner = new Scanner(inputFile);
 		) {
 			while (scanner.hasNextLine()) {
 				processLine(scanner.nextLine());
+				line++;
 			}
+		} catch (IllegalArgumentException e) {
+			System.out.println("Parsing error on line " + line + ": " + e.getMessage());
 		}
 	}
 
@@ -42,8 +47,8 @@ public class OrderList {
 		// Split regex trims excess whitespace near commas
 		String[] cols = line.split("\\s*,\\s*");
 
-		// 4 properties common to all product types
-		if (cols.length >= 4) {
+		// All rows in csv file have same columns
+		if (cols.length == 6) {
 			LocalDateTime timestamp = LocalDateTime.parse(cols[0], DateTimeFormatter.ISO_DATE_TIME);
 			String custId = cols[1];
 			String itemId = cols[2];
@@ -56,7 +61,7 @@ public class OrderList {
 
 			orders.add(new Order(timestamp, custId, newItem));
 		} else {
-			throw new IllegalArgumentException("Line contains too few values");
+			throw new IllegalArgumentException("Line contains wrong number of values");
 		}
 	}
 
