@@ -39,8 +39,17 @@ public class Order {
         return fullPrice;
     }
 
+    public String getItemId() {
+        return itemId;
+    }
+
+    public BigDecimal getPricePaid() {
+        return pricePaid;
+    }
+
     // Used to apply discounts
-    public boolean setPricePaid(BigDeicmal newPrice) {
+    public boolean setPricePaid(BigDecimal newPrice) {
         this.pricePaid = newPrice;
+        return true;
     }
 }
