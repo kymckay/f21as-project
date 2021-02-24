@@ -10,10 +10,6 @@ public class OrderTableModel extends AbstractTableModel {
     private String[] columns = new String[] { "ID", "Item", "Price" };
     OrderList orderList;
 
-    OrderTableModel() {
-        this(new OrderList());
-    }
-
     OrderTableModel(OrderList orders) {
         this.orderList = orders;
     }
@@ -53,7 +49,7 @@ public class OrderTableModel extends AbstractTableModel {
             case 0:
                 return rowOrder.getCustomerID();
             case 1:
-                return rowOrder.getItemDetails().detailsString();
+                return rowOrder.getItemDetails();
             case 2:
                 return rowOrder.getPricePaid();
             default:

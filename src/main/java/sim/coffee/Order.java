@@ -5,22 +5,14 @@ import java.time.LocalDateTime;
 
 public class Order {
 
-
-    // Instance variables
     private LocalDateTime time;
     private String customerId;
-    private String itemId;
-    private String itemDetail;
-    private BigDecimal fullPrice;
-    private BigDecimal pricePaid;
+    private OrderItem item;
 
-    public Order(LocalDateTime t, String customerId, String itemId, String itemDetail, BigDecimal fullPrice, BigDecimal pricePaid) {
+    public Order(LocalDateTime t, String customerId, OrderItem item) {
         time = t;
         this.customerId = customerId;
-        this.itemId = itemId;
-        this.itemDetail = itemDetail;
-        this.fullPrice = fullPrice;
-        this.pricePaid = pricePaid;
+        this.item = item;
     }
 
     public LocalDateTime getTime() {
@@ -32,24 +24,23 @@ public class Order {
     }
 
     public String getItemDetails() {
-        return itemDetail;
+        return item.getItemDetails();
     }
 
     public BigDecimal getFullPrice() {
-        return fullPrice;
-    }
-
-    public String getItemId() {
-        return itemId;
+        return item.getFullPrice();
     }
 
     public BigDecimal getPricePaid() {
-        return pricePaid;
+        return item.getPricePaid();
     }
 
-    // Used to apply discounts
-    public boolean setPricePaid(BigDecimal newPrice) {
-        this.pricePaid = newPrice;
-        return true;
+    public String getItemId() {
+        return item.getItemId();
+    }
+
+    // Used to apply discounts in the basket
+    public void setPricePaid(BigDecimal newPrice) {
+        item.setPricePaid(newPrice);
     }
 }

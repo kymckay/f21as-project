@@ -26,4 +26,9 @@ public class Merchandise extends MenuItem {
     public Colour[] getColours() {
     	return colours;
     }
+
+    // A chosen label influences the price of this item
+    public BigDecimal getPrice(Label l) {
+        return getPrice().add(BigDecimal.valueOf(l.getAddOnPrice()));
+    }
 }

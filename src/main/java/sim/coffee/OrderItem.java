@@ -2,20 +2,37 @@ package sim.coffee;
 
 import java.math.BigDecimal;
 
-public abstract class OrderItem {
+public class OrderItem {
 
-    private String id;
+    private String itemId;
+    private String itemDetails;
+    private BigDecimal fullPrice;
+    private BigDecimal pricePaid;
 
-    OrderItem (String id) {
-        this.id = id;
+    public OrderItem(String itemId, String itemDetails, BigDecimal fullPrice, BigDecimal pricePaid) {
+        this.itemId = itemId;
+        this.itemDetails = itemDetails;
+        this.fullPrice = fullPrice;
+        this.pricePaid = pricePaid;
     }
 
-    public String getId() {
-        return id;
+    public String getItemId() {
+        return itemId;
     }
 
-    abstract BigDecimal getPrice();
+    public String getItemDetails() {
+        return itemDetails;
+    }
 
-    // For pretty details display in UI
-    abstract String detailsString();
+    public BigDecimal getFullPrice() {
+        return fullPrice;
+    }
+
+    public BigDecimal getPricePaid() {
+        return pricePaid;
+    }
+
+    public void setPricePaid(BigDecimal pricePaid) {
+        this.pricePaid = pricePaid;
+    }
 }

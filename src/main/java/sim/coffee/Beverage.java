@@ -33,4 +33,11 @@ public class Beverage extends MenuItem {
 	public Milk[] getMilks() {
 		return milks;
 	}
+
+	// Chosen size and milk changes the price of this item
+	public BigDecimal getPrice(Size s, Milk m) {
+		BigDecimal withMilk = getPrice().add(BigDecimal.valueOf(m.getAddOnPrice()));
+
+		return withMilk.multiply(BigDecimal.valueOf(s.getCoefficient()));
+	}
 }
