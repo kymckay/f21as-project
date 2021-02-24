@@ -101,6 +101,10 @@ public class OrderList {
 		return orders.add(o);
 	}
 
+	public boolean addAll(List<Order> l) {
+		return orders.addAll(l);
+	}
+
 	// Simple wrapper method
 	public Order get(int index) {
 		return orders.get(index);
