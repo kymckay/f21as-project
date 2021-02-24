@@ -23,12 +23,16 @@ public class OrderBasket extends OrderList {
 
     // Parses through basket list and checks for discount
     private void applyDiscount() {
-        // for (int i = 0; i < this.orders.size(); i++) {
-        //     list.get(i).getItemDetails().
-        // }
         // Loops through the element - order in orderList
         for (Order o : this.orders) {
+            switch (o.getTime().of(year, month, dayOfMonth, hour, minute, second)) {
+                case value:
             
+                    break;
+            
+                default:
+                    break;
+            }
         }
     }
 
