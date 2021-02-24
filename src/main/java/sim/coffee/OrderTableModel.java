@@ -49,7 +49,7 @@ public class OrderTableModel extends AbstractTableModel {
             case 0:
                 return rowOrder.getCustomerID();
             case 1:
-                return rowOrder.getItemDetail();
+                return rowOrder.getItemDetails();
             case 2:
                 return rowOrder.getPricePaid();
             default:
