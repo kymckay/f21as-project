@@ -14,7 +14,7 @@ public class OrderList {
 
 	List<Order> orders;
 
-	OrderList(List<Order> list) { // constructor accepts both LinkedList and ArrayList instances
+	protected OrderList(List<Order> list) { // constructor accepts both LinkedList and ArrayList instances
 		orders = list;
 	}
 

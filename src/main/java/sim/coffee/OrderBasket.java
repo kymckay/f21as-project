@@ -11,7 +11,6 @@ public class OrderBasket extends OrderList {
 
     private OrderList orderList;
     private Menu menu;
-    private List<Order> list;
 
     // private HashMap<String, Integer> count = new HashMap<>();
 
@@ -23,17 +22,19 @@ public class OrderBasket extends OrderList {
     }
 
     // Parses through basket list and checks for discount
-    private BigDecimal applyDiscount() {
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).getItemDetails().
-            return null;
+    private void applyDiscount() {
+        // for (int i = 0; i < this.orders.size(); i++) {
+        //     list.get(i).getItemDetails().
+        // }
+        // Loops through the element - order in orderList
+        for (Order o : this.orders) {
+            
         }
     }
 
     // dumps basket contents into supplied OrderList
     private boolean checkout() {
-        orderList.addAll(list);;
-        return true;
+        return orderList.addAll(this.orders);
     }
 
     // adds value to the map
