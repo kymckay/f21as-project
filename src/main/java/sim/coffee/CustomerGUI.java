@@ -232,12 +232,18 @@ public class CustomerGUI {
         Order newOrder = new Order(LocalDateTime.now(), customer, newItem);
 
         basket.add(newOrder);
+
+        // Refresh the UI table to reflect data change
+        basket.fireTableDataChanged();
     }
 
     // Tells the basket to log all orders in the order history
     private void onCheckout(ActionEvent e) {
         basket.checkout();
         customer = nextCustomer();
+
+        // Refresh the UI table to reflect data change
+        basket.fireTableDataChanged();
     };
 
     private void setupCheckout() {
