@@ -22,6 +22,7 @@ public class OrderBasket extends OrderList {
     }
 
     // Parses through basket list and checks for discount
+    // TODO use setPricePaid
     private void applyDiscount() {
         // Loops through the element - order in orderList
         for (Order o : this.orders) {
@@ -47,7 +48,7 @@ public class OrderBasket extends OrderList {
         applyDiscount();
         checkout();
         super.add(o);
-        String a = o.getItemDetails().getId();
+        String a = o.getItemDetails().getI;
         menu.getKey(a).setCount();
         // count.put(a, count.get(a) + 1);
         return true;
