@@ -17,13 +17,13 @@ public class OrderTableModelTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     static OrderList testList;
-    static OrderTableModel testModel;
+    static BasketTableModel testModel;
 
     // If file isn't found tests fail automatically
     @BeforeClass
     public static void init() throws FileNotFoundException {
         testList = new OrderList("data/test/orders.csv");
-        testModel = new OrderTableModel(testList);
+        testModel = new BasketTableModel(testList);
     }
 
     /**

@@ -8,17 +8,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 
@@ -40,7 +30,7 @@ public class CustomerGUI {
     private JPanel controlPanel;
 
     private MenuTableModel menu;
-    private OrderTableModel basket;
+    private BasketTableModel basket;
 
     // There's probably a better way to manage this but for now I'm just storing all relevant controls
     JComboBox<Colour> colours = new JComboBox<>();
@@ -49,7 +39,7 @@ public class CustomerGUI {
     JComboBox<Size> sizes = new JComboBox<>();
     JComboBox<Milk> milks = new JComboBox<>();
 
-    CustomerGUI(MenuTableModel menu, OrderTableModel basket) {
+    CustomerGUI(MenuTableModel menu, BasketTableModel basket) {
         this.menu = menu;
         this.basket = basket;
 
@@ -195,8 +185,9 @@ public class CustomerGUI {
         return panel;
     }
 
+    // Tells the basket to log all orders in the order history
     private void onCheckout(ActionEvent e) {
-        // TODO: Tell basket to checkout
+        basket.checkout();
     };
 
     private void setupCheckout() {

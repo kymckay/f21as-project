@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial") // Not planning on serializing this
-public class OrderTableModel extends AbstractTableModel {
+public class BasketTableModel extends AbstractTableModel {
 
-    private String[] columns = new String[] { "ID", "Item", "Price" };
-    OrderList orderList;
+    private String[] columns = new String[] { "ID", "Item", "Price", "Discount" };
+    OrderBasket basket;
 
-    OrderTableModel(OrderList orders) {
-        this.orderList = orders;
+    BasketTableModel(OrderBasket basket) {
+        this.basket = basket;
     }
 
 	@Override
@@ -33,7 +33,7 @@ public class OrderTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return orderList.size();
+        return basket.size();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class OrderTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Order rowOrder = orderList.get(rowIndex);
+        Order rowOrder = basket.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
@@ -51,11 +51,17 @@ public class OrderTableModel extends AbstractTableModel {
             case 1:
                 return rowOrder.getItemDetails();
             case 2:
-                return rowOrder.getPricePaid();
+                return rowOrder.getFullPrice();
+            case 3:
+                return String.format("%s%%",
+                        rowOrder.getPricePaid().divide(rowOrder.getFullPrice()).multiply(new BigDecimal("100")));
             default:
                 // Should never be reached
                 throw new IndexOutOfBoundsException(columnIndex);
         }
     }
 
+    public void checkout() {
+        basket.checkout();
+    }
 }

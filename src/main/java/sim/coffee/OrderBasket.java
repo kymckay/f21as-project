@@ -28,9 +28,9 @@ public class OrderBasket extends OrderList {
         for (Order o : this.orders) {
             switch (o.getTime().of(year, month, dayOfMonth, hour, minute, second)) {
                 case value:
-            
+
                     break;
-            
+
                 default:
                     break;
             }
@@ -38,7 +38,7 @@ public class OrderBasket extends OrderList {
     }
 
     // dumps basket contents into supplied OrderList
-    private boolean checkout() {
+    public boolean checkout() {
         return orderList.addAll(this.orders);
     }
 
