@@ -61,6 +61,7 @@ public class OrderBasket extends OrderList {
                 case 17: case 18:
 
                     break;
+
                 default:
                     
                     break;
@@ -69,7 +70,7 @@ public class OrderBasket extends OrderList {
     }
 
     // dumps basket contents into supplied OrderList
-    private boolean checkout() {
+    public boolean checkout() {
         return orderList.addAll(this.orders);
     }
 

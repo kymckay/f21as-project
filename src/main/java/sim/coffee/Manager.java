@@ -28,7 +28,7 @@ public class Manager {
 
         new CustomerGUI(
             new MenuTableModel(menu),
-            new OrderTableModel(basket)
+            new BasketTableModel(basket)
         );
     }
 }

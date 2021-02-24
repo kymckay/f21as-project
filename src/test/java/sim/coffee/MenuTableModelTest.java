@@ -41,7 +41,7 @@ public class MenuTableModelTest {
     }
 
     /**
-     * Ensure table model captures correct number of entries in the menu.
+     * Ensure table model reflects correct number of entries in the menu.
      */
     @Test
     public void rowCountCorrect() {
