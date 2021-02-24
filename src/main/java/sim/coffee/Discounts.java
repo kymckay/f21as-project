@@ -101,7 +101,8 @@ public class Discounts extends OrderBasket {
                                 
                                 if (countD == '0') {
 
-                                    BigDecimal factor = (100-discount)/10;
+                                    BigDecimal factor = hundred.subtract(discount);
+                                    factor = factor.divide(new BigDecimal(10));
                                     price = price.multiply(new BigDecimal(factor));
 
                                 } else if (countD < 0) {
