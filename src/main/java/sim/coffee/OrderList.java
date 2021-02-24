@@ -100,7 +100,7 @@ public class OrderList {
 		BigDecimal sum = new BigDecimal("0");
 
 		for (Order o : orders) {
-			sum = sum.add(o.get());
+			sum = sum.add(o.getPricePaid());
 		}
 
 		return sum;

@@ -23,8 +23,8 @@ public class Order {
         return customerId;
     }
 
-    public String getItemDetail() {
-        return item.getItemDetail();
+    public String getItemDetails() {
+        return item.getItemDetails();
     }
 
     public BigDecimal getFullPrice() {
