@@ -52,9 +52,9 @@ public class BasketTableModelTest {
     public void invalidIndexThrowsException() {
         // Next method call should throw the exception
         exceptionRule.expect(IndexOutOfBoundsException.class);
-        exceptionRule.expectMessage("Index out of range: 4");
+        exceptionRule.expectMessage("Index out of range: 5");
 
-        testModel.getValueAt(0, 4);
+        testModel.getValueAt(0, 5);
     }
 
     /**

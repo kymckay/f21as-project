@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial") // Not planning on serializing this
 public class BasketTableModel extends AbstractTableModel {
 
-    private String[] columns = new String[] { "ID", "Item", "Price", "Discount" };
+    private String[] columns = new String[] { "ID", "Item", "Details", "Price", "Discount" };
     OrderBasket basket;
 
     BasketTableModel(OrderBasket basket) {
@@ -49,10 +49,12 @@ public class BasketTableModel extends AbstractTableModel {
             case 0:
                 return rowOrder.getCustomerID();
             case 1:
-                return rowOrder.getItemDetails();
+                return rowOrder.getItemId();
             case 2:
-                return rowOrder.getFullPrice();
+                return rowOrder.getItemDetails();
             case 3:
+                return rowOrder.getFullPrice();
+            case 4:
                 return String.format("%s%%",
                         rowOrder.getPricePaid().divide(rowOrder.getFullPrice()).multiply(new BigDecimal("100")));
             default:
