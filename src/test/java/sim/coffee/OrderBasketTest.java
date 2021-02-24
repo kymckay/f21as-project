@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.junit.BeforeClass;
@@ -58,8 +59,8 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that upon checkout the basket is emptied of all orders
-     * and the contents are moved to the historic list
+     * Tests that upon checkout the basket is emptied of all orders and the contents
+     * are moved to the historic list
      */
     @Test
     public void checkout() {
@@ -72,4 +73,47 @@ public class OrderBasketTest {
         assertEquals(0, testBasket.size());
         assertEquals(size, testList.size());
     }
+
+    /**
+     * Tests that .. TBD
+     */
+    // @Test
+    // public void discount1() {
+
+    // }
+
+    /**
+     * Tests that any drink and food item ordered between 12:00 and 14:00 costs £4.00
+     */
+    @Test
+    public void discount2() {
+        // First ensure basket is cleared
+        testBasket.checkout();
+
+        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+
+        // These must match the test data menu input
+        OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
+        OrderItem drinkItem = new OrderItem("B001", "M|true|None", drinkPrice, drinkPrice);
+
+        LocalDateTime time = LocalDateTime.parse("2021-03-07T12:15Z", DateTimeFormatter.ISO_DATE_TIME);
+
+        Order food = new Order(time, "TS001", foodItem);
+        Order drink = new Order(time, "TS001", drinkItem);
+
+        testBasket.add(food);
+        testBasket.add(drink);
+
+        // Discount should automatically apply once added
+        assertEquals(new BigDecimal("4.00"), testBasket.getTotalIncome());
+    }
+
+    /**
+     * Tests that all food items are 50% off after 17:00
+     */
+    // @Test
+    // public void discount3() {
+
+    // }
 }
