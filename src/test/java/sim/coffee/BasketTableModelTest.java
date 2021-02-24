@@ -27,7 +27,7 @@ public class BasketTableModelTest {
     public static void init() throws FileNotFoundException {
         testBasket = new OrderBasket(
             new Menu("data/test/menu.csv"),
-            new OrderList("data/test/orders.csv", new ArrayList<>()),
+            new OrderList(new ArrayList<>()),
             new ArrayList<>()
         );
 
