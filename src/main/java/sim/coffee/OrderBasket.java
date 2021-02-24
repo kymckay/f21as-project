@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class OrderBasket extends OrderList {
 
@@ -26,6 +27,23 @@ public class OrderBasket extends OrderList {
 
     // Parses through basket list and checks for discount
     private void applyDiscount() {
+        // Create counter to keep track no. of each type of items ordered
+        int[] count = {0, 0, 0}; // {'F', 'B', 'M'}
+        for (Order o : this.orders) {
+            switch (o.getItemDetails().charAt(0)) {
+                case 'F':
+                    count[0]++;
+                    break;
+                case 'B':
+                    count[1]++;
+                    break;
+                default:
+                    count[2]++;
+                    break;
+            }
+        }
+        // Get sum of count array
+        int sumCount = IntStream.of(count).sum();
         // Loops through the element - order in orderList
         for (Order o : this.orders) {
             //local Variables shared ∀ discount cases
@@ -36,22 +54,26 @@ public class OrderBasket extends OrderList {
             switch (o.getTime().getHour()) {
                 // For orders ordered at 8.00 a.m. to 10.59 a.m. (Excluding 11.00 a.m.)
                 // Hence, order hours 8, 9, 10
+                // Only applies when count[0] = count[1] and count[0], count[1] > 0
                 case 8: case 9: case 10:
-                    if (id == 'M') {
-                        // In cases that its a merch (no discount)
-                        o.setPricePaid(price);
-                    } else if (bevHot == 'F') {
-                        // In cases that its a beverage but not hot (no discount)
-                        o.setPricePaid(price);
-                        // Other cases (with discount)
-                    } else {
-                        price = price.multiply(new BigDecimal(7));
-                        price = price.divide(new BigDecimal(100), 3, RoundingMode.CEILING);
-                        o.setPricePaid(price);
+                    if (sumCount > 0 && count[0]==count[1]) {
+                        if (id == 'M') {
+                            // In cases that its a merch (no discount)
+                            o.setPricePaid(price);
+                        } else if (bevHot == 'F' || bevHot == 'f') {
+                            // In cases that its a beverage but not hot (no discount)
+                            o.setPricePaid(price);
+                            // Other cases (with discount)
+                        } else {
+                            price = price.multiply(new BigDecimal(7));
+                            price = price.divide(new BigDecimal(100), 3, RoundingMode.CEILING);
+                            o.setPricePaid(price);
+                        }
+                        break;
                     }
-                    break;
                 
                 // For every food + drink combo, final price is 4.00
+                // For orders made between 12.00 p.m. to 13.59 p.m.
                 case 12: case 13:
                     // Set Final Price
                     BigDecimal finalPrice = new BigDecimal(4);
@@ -63,7 +85,7 @@ public class OrderBasket extends OrderList {
                     break;
 
                 default:
-                    
+                    o.setPricePaid(price);
                     break;
             }
         }
@@ -78,7 +100,6 @@ public class OrderBasket extends OrderList {
     @Override
     public boolean add(Order o) {
         applyDiscount();
-        checkout();
         super.add(o);
         String a = o.getItemId();
         menu.getKey(a).setCount();
