@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
@@ -246,16 +247,26 @@ public class CustomerGUI {
         // Don't want this event to fire fully if user click + drags
         // Would result in rapid UI changes
         if (!e.getValueIsAdjusting()) {
-            // Single selection mode means there's only ever one index
-            int i =  e.getFirstIndex();
+            // Need selection model to get current selection
+            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
-            // Index is in terms of the view, does not correspond to underlying data
+            // Single selection mode means there's only ever one index
+            int i = lsm.getMinSelectionIndex();
+
+            // Sanity check to avoid errors when event fires on filter change
+            // If previous filter had more rows, this can occur if old selection was beyond
+            // new row count
+            if (i >= menuTable.getRowCount()) {
+                return;
+            }
+
+            // Index is in terms of the view, does not correspond to underlying data when
+            // filtered
             i = menuTable.convertRowIndexToModel(i);
 
             selectedItem = menu.getRowItem(i);
 
-            // Note there is probably a nicer way to do this
-            // It feels very ugly, but it works for now
+            // Controls to populate depend on the type of item
             if (selectedItem instanceof Food) {
                 // TODO: Show dietary classes
             } else if (selectedItem instanceof Beverage) {
