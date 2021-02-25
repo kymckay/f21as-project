@@ -253,9 +253,15 @@ public class CustomerGUI {
             // Single selection mode means there's only ever one index
             int i = lsm.getMinSelectionIndex();
 
+            // Sanity check to avoid errors when event fires on filter change
+            // If previous filter had more rows, this can occur if old selection was beyond
+            // new row count
+            if (i >= menuTable.getRowCount()) {
+                return;
+            }
+
             // Index is in terms of the view, does not correspond to underlying data when
             // filtered
-            // TODO: Fix this out of bounds on filter change
             i = menuTable.convertRowIndexToModel(i);
 
             selectedItem = menu.getRowItem(i);
