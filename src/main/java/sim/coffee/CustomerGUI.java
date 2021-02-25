@@ -4,14 +4,21 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 
@@ -35,13 +42,6 @@ public class CustomerGUI {
     private MenuTableModel menu;
     private BasketTableModel basket;
 
-    // There's probably a better way to manage this but for now I'm just storing all relevant controls
-    JComboBox<Colour> colours = new JComboBox<>();
-    JComboBox<Label> labels = new JComboBox<>();
-    JCheckBox isHot = new JCheckBox();
-    JComboBox<Size> sizes = new JComboBox<>();
-    JComboBox<Milk> milks = new JComboBox<>();
-
     // The current customer placing orders is tracked here
     private Random custRand = new Random();
     private String customer = nextCustomer();
@@ -51,6 +51,10 @@ public class CustomerGUI {
 
     // Currently selected menu item for ease of access elsewhere
     private MenuItem selectedItem;
+
+    // Controls interact with the item properties
+    ControlsBeverage controlsB = new ControlsBeverage();
+    ControlsMerchandise controlsM = new ControlsMerchandise();
 
     CustomerGUI(MenuTableModel menu, BasketTableModel basket) {
         this.menu = menu;
@@ -98,13 +102,18 @@ public class CustomerGUI {
         controlPanel = new JPanel(new CardLayout());
 
         controlPanel.add(foodControls(), LABEL_F);
-        controlPanel.add(beverageControls(), LABEL_B);
-        controlPanel.add(merchandiseControls(), LABEL_M);
+        controlPanel.add(controlsB, LABEL_B);
+        controlPanel.add(controlsM, LABEL_M);
 
         // Menu starts on food by default (always filtered to one type at a time)
         filterMenu(LABEL_F);
 
-        guiFrame.add(controlPanel, BorderLayout.EAST);
+        JPanel sidebar = new JPanel();
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+
+        sidebar.add(controlPanel);
+        sidebar.add(cartControls());
+        guiFrame.add(sidebar, BorderLayout.EAST);
 
         // Menu categories switched via panel of buttons at top of UI
         JPanel buttonPanel = new JPanel();
@@ -123,63 +132,11 @@ public class CustomerGUI {
         guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
     }
 
-    private JPanel merchandiseControls() {
-        JPanel panel = new JPanel();
-
-        JPanel controls = new JPanel();
-
-        controls.add(colours);
-        controls.add(labels);
-
-        JPanel submit = cartControls();
-
-        // Position checkout below item controls
-        controls.setAlignmentX(Component.CENTER_ALIGNMENT);
-        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        panel.add(controls);
-        panel.add(submit);
-
-        return panel;
-    }
-
-    private JPanel beverageControls() {
-        JPanel panel = new JPanel();
-
-        JPanel controls = new JPanel();
-
-        controls.add(isHot);
-        controls.add(sizes);
-        controls.add(milks);
-
-        JPanel submit = cartControls();
-
-        // Position checkout below item controls
-        controls.setAlignmentX(Component.CENTER_ALIGNMENT);
-        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        panel.add(controls);
-        panel.add(submit);
-
-        return panel;
-    }
-
     private JPanel foodControls() {
         JPanel panel = new JPanel();
 
         // TODO show dietary classes
-        JLabel controls = new JLabel("No food controls to show.");
-        JPanel submit = cartControls();
-
-        // Position checkout below item controls
-        controls.setAlignmentX(Component.CENTER_ALIGNMENT);
-        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        panel.add(controls);
-        panel.add(submit);
+        panel.add(new JLabel("No food controls to show."));
 
         return panel;
     }
@@ -211,17 +168,10 @@ public class CustomerGUI {
         // details
         switch (menuView) {
             case LABEL_B:
-                Size s = (Size)sizes.getSelectedItem();
-                boolean hot = isHot.isSelected();
-                Milk m = (Milk)milks.getSelectedItem();
-
-                details = Beverage.formatDetails(s, hot, m);
+                details = controlsB.getItemDetails();
                 break;
             case LABEL_M:
-                Label l = (Label) labels.getSelectedItem();
-                Colour c = (Colour) colours.getSelectedItem();
-
-                details = Merchandise.formatDetails(l, c);
+                details = controlsM.getItemDetails();
                 break;
             default:
                 // Simple types (like food) have no specific details
@@ -278,30 +228,9 @@ public class CustomerGUI {
             if (selectedItem instanceof Food) {
                 // TODO: Show dietary classes
             } else if (selectedItem instanceof Beverage) {
-                sizes.removeAllItems();
-                for (Size s : selectedItem.getSizes()) {
-                    sizes.addItem(s);
-                }
-
-                milks.removeAllItems();
-                for (Milk m : selectedItem.getMilks()) {
-                    milks.addItem(m);
-                }
-
-                isHot.setEnabled(selectedItem.canBeHot());
-
-                sizes.setSelectedIndex(0);
-                milks.setSelectedIndex(0);
+                controlsB.populate((Beverage) selectedItem);
             } else {
-                colours.removeAllItems();
-                for (Colour c : selectedItem.getColours()) {
-                    colours.addItem(c);
-                }
-
-                labels.removeAllItems();
-                for (Label l : selectedItem.getLabels()) {
-                    labels.addItem(l);
-                }
+                controlsM.populate((Merchandise) selectedItem);
             }
         }
     }
