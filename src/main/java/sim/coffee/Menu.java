@@ -47,62 +47,70 @@ public class Menu {
 	private void processLine (String line) throws IllegalIDException {
 		// Splitting with regex trims excess whitespace near commas
 		String details [] = line.split("\\s*,\\s*");
+		
+		// All rows in csv file have same columns
+		if (details.length == 4) {
+			
+			MenuItem newItem;
+			String id            = details[0];
+			String description   = details[1];
+			BigDecimal basePrice = new BigDecimal(details[2]);
+			String itemDetails   = details[3]; 
+			
+			// First character of item ID diferentiates the types
+			switch (id.substring(0,1)) {
+				case "B":
+					String beverageDetails [] = itemDetails.split("\\s*!\\s*");
+			
+					boolean isHot = Boolean.parseBoolean(beverageDetails[0]);
 
-		String id            = details[0];
-		String description   = details[1];
-		BigDecimal basePrice = new BigDecimal(details[2]);
+					Size[] sizes =
+							Arrays.stream(beverageDetails[1].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Size::valueOf)
+							.toArray(Size[]::new);
 
-		MenuItem newItem;
+					Milk[] milks =
+							Arrays.stream(beverageDetails[2].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Milk::valueOf)
+							.toArray(Milk[]::new);
 
-		// First character of item ID diferentiates the types
-		switch (id.substring(0,1)) {
-			case "B":
-				boolean isHot = Boolean.parseBoolean(details[3]);
+					newItem = new Beverage(sizes, isHot, milks, id, basePrice, description);
 
-				Size[] sizes =
-					Arrays.stream(details[4].split(PIPE_SEP))
-						.map(String::toUpperCase)
-						.map(Size::valueOf)
-						.toArray(Size[]::new);
+					break;
+				case "F":
+					DietaryClass[] dietaryClasses =
+						Arrays.stream(itemDetails.split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(DietaryClass::valueOf)
+							.toArray(DietaryClass[]::new);
 
-				Milk[] milks =
-					Arrays.stream(details[5].split(PIPE_SEP))
-						.map(String::toUpperCase)
-						.map(Milk::valueOf)
-						.toArray(Milk[]::new);
+					newItem = new Food(dietaryClasses, id, basePrice, description);
+					break;
+				case "M":
+					String merchDetails [] = itemDetails.split("\\s*!\\s*");
+					
+					Label[] labels =
+						Arrays.stream(merchDetails[0].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Label::valueOf)
+							.toArray(Label[]::new);
 
-				newItem = new Beverage(sizes, isHot, milks, id, basePrice, description);
+					Colour[] colours =
+						Arrays.stream(merchDetails[1].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Colour::valueOf)
+							.toArray(Colour[]::new);
 
-				break;
-			case "F":
-				DietaryClass[] dietaryClasses =
-					Arrays.stream(details[3].split(PIPE_SEP))
-						.map(String::toUpperCase)
-						.map(DietaryClass::valueOf)
-						.toArray(DietaryClass[]::new);
+					newItem = new Merchandise(labels, colours, id, basePrice, description);
+					break;
+				default:
+					throw new IllegalArgumentException("Line contains invalid Item ID");
+			}
 
-				newItem = new Food(dietaryClasses, id, basePrice, description);
-				break;
-			case "M":
-				Label[] labels =
-					Arrays.stream(details[3].split(PIPE_SEP))
-						.map(String::toUpperCase)
-						.map(Label::valueOf)
-						.toArray(Label[]::new);
-
-				Colour[] colours =
-					Arrays.stream(details[4].split(PIPE_SEP))
-						.map(String::toUpperCase)
-						.map(Colour::valueOf)
-						.toArray(Colour[]::new);
-
-				newItem = new Merchandise(labels, colours, id, basePrice, description);
-				break;
-			default:
-				throw new IllegalArgumentException("Line contains invalid Item ID");
+			this.add(id, newItem);
 		}
-
-		this.add(id, newItem);
 	}
 
 
