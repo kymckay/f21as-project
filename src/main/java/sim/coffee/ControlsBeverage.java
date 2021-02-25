@@ -64,6 +64,15 @@ public class ControlsBeverage extends JPanel {
     }
 
     private void updatePrice() {
+        // Can't update price while in temporary inconsistent state
+        // This occurs when items are removed from the lists on population
+        if (
+            sizes.getSelectedIndex() == -1
+            || milks.getSelectedIndex() == -1
+        ) {
+            return;
+        }
+
         Size s = (Size) sizes.getSelectedItem();
         Milk m = (Milk) milks.getSelectedItem();
 

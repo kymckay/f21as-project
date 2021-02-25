@@ -55,6 +55,12 @@ public class ControlsMerchandise extends JPanel {
     }
 
     private void updatePrice() {
+        // Can't update price while in temporary inconsistent state
+        // This occurs when items are removed from the list on population
+        if (labels.getSelectedIndex() == -1) {
+            return;
+        }
+
         Label l = (Label) labels.getSelectedItem();
 
         BigDecimal newPrice = currentItem.getPrice(l);
