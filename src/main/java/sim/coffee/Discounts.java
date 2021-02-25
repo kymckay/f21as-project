@@ -1,28 +1,17 @@
 package sim.coffee;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OrderBasket extends OrderList {
 
-    private OrderList orderList;
-    private Menu menu;
+public class Discounts extends OrderBasket {
 
-    // private HashMap<String, Integer> count = new HashMap<>();
-
-    // Instantiate Map to track order count
-    OrderBasket(Menu m, OrderList o, List<Order> list) {
-    	super(list);
-        menu = m;
-        orderList = o;
+    Discounts(Menu m, OrderList o, List<Order> list) {
+        super(m, o, list);
     }
 
-    // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00   
-    // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00  
-    // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00 
-    // Parses through basket list and checks for discount
     public boolean ifSandwich(Order o) {
         // Use Regex to track the food item and differentiate
         // // between pastry and sandwich
@@ -37,7 +26,7 @@ public class OrderBasket extends OrderList {
     public int getCount(int i) {
         int[] count = {0, 0, 0, 0, 0}; // {Sandwich, Pastry, 'B–hot', 'B-cold', 'M'}
         for (Order o : this.orders) {
-            switch (o.getItemId().charAt(0)) {
+            switch (o.getItemDetails().charAt(0)) {
                 case 'F':
                     if (ifSandwich(o)) {
                         count[0]++; // If ifSandwich = true, the sandwich count ++
@@ -179,7 +168,7 @@ public class OrderBasket extends OrderList {
                 
             } else if (countD.signum() < 0) {
 
-                if (getItemType(o) == 'F') {
+                if (getItemType(o) == 'f') {
 
                     countD = countD.multiply(new BigDecimal(-1));
                     price = countD.multiply(price);
@@ -240,6 +229,7 @@ public class OrderBasket extends OrderList {
 
     }
 
+    @Override
     public void applyDiscount() {
 
         // Order has to have more than 1 item
@@ -272,23 +262,4 @@ public class OrderBasket extends OrderList {
             }
         }
     }
-
-    // dumps basket contents into supplied OrderList
-    public boolean checkout() {
-        return orderList.addAll(this.orders);
-    }
-
-    // adds value to the map
-    @Override
-    public boolean add(Order o) {
-        applyDiscount();
-        super.add(o);
-        String a = o.getItemId();
-        menu.getKey(a).setCount();
-        // count.put(a, count.get(a) + 1);
-        return true;
-    }
-
-
-
 }
