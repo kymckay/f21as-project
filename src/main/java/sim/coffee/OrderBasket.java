@@ -31,7 +31,7 @@ public class OrderBasket extends OrderList {
     }
 
     // Create counter to keep track no. of each type of items ordered
-    public int getCount(int i) {
+    public int[] getCount() {
         int[] count = {0, 0, 0, 0, 0}; // {Sandwich, Pastry, 'B–hot', 'B-cold', 'M'}
         for (Order o : this.orders) {
             switch (o.getItemId().charAt(0)) {
@@ -54,14 +54,14 @@ public class OrderBasket extends OrderList {
                     break;
             }
         }
-        return count[i];
+        return count;
     }
 
     // Get sum of counter array
     public int getSumCount() {
         int count = 0;
         for (int i = 0; i < 5; i++) {
-            count = count + getCount(i);
+            count = count + getCount()[i];
         }
         return count;
     }
@@ -84,8 +84,9 @@ public class OrderBasket extends OrderList {
     public void morningDiscount(Order o) {
 
         BigDecimal price = getBasePrice(o);
+        int k = getCount()[0];
 
-        if (getCount(1) >= 1 && getCount(2) >= 1) {
+        if (k > 0 | getCount()[2] > 0) {
 
             if (ifSandwich(o) == false || !isHot(o) || getItemType(o) == 'M') {
 
@@ -93,8 +94,8 @@ public class OrderBasket extends OrderList {
 
             } else {
 
-                BigDecimal sandwich = new BigDecimal(getCount(1));
-                BigDecimal hotBev = new BigDecimal(getCount(2));
+                BigDecimal sandwich = new BigDecimal(getCount()[0]);
+                BigDecimal hotBev = new BigDecimal(getCount()[2]);
                 BigDecimal countD = hotBev.subtract(sandwich);
                 BigDecimal discount = new BigDecimal(0.3);
                 BigDecimal baseFactor = new BigDecimal(1);
@@ -102,7 +103,7 @@ public class OrderBasket extends OrderList {
 
                 if (sandwich.equals(hotBev)) {
 
-                    baseFactor = baseFactor.subtract(discount);
+                    factor = baseFactor.subtract(discount);
                     price = price.multiply(factor);
                     o.setPricePaid(price);
 
@@ -157,8 +158,8 @@ public class OrderBasket extends OrderList {
     public void afternoonDiscount(Order o) {
 
         BigDecimal price = getBasePrice(o);
-        int foodInt = getCount(0) + getCount(1);
-        int bevInt = getCount(2) + getCount(3);
+        int foodInt = getCount()[0] + getCount()[1];
+        int bevInt = getCount()[2] + getCount()[3];
 
 
         if (foodInt >= 1 && bevInt >= 1) {
@@ -219,7 +220,7 @@ public class OrderBasket extends OrderList {
         BigDecimal price = getBasePrice(o);
         BigDecimal factor = new BigDecimal(0.5);
 
-        if (getCount(0) > 0 || getCount(1) > 0) {
+        if (getCount()[0] > 0 || getCount()[1] > 0) {
 
             if (getItemType(o) == 'F') {
 
@@ -246,10 +247,9 @@ public class OrderBasket extends OrderList {
 
                 // Switch case for the 3 different discount rules based on the order hour
                 switch (o.getTime().getHour()) {
-
                     // For orders ordered at 8.00 a.m. to 10.59 a.m. (Excluding 11.00 a.m.)
                     // Hence, order hours 8, 9, 10
-                    case 8: case 9: case 10:
+                    case 8: case 9: case 10: case 23:
                         morningDiscount(o);
                         break;
                     // For orders made between 12.00 p.m. to 1.59 p.m.
@@ -257,13 +257,12 @@ public class OrderBasket extends OrderList {
                         afternoonDiscount(o);
                         break;
                     // For orders made between 5.00 p.m. to 6.59 p.m.
-                    case 17: case 18:
+                    case 17: case 18: 
                         eveningDiscount(o);
                         break;
                     default:
                         o.setPricePaid(getBasePrice(o));
                         break;
-
                 }
             }
         }
