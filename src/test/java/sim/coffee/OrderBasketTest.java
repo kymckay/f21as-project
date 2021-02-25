@@ -65,6 +65,7 @@ public class OrderBasketTest {
         assertNotEquals(0, size);
 
         testBasket.checkout();
+
         assertEquals(0, testBasket.size());
         assertEquals(size, testList.size());
     }
@@ -89,14 +90,6 @@ public class OrderBasketTest {
         testBasket.add(drink);
     }
 
-    /**
-     * Tests that .. TBD
-     */
-    // @Test
-    // public void discount1() {
-
-    // }
-
     @Test
     public void getSumCount() {
         setupOrder("2021-03-07T12:15Z");
@@ -104,6 +97,23 @@ public class OrderBasketTest {
         assertEquals(1, testBasket.getCount(0));
         assertEquals(1, testBasket.getCount(2));
         assertNotEquals(1, testBasket.getCount(1));
+    }
+
+    /**
+     * Tests that .. TBD
+     */
+    @Test
+    public void discount1() {
+        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+
+        // Find sum if food & drinks is 30% off
+        BigDecimal multiplicand = new BigDecimal(0.7);
+        drinkPrice = drinkPrice.multiply(multiplicand);
+        foodPrice = foodPrice.multiply(multiplicand);
+        BigDecimal discountPrice = drinkPrice.add(foodPrice);
+        setupOrder("2021-03-07T09:15Z");
+        assertEquals(discountPrice, testBasket.getTotalIncome());
     }
 
     /**

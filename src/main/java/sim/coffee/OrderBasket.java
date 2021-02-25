@@ -24,7 +24,7 @@ public class OrderBasket extends OrderList {
         // Use Regex to track the food item and differentiate
         // // between pastry and sandwich
         String desc = menu.getKey(o.getItemId()).getDescription();
-        Pattern pattern = Pattern.compile("sandwich", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("Sandwich", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(desc);
         boolean matchFound = matcher.find();
         return matchFound;
@@ -87,20 +87,20 @@ public class OrderBasket extends OrderList {
 
         if (getCount(1) >= 1 && getCount(2) >= 1) {
 
-            if (ifSandwich(o) || !isHot(o) || getItemType(o) == 'M') {
+            if (ifSandwich(o) == false || !isHot(o) || getItemType(o) == 'M') {
 
                 o.setPricePaid(price);
 
             } else {
 
-                BigDecimal pastry = new BigDecimal(getCount(1));
+                BigDecimal sandwich = new BigDecimal(getCount(1));
                 BigDecimal hotBev = new BigDecimal(getCount(2));
-                BigDecimal countD = hotBev.subtract(pastry);
+                BigDecimal countD = hotBev.subtract(sandwich);
                 BigDecimal discount = new BigDecimal(0.3);
                 BigDecimal baseFactor = new BigDecimal(1);
                 BigDecimal factor = new BigDecimal(1);
 
-                if (countD.equals(BigDecimal.ZERO)) {
+                if (sandwich.equals(hotBev)) {
 
                     baseFactor = baseFactor.subtract(discount);
                     price = price.multiply(factor);
@@ -108,7 +108,7 @@ public class OrderBasket extends OrderList {
 
                 } else if (countD.signum() < 0) {
 
-                    if (ifSandwich(o) == false) {
+                    if (getItemType(o) == 'F') {
 
                         BigDecimal num = countD.multiply(new BigDecimal(-1));
                         num = num.add(hotBev);
@@ -129,7 +129,7 @@ public class OrderBasket extends OrderList {
 
                     if (getItemType(o) == 'B') {
 
-                        BigDecimal num = countD.add(pastry);
+                        BigDecimal num = countD.add(sandwich);
                         discount = discount.divide(num);
                         factor = baseFactor.add(discount);
                         price = price.multiply(factor);
