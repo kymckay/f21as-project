@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 
 import javax.swing.table.AbstractTableModel;
 
-@SuppressWarnings("serial") // Not planning on serializing this
 public class MenuTableModel extends AbstractTableModel {
+
+    // This is just to placate the linter. We never seralise this class so it's
+    // irrelevant to us.
+    private static final long serialVersionUID = 1L;
 
     private String[] columns = new String[] { "ID", "Item", "Price" };
     private String[] rowIDs;
-    private Menu menu;
+    private transient Menu menu;
 
     public MenuTableModel(Menu menu) {
         this.menu = menu;

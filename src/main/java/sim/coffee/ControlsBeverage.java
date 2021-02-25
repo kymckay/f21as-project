@@ -9,6 +9,10 @@ import javax.swing.JPanel;
 
 public class ControlsBeverage extends JPanel {
 
+    // This is just to placate the linter. We never seralise this class so it's
+    // irrelevant to us.
+    private static final long serialVersionUID = 1L;
+
     JCheckBox isHot = new JCheckBox();
     JComboBox<Size> sizes = new JComboBox<>();
     JComboBox<Milk> milks = new JComboBox<>();

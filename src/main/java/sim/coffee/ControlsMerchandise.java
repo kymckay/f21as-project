@@ -8,6 +8,10 @@ import javax.swing.JPanel;
 
 public class ControlsMerchandise extends JPanel {
 
+    // This is just to placate the linter. We never seralise this class so it's
+    // irrelevant to us.
+    private static final long serialVersionUID = 1L;
+
     JComboBox<Colour> colours = new JComboBox<>();
     JComboBox<Label> labels = new JComboBox<>();
 

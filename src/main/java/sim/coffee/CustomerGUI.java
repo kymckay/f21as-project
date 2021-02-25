@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
@@ -195,7 +194,7 @@ public class CustomerGUI {
 
         // Refresh the UI table to reflect data change
         basket.fireTableDataChanged();
-    };
+    }
 
     private void setupCheckout() {
         // Table element will list menu items available to add to cart
