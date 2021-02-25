@@ -108,9 +108,13 @@ public class OrderBasketTest {
         setupOrder("2021-03-07T12:15Z");
         assertEquals(discountPrice, testBasket.getTotalIncome());
 
+        clearBasket();
+
         // Discount should not apply after 14:00
         setupOrder("2021-03-07T14:01Z");
         assertNotEquals(discountPrice, testBasket.getTotalIncome());
+
+        clearBasket();
 
         // Discount should not apply before 12:00
         setupOrder("2021-03-07T11:59Z");
