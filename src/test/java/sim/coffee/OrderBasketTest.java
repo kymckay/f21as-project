@@ -97,6 +97,15 @@ public class OrderBasketTest {
 
     // }
 
+    @Test
+    public void getSumCount() {
+        setupOrder("2021-03-07T12:15Z");
+        assertEquals(2, testBasket.getSumCount());
+        assertEquals(1, testBasket.getCount(0));
+        assertEquals(1, testBasket.getCount(2));
+        assertNotEquals(1, testBasket.getCount(1));
+    }
+
     /**
      * Tests that any drink and food item ordered between 12:00 and 14:00 costs £4.00
      */
