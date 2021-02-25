@@ -69,6 +69,7 @@ public class CustomerGUI {
 
         guiFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        // Construct the layout and elements in order
         setup();
 
         // Let frame layout manager handle sizing
@@ -78,6 +79,7 @@ public class CustomerGUI {
 
     private void setup() {
         // Right of UI contains item and checkout controls stacked
+        // Controls set before menu so it can start filtered
         JPanel sidebar = setupControls();
         guiFrame.add(sidebar, BorderLayout.EAST);
 
@@ -94,6 +96,7 @@ public class CustomerGUI {
     }
 
     private JPanel setupControls() {
+        // Card layout enables switching between category controls in place
         controlPanel = new JPanel(new CardLayout());
 
         controlPanel.add(foodControls(), LABEL_F);
@@ -108,8 +111,8 @@ public class CustomerGUI {
         return sidebar;
     }
 
-    private JScrollPane setupMenu() {
-        // Table element will list menu items available to add to cart
+    private JPanel setupMenu() {
+        // Table element will list menu items available to add to basket
         menuTable = new JTable(menu);
 
         // Staff can only add one menu item at a time as their properties differ
@@ -128,18 +131,29 @@ public class CustomerGUI {
         // Scroll pane contains table to enable scrollbar
         JScrollPane menuPane = new JScrollPane();
         menuPane.setViewportView(menuTable);
-        return menuPane;
+
+        // Add label to distinguish UI sections
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(new JLabel("Menu:"));
+        panel.add(menuPane);
+        return panel;
     }
 
-    private JScrollPane setupBasket() {
-        // Table element will list menu items available to add to cart
-        JTable ordersTable = new JTable(basket);
+    private JPanel setupBasket() {
+        // Table element will list menu items available to add to basket
+        JTable basketTable = new JTable(basket);
 
         // Scroll pane contains table to enable scrollbar
-        JScrollPane ordersPane = new JScrollPane();
-        ordersPane.setViewportView(ordersTable);
+        JScrollPane basketPane = new JScrollPane();
+        basketPane.setViewportView(basketTable);
 
-        return ordersPane;
+        // Add label to distinguish UI sections
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(new JLabel("Basket:"));
+        panel.add(basketPane);
+        return panel;
     }
 
     private JPanel setupMenuButtons() {
@@ -163,10 +177,10 @@ public class CustomerGUI {
     private JPanel setupCheckout() {
         JPanel panel = new JPanel();
 
-        JButton add = new JButton("Add to Cart");
+        JButton add = new JButton("Add to Basket");
         JButton checkout = new JButton("Checkout");
 
-        add.addActionListener(this::addToCart);
+        add.addActionListener(this::addToBasket);
         checkout.addActionListener(this::onCheckout);
 
         panel.add(add);
@@ -185,7 +199,7 @@ public class CustomerGUI {
     }
 
     // Instantiates a new order from item controls and puts it in the basket
-    private void addToCart(ActionEvent e) {
+    private void addToBasket(ActionEvent e) {
         OrderItem newItem;
 
         String itemId = selectedItem.getID();
