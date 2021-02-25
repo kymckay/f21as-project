@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
@@ -246,10 +247,15 @@ public class CustomerGUI {
         // Don't want this event to fire fully if user click + drags
         // Would result in rapid UI changes
         if (!e.getValueIsAdjusting()) {
-            // Single selection mode means there's only ever one index
-            int i = e.getFirstIndex();
+            // Need selection model to get current selection
+            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
-            // Index is in terms of the view, does not correspond to underlying data
+            // Single selection mode means there's only ever one index
+            int i = lsm.getMinSelectionIndex();
+
+            // Index is in terms of the view, does not correspond to underlying data when
+            // filtered
+            // TODO: Fix this out of bounds on filter change
             i = menuTable.convertRowIndexToModel(i);
 
             selectedItem = menu.getRowItem(i);
