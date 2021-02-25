@@ -69,15 +69,46 @@ public class CustomerGUI {
 
         guiFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setupMenu();
-        setupCheckout();
+        setup();
 
         // Let frame layout manager handle sizing
         guiFrame.pack();
         guiFrame.setVisible(true);
     }
 
-    private void setupMenu() {
+    private void setup() {
+        // Right of UI contains item and checkout controls stacked
+        JPanel sidebar = setupControls();
+        guiFrame.add(sidebar, BorderLayout.EAST);
+
+        // Center of UI has menu and basket tables stacked
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
+        centerPanel.add(setupMenu());
+        centerPanel.add(setupBasket());
+        guiFrame.add(centerPanel, BorderLayout.CENTER);
+
+        // Top of UI contains menu category buttons
+        guiFrame.add(setupMenuButtons(), BorderLayout.NORTH);
+    }
+
+    private JPanel setupControls() {
+        controlPanel = new JPanel(new CardLayout());
+
+        controlPanel.add(foodControls(), LABEL_F);
+        controlPanel.add(controlsB, LABEL_B);
+        controlPanel.add(controlsM, LABEL_M);
+
+        JPanel sidebar = new JPanel();
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+
+        sidebar.add(controlPanel);
+        sidebar.add(setupCheckout());
+        return sidebar;
+    }
+
+    private JScrollPane setupMenu() {
         // Table element will list menu items available to add to cart
         menuTable = new JTable(menu);
 
@@ -91,30 +122,27 @@ public class CustomerGUI {
         // Row sorter is used to apply filters to the table
         menuTable.setRowSorter(menuSorter);
 
-        // Scroll pane contains table to enable scrollbar
-        JScrollPane menuPane = new JScrollPane();
-        menuPane.setViewportView(menuTable);
-
-        // Section with menu table
-        guiFrame.add(menuPane, BorderLayout.CENTER);
-
-        // Item controls appear on the right of the menu
-        controlPanel = new JPanel(new CardLayout());
-
-        controlPanel.add(foodControls(), LABEL_F);
-        controlPanel.add(controlsB, LABEL_B);
-        controlPanel.add(controlsM, LABEL_M);
-
         // Menu starts on food by default (always filtered to one type at a time)
         filterMenu(LABEL_F);
 
-        JPanel sidebar = new JPanel();
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        // Scroll pane contains table to enable scrollbar
+        JScrollPane menuPane = new JScrollPane();
+        menuPane.setViewportView(menuTable);
+        return menuPane;
+    }
 
-        sidebar.add(controlPanel);
-        sidebar.add(cartControls());
-        guiFrame.add(sidebar, BorderLayout.EAST);
+    private JScrollPane setupBasket() {
+        // Table element will list menu items available to add to cart
+        JTable ordersTable = new JTable(basket);
 
+        // Scroll pane contains table to enable scrollbar
+        JScrollPane ordersPane = new JScrollPane();
+        ordersPane.setViewportView(ordersTable);
+
+        return ordersPane;
+    }
+
+    private JPanel setupMenuButtons() {
         // Menu categories switched via panel of buttons at top of UI
         JPanel buttonPanel = new JPanel();
         JButton foodButton = new JButton(LABEL_F);
@@ -129,19 +157,10 @@ public class CustomerGUI {
         buttonPanel.add(foodButton);
         buttonPanel.add(drinkButton);
         buttonPanel.add(merchButton);
-        guiFrame.add(buttonPanel, BorderLayout.NORTH); // Section with category buttons
+        return buttonPanel;
     }
 
-    private JPanel foodControls() {
-        JPanel panel = new JPanel();
-
-        // TODO show dietary classes
-        panel.add(new JLabel("No food controls to show."));
-
-        return panel;
-    }
-
-    private JPanel cartControls() {
+    private JPanel setupCheckout() {
         JPanel panel = new JPanel();
 
         JButton add = new JButton("Add to Cart");
@@ -152,6 +171,15 @@ public class CustomerGUI {
 
         panel.add(add);
         panel.add(checkout);
+
+        return panel;
+    }
+
+    private JPanel foodControls() {
+        JPanel panel = new JPanel();
+
+        // TODO show dietary classes
+        panel.add(new JLabel("No food controls to show."));
 
         return panel;
     }
@@ -194,17 +222,6 @@ public class CustomerGUI {
 
         // Refresh the UI table to reflect data change
         basket.fireTableDataChanged();
-    }
-
-    private void setupCheckout() {
-        // Table element will list menu items available to add to cart
-        JTable ordersTable = new JTable(basket);
-
-        // Scroll pane contains table to enable scrollbar
-        JScrollPane ordersPane = new JScrollPane();
-        ordersPane.setViewportView(ordersTable);
-
-        guiFrame.add(ordersPane, BorderLayout.SOUTH); // Section with checkout orders table
     }
 
     /**
