@@ -101,7 +101,7 @@ public class Discounts extends OrderBasket {
 
                 } else if (countD.signum() < 0) {
 
-                    if (ifSandwich(o) == false) {
+                    if (ifSandwich(o)) {
 
                         BigDecimal num = countD.multiply(new BigDecimal(-1));
                         num = num.add(hotBev);
