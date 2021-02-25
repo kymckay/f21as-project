@@ -247,15 +247,14 @@ public class CustomerGUI {
         // Would result in rapid UI changes
         if (!e.getValueIsAdjusting()) {
             // Single selection mode means there's only ever one index
-            int i =  e.getFirstIndex();
+            int i = e.getFirstIndex();
 
             // Index is in terms of the view, does not correspond to underlying data
             i = menuTable.convertRowIndexToModel(i);
 
             selectedItem = menu.getRowItem(i);
 
-            // Note there is probably a nicer way to do this
-            // It feels very ugly, but it works for now
+            // Controls to populate depend on the type of item
             if (selectedItem instanceof Food) {
                 // TODO: Show dietary classes
             } else if (selectedItem instanceof Beverage) {
