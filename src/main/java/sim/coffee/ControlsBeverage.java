@@ -24,6 +24,10 @@ public class ControlsBeverage extends JPanel {
         this.add(sizes);
         this.add(milks);
         this.add(price);
+
+        // Price changes with size and milk
+        sizes.addActionListener(e -> updatePrice());
+        milks.addActionListener(e -> updatePrice());
     }
 
     // Populates the item controls based on the supplied menu item
@@ -46,10 +50,6 @@ public class ControlsBeverage extends JPanel {
 
         sizes.setSelectedIndex(0);
         milks.setSelectedIndex(0);
-
-        // Price changes with size and milk
-        sizes.addActionListener(e -> updatePrice());
-        milks.addActionListener(e -> updatePrice());
 
         // New item's initial price probably differs from previous
         updatePrice();
