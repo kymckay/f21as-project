@@ -83,7 +83,8 @@ public class CustomerGUI {
         menuTable = new JTable(menu);
 
         // Staff can only add one menu item at a time as their properties differ
-        menuTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // This model also forces a selection at all times for a consistent state
+        menuTable.setSelectionModel(new MenuListSelectionModel());
 
         // Menu item controls differ per item, updated when list selection changes
         menuTable.getSelectionModel().addListSelectionListener(this::updateMenuControls);
@@ -244,6 +245,9 @@ public class CustomerGUI {
         // When menu is filtered corresponding controls are available
         CardLayout cl = (CardLayout) controlPanel.getLayout();
         cl.show(controlPanel, label);
+
+        // Table should always have an element selected for consistency
+        menuTable.setRowSelectionInterval(0, 0);
 
         // Track state of menu for ease of checking elsewhere
         menuView = label;
