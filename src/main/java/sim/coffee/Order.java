@@ -43,4 +43,12 @@ public class Order {
     public void setPricePaid(BigDecimal newPrice) {
         item.setPricePaid(newPrice);
     }
+
+    // Calculates the percentage discount (between 0 and 1)
+    public BigDecimal getDiscount() {
+        BigDecimal menuPrice = getFullPrice();
+        BigDecimal finalPrice = getPricePaid();
+
+        return new BigDecimal("1").subtract(finalPrice.divide(menuPrice));
+    }
 }

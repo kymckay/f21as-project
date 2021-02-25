@@ -53,10 +53,9 @@ public class BasketTableModel extends AbstractTableModel {
             case 2:
                 return rowOrder.getItemDetails();
             case 3:
-                return rowOrder.getFullPrice();
+                return rowOrder.getPricePaid();
             case 4:
-                return String.format("%s%%",
-                        rowOrder.getPricePaid().divide(rowOrder.getFullPrice()).multiply(new BigDecimal("100")));
+                return String.format("%s%%", rowOrder.getDiscount().multiply(new BigDecimal("100")));
             default:
                 // Should never be reached
                 throw new IndexOutOfBoundsException(columnIndex);
