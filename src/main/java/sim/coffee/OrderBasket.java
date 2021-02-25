@@ -10,18 +10,15 @@ public class OrderBasket extends OrderList {
     private OrderList orderList;
     private Menu menu;
 
-    // private HashMap<String, Integer> count = new HashMap<>();
-
-    // Instantiate Map to track order count
     OrderBasket(Menu m, OrderList o, List<Order> list) {
     	super(list);
         menu = m;
         orderList = o;
     }
 
-    // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00   
-    // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00  
-    // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00 
+    // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00
+    // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00
+    // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00
     // Parses through basket list and checks for discount
     public boolean ifSandwich(Order o) {
         // Use Regex to track the food item and differentiate
@@ -46,8 +43,7 @@ public class OrderBasket extends OrderList {
                     }
                     break;
                 case 'B':
-                    char bevHot = o.getItemDetails().charAt(2);
-                    if (bevHot == 't') {
+                    if (isHot(o)) {
                         count[2]++;
                     } else {
                         count[3]++;
@@ -74,8 +70,8 @@ public class OrderBasket extends OrderList {
         return o.getFullPrice();
     }
 
-    public Character isHot(Order o) {
-        return o.getItemDetails().charAt(2);
+    public boolean isHot(Order o) {
+        return o.getItemDetails().split("\\|")[1].charAt(0) == 't';
     }
 
     public Character getItemType(Order o) {
@@ -91,8 +87,8 @@ public class OrderBasket extends OrderList {
 
         if (getCount(1) >= 1 && getCount(2) >= 1) {
 
-            if (ifSandwich(o) || isHot(o) == 'f' || getItemType(o) == 'M') {
-                
+            if (ifSandwich(o) || !isHot(o) || getItemType(o) == 'M') {
+
                 o.setPricePaid(price);
 
             } else {
@@ -103,7 +99,7 @@ public class OrderBasket extends OrderList {
                 BigDecimal discount = new BigDecimal(0.3);
                 BigDecimal baseFactor = new BigDecimal(1);
                 BigDecimal factor = new BigDecimal(1);
-                
+
                 if (countD.equals(BigDecimal.ZERO)) {
 
                     baseFactor = baseFactor.subtract(discount);
@@ -122,17 +118,17 @@ public class OrderBasket extends OrderList {
                         o.setPricePaid(price);
 
                     } else {
-                        
+
                         factor = baseFactor.subtract(discount);
                         price = price.multiply(factor);
                         o.setPricePaid(price);
 
                     }
-                    
+
                 } else {
 
                     if (getItemType(o) == 'B') {
-                        
+
                         BigDecimal num = countD.add(pastry);
                         discount = discount.divide(num);
                         factor = baseFactor.add(discount);
@@ -155,7 +151,7 @@ public class OrderBasket extends OrderList {
             o.setPricePaid(price);
 
         }
-        
+
     }
 
     public void afternoonDiscount(Order o) {
@@ -176,7 +172,7 @@ public class OrderBasket extends OrderList {
             if (countD.equals(BigDecimal.ZERO)) {
 
                 o.setPricePaid(dealPrice);
-                
+
             } else if (countD.signum() < 0) {
 
                 if (getItemType(o) == 'F') {
@@ -186,13 +182,13 @@ public class OrderBasket extends OrderList {
                     price = price.add(bev.multiply(dealPrice));
                     price = price.divide(food);
                     o.setPricePaid(price);
-                    
+
                 } else {
 
                     o.setPricePaid(dealPrice);
-                    
+
                 }
-                
+
             } else {
 
                 if (getItemType(o) == 'B') {
@@ -201,11 +197,11 @@ public class OrderBasket extends OrderList {
                     price = price.add(food.multiply(dealPrice));
                     price = price.divide(bev);
                     o.setPricePaid(price);
-                    
+
                 } else {
 
                     o.setPricePaid(price);
-                    
+
                 }
 
             }
@@ -229,13 +225,13 @@ public class OrderBasket extends OrderList {
 
                 price = price.multiply(factor);
                 o.setPricePaid(price);
-                
+
             }
-            
+
         } else {
 
             o.setPricePaid(price);
-            
+
         }
 
     }
