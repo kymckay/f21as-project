@@ -16,7 +16,6 @@ public abstract class OrderBasket extends OrderList {
         orderList = o;
     }
 
-
     // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00   
     // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00  
     // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00 
