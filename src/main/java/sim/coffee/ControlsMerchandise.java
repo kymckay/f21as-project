@@ -24,9 +24,6 @@ public class ControlsMerchandise extends JPanel {
 
         // Price changes with label
         labels.addActionListener(e -> updatePrice());
-
-        // New item's initial price probably differs from previous
-        updatePrice();
     }
 
     // Populates the item controls based on the supplied menu item
@@ -45,6 +42,9 @@ public class ControlsMerchandise extends JPanel {
 
         colours.setSelectedIndex(0);
         labels.setSelectedIndex(0);
+
+        // New item's initial price probably differs from previous
+        updatePrice();
     }
 
     public String getItemDetails() {
