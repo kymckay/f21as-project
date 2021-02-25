@@ -75,8 +75,9 @@ public class Discounts extends OrderBasket {
     // Only applies when getCount[0] = getCount[2], getCount[1] = getCount[2]
     // // and getCount[0], getCount[1], getCount[2] > 0
     public void morningDiscount(Order o) {
+
         BigDecimal price = getBasePrice(o);
-        BigDecimal factor = new BigDecimal(1);
+
         if (getCount(1) >= 1 && getCount(2) >= 1) {
 
             if (ifSandwich(o) || isHot(o) == 'f' || getItemType(o) == 'M') {
@@ -85,15 +86,16 @@ public class Discounts extends OrderBasket {
 
             } else {
 
-                BigDecimal c1 = new BigDecimal(getCount(1));
-                BigDecimal c2 = new BigDecimal(getCount(2));
-                BigDecimal countD = c2.subtract(c1);
+                BigDecimal pastry = new BigDecimal(getCount(1));
+                BigDecimal hotBev = new BigDecimal(getCount(2));
+                BigDecimal countD = hotBev.subtract(pastry);
                 BigDecimal discount = new BigDecimal(0.3);
                 BigDecimal baseFactor = new BigDecimal(1);
+                BigDecimal factor = new BigDecimal(1);
                 
                 if (countD.equals(BigDecimal.ZERO)) {
 
-                    factor = baseFactor.subtract(discount);
+                    baseFactor = baseFactor.subtract(discount);
                     price = price.multiply(factor);
                     o.setPricePaid(price);
 
@@ -102,7 +104,7 @@ public class Discounts extends OrderBasket {
                     if (ifSandwich(o) == false) {
 
                         BigDecimal num = countD.multiply(new BigDecimal(-1));
-                        num = num.add(new BigDecimal(1));
+                        num = num.add(hotBev);
                         discount = discount.divide(num);
                         factor = baseFactor.add(discount);
                         price = price.multiply(factor);
@@ -118,12 +120,23 @@ public class Discounts extends OrderBasket {
                     
                 } else {
 
-                    BigDecimal num = countD.add(new BigDecimal(1));
-                    discount = discount.divide(num);
-                    factor = baseFactor.add(discount);
-                    price = price.multiply(factor);
+                    if (getItemType(o) == 'B') {
+                        
+                        BigDecimal num = countD.add(pastry);
+                        discount = discount.divide(num);
+                        factor = baseFactor.add(discount);
+                        price = price.multiply(factor);
+
+                    } else {
+
+                        factor = baseFactor.subtract(discount);
+                        price = price.multiply(factor);
+                        o.setPricePaid(price);
+
+                    }
 
                 }
+
             }
 
         } else {
@@ -131,10 +144,73 @@ public class Discounts extends OrderBasket {
             o.setPricePaid(price);
 
         }
+        
     }
 
-    public void afternoonDiscount() {
+    public void afternoonDiscount(Order o) {
+
+        BigDecimal price = getBasePrice(o);
+        int foodInt = getCount(0) + getCount(1);
+        int bevInt = getCount(2) + getCount(3);
+
+
+        if (foodInt >= 1 && bevInt >= 1) {
+
+            BigDecimal food = new BigDecimal(foodInt);
+            BigDecimal bev = new BigDecimal(bevInt);
+            BigDecimal countD = bev.subtract(food);
+            // £4/2 = £2
+            BigDecimal dealPrice = new BigDecimal(2);
+
+            if (countD.equals(BigDecimal.ZERO)) {
+
+                o.setPricePaid(dealPrice);
+                
+            } else if (countD.signum() < 0) {
+
+                if (getItemType(o) == 'f') {
+
+                    countD = countD.multiply(new BigDecimal(-1));
+                    price = countD.multiply(price);
+                    price = price.add(bev.multiply(dealPrice));
+                    price = price.divide(food);
+                    o.setPricePaid(price);
+                    
+                } else {
+
+                    o.setPricePaid(dealPrice);
+                    
+                }
+                
+            } else {
+
+                if (getItemType(o) == 'B') {
+
+                    price = countD.multiply(price);
+                    price = price.add(food.multiply(dealPrice));
+                    price = price.divide(bev);
+                    o.setPricePaid(price);
+                    
+                } else {
+
+                    o.setPricePaid(price);
+                    
+                }
+
+            }
+
+        } else {
+
+            o.setPricePaid(price);
+
+        }
+
+    }
+
+    public void eveningDiscount(Order o) {
+
         
+
     }
 
     @Override
@@ -154,10 +230,11 @@ public class Discounts extends OrderBasket {
                     case 8: case 9: case 10:
                         morningDiscount(o);
                         break;
-                    // For orders made between 12.00 p.m. to 13.59 p.m.
+                    // For orders made between 12.00 p.m. to 1.59 p.m.
                     case 12: case 13:
-
+                        afternoonDiscount(o);
                         break;
+                    // For orders made between 5.00 p.m. to 6.59 p.m.
                     case 17: case 18:
 
                         break;
