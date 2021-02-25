@@ -209,7 +209,23 @@ public class Discounts extends OrderBasket {
 
     public void eveningDiscount(Order o) {
 
-        
+        BigDecimal price = getBasePrice(o);
+        BigDecimal factor = new BigDecimal(0.5);
+
+        if (getCount(0) > 0 || getCount(1) > 0) {
+
+            if (getItemType(o) == 'F') {
+
+                price = price.multiply(factor);
+                o.setPricePaid(price);
+                
+            }
+            
+        } else {
+
+            o.setPricePaid(price);
+            
+        }
 
     }
 
@@ -236,15 +252,14 @@ public class Discounts extends OrderBasket {
                         break;
                     // For orders made between 5.00 p.m. to 6.59 p.m.
                     case 17: case 18:
-
+                        eveningDiscount(o);
                         break;
-
                     default:
                         o.setPricePaid(getBasePrice(o));
                         break;
+
                 }
             }
         }
     }
-    
 }
