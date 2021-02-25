@@ -5,6 +5,10 @@ import javax.swing.DefaultListSelectionModel;
 
 class MenuListSelectionModel extends DefaultListSelectionModel {
 
+    // This is just to placate the linter. We never seralise this class so it's
+    // irrelevant to us.
+    private static final long serialVersionUID = 1L;
+
     // Menu is browsed one item at a time
     MenuListSelectionModel() {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
