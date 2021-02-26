@@ -114,6 +114,6 @@ public class ControlsBeverage extends JPanel {
         // Half even typically rounding method for finance
         BigDecimal newPrice = currentItem.getPrice(s, m).setScale(2, RoundingMode.HALF_EVEN);
 
-        price.setText(newPrice.toString());
+        price.setText("£" + newPrice.toString());
     }
 }

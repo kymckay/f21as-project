@@ -231,7 +231,7 @@ public class CustomerGUI {
 
         // Update the basket total price display
         // Value should be 2 decimal places already
-        basketPrice.setText(basket.getTotalPrice().toString());
+        basketPrice.setText("£" + basket.getTotalPrice().toString());
     }
 
     // Tells the basket to log all orders in the order history

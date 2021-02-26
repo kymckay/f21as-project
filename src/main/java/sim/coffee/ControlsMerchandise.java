@@ -101,6 +101,6 @@ public class ControlsMerchandise extends JPanel {
         // Half even typically rounding method for finance
         BigDecimal newPrice = currentItem.getPrice(l).setScale(2, RoundingMode.HALF_EVEN);
 
-        price.setText(newPrice.toString());
+        price.setText("£" + newPrice.toString());
     }
 }
