@@ -1,6 +1,7 @@
 package sim.coffee;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -74,7 +75,9 @@ public class ControlsMerchandise extends JPanel {
 
         Label l = (Label) labels.getSelectedItem();
 
-        BigDecimal newPrice = currentItem.getPrice(l);
+        // Prices should always display to 2 decimal places
+        // Half even typically rounding method for finance
+        BigDecimal newPrice = currentItem.getPrice(l).setScale(2, RoundingMode.HALF_EVEN);
 
         price.setText(newPrice.toString());
     }

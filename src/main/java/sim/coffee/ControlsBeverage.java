@@ -3,6 +3,7 @@ package sim.coffee;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -108,7 +109,9 @@ public class ControlsBeverage extends JPanel {
         Size s = (Size) sizes.getSelectedItem();
         Milk m = (Milk) milks.getSelectedItem();
 
-        BigDecimal newPrice = currentItem.getPrice(s, m);
+        // Prices should always display to 2 decimal places
+        // Half even typically rounding method for finance
+        BigDecimal newPrice = currentItem.getPrice(s, m).setScale(2, RoundingMode.HALF_EVEN);
 
         price.setText(newPrice.toString());
     }
