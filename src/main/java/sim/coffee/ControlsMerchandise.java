@@ -34,18 +34,25 @@ public class ControlsMerchandise extends JPanel {
     public void populate(Merchandise m) {
         currentItem = m;
 
+        Colour[] availableColours = m.getColours();
+        Label[] availableLabels = m.getLabels();
+
         colours.removeAllItems();
-        for (Colour c : m.getColours()) {
+        for (Colour c : availableColours) {
             colours.addItem(c);
         }
 
         labels.removeAllItems();
-        for (Label l : m.getLabels()) {
+        for (Label l : availableLabels) {
             labels.addItem(l);
         }
 
         colours.setSelectedIndex(0);
         labels.setSelectedIndex(0);
+
+        // No reason to interact with combo boxes when there's 1 option
+        colours.setEnabled(availableColours.length > 1);
+        labels.setEnabled(availableLabels.length > 1);
 
         // New item's initial price probably differs from previous
         updatePrice();

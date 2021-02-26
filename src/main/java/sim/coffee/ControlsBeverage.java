@@ -38,13 +38,16 @@ public class ControlsBeverage extends JPanel {
     public void populate(Beverage b) {
         currentItem = b;
 
+        Size[] availablSizes = b.getSizes();
+        Milk[] availableMilks = b.getMilks();
+
         sizes.removeAllItems();
-        for (Size s : b.getSizes()) {
+        for (Size s : availablSizes) {
             sizes.addItem(s);
         }
 
         milks.removeAllItems();
-        for (Milk m : b.getMilks()) {
+        for (Milk m : availableMilks) {
             milks.addItem(m);
         }
 
@@ -54,6 +57,10 @@ public class ControlsBeverage extends JPanel {
 
         sizes.setSelectedIndex(0);
         milks.setSelectedIndex(0);
+
+        // No reason to interact with combo boxes when there's 1 option
+        sizes.setEnabled(availablSizes.length > 1);
+        milks.setEnabled(availableMilks.length > 1);
 
         // New item's initial price probably differs from previous
         updatePrice();
