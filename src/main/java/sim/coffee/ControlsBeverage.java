@@ -1,5 +1,7 @@
 package sim.coffee;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.math.BigDecimal;
 
 import javax.swing.JCheckBox;
@@ -13,7 +15,7 @@ public class ControlsBeverage extends JPanel {
     // irrelevant to us.
     private static final long serialVersionUID = 1L;
 
-    JCheckBox isHot = new JCheckBox();
+    JCheckBox isHot = new JCheckBox("Hot drink?");
     JComboBox<Size> sizes = new JComboBox<>();
     JComboBox<Milk> milks = new JComboBox<>();
 
@@ -24,10 +26,29 @@ public class ControlsBeverage extends JPanel {
     transient Beverage currentItem;
 
     ControlsBeverage() {
-        this.add(isHot);
-        this.add(sizes);
-        this.add(milks);
-        this.add(price);
+        // Grid bag layout allows easily stacking controls horizontally and vertically
+        // while controlling their size
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Want components to expand horizontally as needed
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // This places all controls in one column vertically
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+
+        this.add(isHot, gbc);
+        this.add(new JLabel("Selected Size"), gbc);
+        this.add(sizes, gbc);
+        this.add(new JLabel("Selected Milk"), gbc);
+        this.add(milks, gbc);
+
+        // Place price label beside price
+        this.add(new JLabel("Price:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        this.add(price, gbc);
 
         // Price changes with size and milk
         sizes.addActionListener(e -> updatePrice());
