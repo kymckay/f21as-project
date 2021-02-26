@@ -56,6 +56,8 @@ public class CustomerGUI {
     ControlsBeverage controlsB = new ControlsBeverage();
     ControlsMerchandise controlsM = new ControlsMerchandise();
 
+    private JLabel basketPrice;
+
     CustomerGUI(MenuTableModel menu, BasketTableModel basket) {
         this.menu = menu;
         this.basket = basket;
@@ -178,12 +180,15 @@ public class CustomerGUI {
     private JPanel setupCheckout() {
         JPanel panel = new JPanel();
 
+        basketPrice = new JLabel("£0.00");
+
         JButton add = new JButton("Add to Basket");
         JButton checkout = new JButton("Checkout");
 
         add.addActionListener(this::addToBasket);
         checkout.addActionListener(this::onCheckout);
 
+        panel.add(basketPrice);
         panel.add(add);
         panel.add(checkout);
 
@@ -228,6 +233,10 @@ public class CustomerGUI {
 
         // Refresh the UI table to reflect data change
         basket.fireTableDataChanged();
+
+        // Update the basket total price display
+        // Value should be 2 decimal places already
+        basketPrice.setText(basket.getTotalPrice().toString());
     }
 
     // Tells the basket to log all orders in the order history

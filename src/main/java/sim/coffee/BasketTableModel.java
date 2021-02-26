@@ -72,4 +72,8 @@ public class BasketTableModel extends AbstractTableModel {
     public boolean add(Order o) {
         return basket.add(o);
     }
+
+	public BigDecimal getTotalPrice() {
+		return basket.getTotalIncome();
+	}
 }
