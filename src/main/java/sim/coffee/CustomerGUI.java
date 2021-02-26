@@ -5,15 +5,20 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -234,13 +239,66 @@ public class CustomerGUI {
         basketPrice.setText("£" + basket.getTotalPrice().toString());
     }
 
-    // Tells the basket to log all orders in the order history
+ // Tells the basket to log all orders in the order history
     private void onCheckout(ActionEvent e) {
-        basket.checkout();
-        customer = nextCustomer();
+    	
+    	// 
+    	JDialog frame = new JDialog(guiFrame, true);
+    	frame.setAlwaysOnTop(true);
+    	
+    	// Local table of the basket
+        JTable checkoutTable = new JTable(basket);
 
-        // Refresh the UI table to reflect data change
-        basket.fireTableDataChanged();
+        // Scroll pane contains table to enable scrollbar
+        JScrollPane basketPane = new JScrollPane();
+        basketPane.setViewportView(checkoutTable);
+        
+        // Get order total price
+        String orderTotal = "£" + basket.getTotalPrice().toString();
+        JLabel totalBold  = new JLabel(orderTotal);
+        totalBold.setFont(new Font(null, Font.BOLD, 13));
+        
+        // Get all text nicely aligned with FlowLayout
+        JPanel billTotal = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        billTotal.add(new JLabel("Grand Total: "));
+        billTotal.add(totalBold);
+        
+        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        bottom.add(new JLabel("Do you want to proceed with checkout?"));
+        
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        top.add(new JLabel("Your final bill:"));
+       
+    	JPanel billPanel = new JPanel(); 
+    	billPanel.setLayout((new BoxLayout(billPanel, BoxLayout.Y_AXIS)));
+    	billPanel.add(top);
+    	billPanel.add(basketPane);
+    	billPanel.add(billTotal);
+    	billPanel.add(bottom);
+    	
+    	frame.add(billPanel);
+   
+    	// Custom labels for the checkout dialog
+    	Object [] options = {"Yes, confirm order", "No, I want to keep shopping"};
+    	
+    	// Set the dialog box message
+    	int action = JOptionPane.showOptionDialog(frame, billPanel, "Checkout",
+    	        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+    	        null, options, options[0]);
+    	
+    	// Determines the action selected 
+    	if (action == 0) { // "Yes"
+    		customer = nextCustomer(); // customer id updates 
+            // Refresh the UI table to reflect data change
+            
+    		basket.fireTableDataChanged();	// not working atm, tried implementing a clearList() method 
+    										// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
+    		frame.dispose();
+    		
+    	} else if (action == 1) { // "Cancel"
+    		frame.dispose();
+    		
+    	}		
     }
 
     /**
