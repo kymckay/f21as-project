@@ -45,7 +45,8 @@ public class ControlsBeverage extends JPanel {
         this.add(new JLabel("Selected Milk"), gbc);
         this.add(milks, gbc);
 
-        // Place price label beside price
+        // Place price label beside price at bottom of panel
+        gbc.anchor = GridBagConstraints.PAGE_END;
         this.add(new JLabel("Price:"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 5;

@@ -5,12 +5,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -81,21 +81,24 @@ public class CustomerGUI {
     }
 
     private void setup() {
-        // Right of UI contains item and checkout controls stacked
-        // Controls set before menu so it can start filtered
-        JPanel sidebar = setupControls();
-        guiFrame.add(sidebar, BorderLayout.EAST);
-
-        // Center of UI has menu and basket tables stacked
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-
-        centerPanel.add(setupMenu());
-        centerPanel.add(setupBasket());
-        guiFrame.add(centerPanel, BorderLayout.CENTER);
-
         // Top of UI contains menu category buttons
         guiFrame.add(setupMenuButtons(), BorderLayout.NORTH);
+
+        // Center of UI has menu and basket tables stacked with their controls to the
+        // right, easily achieved using a GridBagLayout
+        JPanel mainPanel = new JPanel(new GridLayout(2, 2));
+
+        mainPanel.add(setupMenu());
+        mainPanel.add(setupControls());
+
+        // Row below
+        mainPanel.add(setupBasket());
+        mainPanel.add(setupCheckout());
+
+        guiFrame.add(mainPanel, BorderLayout.CENTER);
+
+        // Menu starts on food by default (always filtered to one type at a time)
+        filterMenu(LABEL_F);
     }
 
     private JPanel setupControls() {
@@ -106,12 +109,7 @@ public class CustomerGUI {
         controlPanel.add(controlsB, LABEL_B);
         controlPanel.add(controlsM, LABEL_M);
 
-        JPanel sidebar = new JPanel();
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-
-        sidebar.add(controlPanel);
-        sidebar.add(setupCheckout());
-        return sidebar;
+        return controlPanel;
     }
 
     private JPanel setupMenu() {
@@ -128,18 +126,15 @@ public class CustomerGUI {
         // Row sorter is used to apply filters to the table
         menuTable.setRowSorter(menuSorter);
 
-        // Menu starts on food by default (always filtered to one type at a time)
-        filterMenu(LABEL_F);
-
         // Scroll pane contains table to enable scrollbar
         JScrollPane menuPane = new JScrollPane();
         menuPane.setViewportView(menuTable);
 
-        // Add label to distinguish UI sections
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(new JLabel("Menu:"));
-        panel.add(menuPane);
+        // Add label above to distinguish UI sections
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JLabel("Menu:"), BorderLayout.NORTH);
+        panel.add(menuPane, BorderLayout.CENTER);
+
         return panel;
     }
 
@@ -151,11 +146,11 @@ public class CustomerGUI {
         JScrollPane basketPane = new JScrollPane();
         basketPane.setViewportView(basketTable);
 
-        // Add label to distinguish UI sections
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(new JLabel("Basket:"));
-        panel.add(basketPane);
+        // Add label above to distinguish UI sections
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JLabel("Basket:"), BorderLayout.NORTH);
+        panel.add(basketPane, BorderLayout.CENTER);
+
         return panel;
     }
 
