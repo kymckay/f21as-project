@@ -84,9 +84,8 @@ public class OrderBasket extends OrderList {
     public void morningDiscount(Order o) {
 
         BigDecimal price = getBasePrice(o);
-        int k = getCount()[0];
 
-        if (k > 0 | getCount()[2] > 0) {
+        if (getCount()[0] > 0 || getCount()[2] > 0) {
 
             if (ifSandwich(o) == false || !isHot(o) || getItemType(o) == 'M') {
 
@@ -162,7 +161,7 @@ public class OrderBasket extends OrderList {
         int bevInt = getCount()[2] + getCount()[3];
 
 
-        if (foodInt >= 1 && bevInt >= 1) {
+        if (foodInt >= 1 || bevInt >= 1) {
 
             BigDecimal food = new BigDecimal(foodInt);
             BigDecimal bev = new BigDecimal(bevInt);
@@ -180,7 +179,7 @@ public class OrderBasket extends OrderList {
 
                     countD = countD.multiply(new BigDecimal(-1));
                     price = countD.multiply(price);
-                    price = price.add(bev.multiply(dealPrice));
+                    price = price.add(food.multiply(dealPrice));
                     price = price.divide(food);
                     o.setPricePaid(price);
 
@@ -249,15 +248,15 @@ public class OrderBasket extends OrderList {
                 switch (o.getTime().getHour()) {
                     // For orders ordered at 8.00 a.m. to 10.59 a.m. (Excluding 11.00 a.m.)
                     // Hence, order hours 8, 9, 10
-                    case 8: case 9: case 10: case 23:
+                    case 8: case 9: case 10:
                         morningDiscount(o);
                         break;
                     // For orders made between 12.00 p.m. to 1.59 p.m.
-                    case 12: case 13:
+                    case 12: case 13: case 11:
                         afternoonDiscount(o);
                         break;
                     // For orders made between 5.00 p.m. to 6.59 p.m.
-                    case 17: case 18: 
+                    case 17: case 18: case 23: 
                         eveningDiscount(o);
                         break;
                     default:
@@ -276,8 +275,8 @@ public class OrderBasket extends OrderList {
     // adds value to the map
     @Override
     public boolean add(Order o) {
-        applyDiscount();
         super.add(o);
+        applyDiscount();
         String a = o.getItemId();
         menu.getKey(a).setCount();
         // count.put(a, count.get(a) + 1);
