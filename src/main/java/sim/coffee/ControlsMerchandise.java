@@ -19,7 +19,7 @@ public class ControlsMerchandise extends JPanel {
 
     // Track current item populating the controls
     // Used for price updates
-    Merchandise currentItem;
+    transient Merchandise currentItem;
 
     public ControlsMerchandise() {
         this.add(colours);

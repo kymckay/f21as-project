@@ -21,7 +21,7 @@ public class ControlsBeverage extends JPanel {
 
     // Track current item populating the controls
     // Used for price updates
-    Beverage currentItem;
+    transient Beverage currentItem;
 
     ControlsBeverage() {
         this.add(isHot);
