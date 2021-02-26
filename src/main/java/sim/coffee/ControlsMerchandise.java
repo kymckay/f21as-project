@@ -1,5 +1,7 @@
 package sim.coffee;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -23,9 +25,28 @@ public class ControlsMerchandise extends JPanel {
     transient Merchandise currentItem;
 
     public ControlsMerchandise() {
-        this.add(colours);
-        this.add(labels);
-        this.add(price);
+        // Grid bag layout allows easily stacking controls horizontally and vertically
+        // while controlling their size
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Want components to expand horizontally as needed
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // This places all controls in one column vertically
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+
+        this.add(new JLabel("Selected Colour"), gbc);
+        this.add(colours, gbc);
+        this.add(new JLabel("Selected Label"), gbc);
+        this.add(labels, gbc);
+
+        // Place price label beside price
+        this.add(new JLabel("Price:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        this.add(price, gbc);
 
         // Price changes with label
         labels.addActionListener(e -> updatePrice());
