@@ -1,6 +1,7 @@
 package sim.coffee;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -161,7 +162,7 @@ public class OrderBasket extends OrderList {
         int bevInt = getCount()[2] + getCount()[3];
 
 
-        if (foodInt >= 1 || bevInt >= 1) {
+        if (foodInt >= 1 && bevInt >= 1) {
 
             BigDecimal food = new BigDecimal(foodInt);
             BigDecimal bev = new BigDecimal(bevInt);
@@ -171,7 +172,7 @@ public class OrderBasket extends OrderList {
 
             if (countD.equals(BigDecimal.ZERO)) {
 
-                o.setPricePaid(dealPrice);
+                o.setPricePaid(dealPrice.setScale(2, RoundingMode.HALF_EVEN));
 
             } else if (countD.signum() < 0) {
 
@@ -181,11 +182,11 @@ public class OrderBasket extends OrderList {
                     price = countD.multiply(price);
                     price = price.add(food.multiply(dealPrice));
                     price = price.divide(food);
-                    o.setPricePaid(price);
+                    o.setPricePaid(price.setScale(2, RoundingMode.HALF_EVEN));
 
                 } else {
 
-                    o.setPricePaid(dealPrice);
+                    o.setPricePaid(dealPrice.setScale(2, RoundingMode.HALF_Even));
 
                 }
 
@@ -194,7 +195,7 @@ public class OrderBasket extends OrderList {
                 if (getItemType(o) == 'B') {
 
                     price = countD.multiply(price);
-                    price = price.add(food.multiply(dealPrice));
+                    price = price.add(bev.multiply(dealPrice));
                     price = price.divide(bev);
                     o.setPricePaid(price);
 
