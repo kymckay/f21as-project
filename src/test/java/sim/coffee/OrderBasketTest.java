@@ -101,18 +101,18 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that .. TBD
+     * Tests that any sandwich and drink combo is 30% off between 08:00 and 10:00
      */
     @Test
     public void discount1() {
         BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
         BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
 
-        // Find sum if food & drinks is 30% off
-        BigDecimal multiplicand = new BigDecimal(0.7);
-        drinkPrice = drinkPrice.multiply(multiplicand);
-        foodPrice = foodPrice.multiply(multiplicand);
-        BigDecimal discountPrice = drinkPrice.add(foodPrice);
+        BigDecimal discountPrice = drinkPrice.add(foodPrice).multiply(new BigDecimal("0.7"));
+
+        // Rounded half even as expected
+        discountPrice = discountPrice.setScale(2, RoundingMode.HALF_EVEN);
+
         setupOrder("2021-03-07T09:15Z");
         assertEquals(discountPrice, testBasket.getTotalIncome());
     }
@@ -122,11 +122,11 @@ public class OrderBasketTest {
      */
     @Test
     public void discount2() {
-        BigDecimal discountPrice = new BigDecimal("4.00").setScale(2, RoundingMode.HALF_EVEN);
+        BigDecimal discountPrice = new BigDecimal("4.00");
+
         // Discount should automatically apply once added
         setupOrder("2021-03-07T12:15Z");
-        BigDecimal o = testBasket.getTotalIncome();
-        assertEquals(discountPrice, o);
+        assertEquals(discountPrice, testBasket.getTotalIncome());
 
         clearBasket();
 
@@ -149,10 +149,13 @@ public class OrderBasketTest {
         BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
         BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
 
-        // Find sum if food is 50% off
+        // Find sum if food is 50% off (rounded half even as expected)
         BigDecimal discountPrice = drinkPrice.add(foodPrice.multiply(new BigDecimal("0.5")));
 
+        // Rounded half even as expected
+        discountPrice = discountPrice.setScale(2, RoundingMode.HALF_EVEN);
+
         setupOrder("2021-03-07T18:15Z");
-        assertEquals(discountPrice.setScale(2, RoundingMode.HALF_UP), testBasket.getTotalIncome());
+        assertEquals(discountPrice, testBasket.getTotalIncome());
     }
 }
