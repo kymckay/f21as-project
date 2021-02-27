@@ -268,9 +268,11 @@ public class OrderBasket extends OrderList {
         }
     }
 
-    // dumps basket contents into supplied OrderList
+    // Dumps basket contents into permanent order list and emptys the basket
     public boolean checkout() {
-        return orderList.addAll(this.orders);
+        boolean added = orderList.addAll(this.orders);
+        orders.clear();
+        return added;
     }
 
     // Adds an order to the basket and applies discounts
