@@ -257,7 +257,7 @@ public class OrderBasket extends OrderList {
                         afternoonDiscount(o);
                         break;
                     // For orders made between 5.00 p.m. to 6.59 p.m.
-                    case 17: case 18: case 23: 
+                    case 17: case 18: case 23:
                         eveningDiscount(o);
                         break;
                     default:
@@ -273,12 +273,18 @@ public class OrderBasket extends OrderList {
         return orderList.addAll(this.orders);
     }
 
-    // adds value to the map
+    // Adds an order to the basket and applies discounts
     @Override
     public boolean add(Order o) {
-        super.add(o);
+        boolean added = super.add(o);
+
+        // Discounts should be updated each time an item is added
         applyDiscount();
+
+        // Item tally can be incremented here (unless a remove from cart option is
+        // added)
         menu.getKey(o.getItemId()).setCount();
-        return true;
+
+        return added;
     }
 }
