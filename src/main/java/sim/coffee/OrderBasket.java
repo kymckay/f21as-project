@@ -172,7 +172,7 @@ public class OrderBasket extends OrderList {
 
             if (countD.equals(BigDecimal.ZERO)) {
 
-                o.setPricePaid(dealPrice.setScale(2, RoundingMode.HALF_EVEN));
+                o.setPricePaid(dealPrice);
 
             } else if (countD.signum() < 0) {
 
@@ -186,7 +186,7 @@ public class OrderBasket extends OrderList {
 
                 } else {
 
-                    o.setPricePaid(dealPrice.setScale(2, RoundingMode.HALF_Even));
+                    o.setPricePaid(dealPrice.setScale(2));
 
                 }
 

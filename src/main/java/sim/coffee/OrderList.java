@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -108,7 +109,7 @@ public class OrderList {
 			sum = sum.add(o.getPricePaid());
 		}
 
-		return sum;
+		return sum.setScale(2, RoundingMode.HALF_UP);
 
 	}
 

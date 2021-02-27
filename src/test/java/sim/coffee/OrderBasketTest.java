@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -121,11 +122,11 @@ public class OrderBasketTest {
      */
     @Test
     public void discount2() {
-        BigDecimal discountPrice = new BigDecimal("4.00");
-
+        BigDecimal discountPrice = new BigDecimal("4.00").setScale(2, RoundingMode.HALF_EVEN);
         // Discount should automatically apply once added
         setupOrder("2021-03-07T12:15Z");
-        assertEquals(discountPrice, testBasket.getTotalIncome());
+        BigDecimal o = testBasket.getTotalIncome();
+        assertEquals(discountPrice, o);
 
         clearBasket();
 
@@ -152,6 +153,6 @@ public class OrderBasketTest {
         BigDecimal discountPrice = drinkPrice.add(foodPrice.multiply(new BigDecimal("0.5")));
 
         setupOrder("2021-03-07T18:15Z");
-        assertEquals(discountPrice, testBasket.getTotalIncome());
+        assertEquals(discountPrice.setScale(2, RoundingMode.HALF_UP), testBasket.getTotalIncome());
     }
 }
