@@ -9,6 +9,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -75,7 +77,14 @@ public class CustomerGUI {
         // Prevent making the window too small to use
         guiFrame.setMinimumSize(new Dimension(500, 500));
 
-        guiFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Inform user that a report has been generated on close
+        guiFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+            	JOptionPane.showMessageDialog(guiFrame, "End of day report saved to file.");
+            	//basket.writeReport();
+            }
+        });
 
         // Construct the layout and elements in order
         setup();
