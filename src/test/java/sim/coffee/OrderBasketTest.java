@@ -50,6 +50,8 @@ public class OrderBasketTest {
 
         testBasket.add(testOrder);
 
+        // The basket should contain one more item and
+        // the corresponding item should be tallied once
         assertEquals(sizeBefore + 1, testBasket.size());
         assertEquals(tallyBefore + 1, testMenu.getKey("F001").getOrderCount());
     }
@@ -63,12 +65,17 @@ public class OrderBasketTest {
         testBasket.add(testOrder);
 
         int size = testBasket.size();
+        int listSize = testList.size();
+
+        // Basket should successfully contain something before it can checkout
         assertNotEquals(0, size);
 
         testBasket.checkout();
 
+        // The basket should now be cleared after checkout
         assertEquals(0, testBasket.size());
-        assertEquals(size, testList.size());
+        // The order list should have grown by the corresponding size
+        assertEquals(listSize + size, testList.size());
     }
 
     // Helper method to add orders to basket for discount testing
