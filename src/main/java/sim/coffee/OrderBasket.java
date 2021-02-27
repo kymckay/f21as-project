@@ -2,6 +2,7 @@ package sim.coffee;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -226,12 +227,32 @@ public class OrderBasket extends OrderList {
 
         // Different discount applies based on hour the order initiated
         if (hour >= 8 && hour < 11) {
-            // TODO: Morning discount
+            discount1();
         } else if (hour >= 12 && hour < 14) {
-            // TODO: Afternoon discount
+            discount2();
         } else if (hour >= 17) {
             discount3();
         }
+    }
+
+    // Applys discount 1 if basket qualifies
+    // Discount 1 = 30% off hot drink and sandwich combos
+    private void discount1() {
+        // TODO
+    }
+
+    // Applys discount 2 if basket qualifies
+    // Discount 2 = food and drink combo is £4.00
+    private void discount2() {
+        // Track items as we go since list is unsorted
+        ArrayList<Order> foodFound = new ArrayList<>();
+        ArrayList<Order> drinkFound = new ArrayList<>();
+
+        for (Order order : orders) {
+            // TODO build lists, skipping already discounted
+        }
+
+        // Once we know all the food/drink orders, apply discounts
     }
 
     // Applys discount 3 if basket qualifies
