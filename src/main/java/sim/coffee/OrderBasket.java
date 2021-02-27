@@ -215,28 +215,7 @@ public class OrderBasket extends OrderList {
 
     }
 
-    public void eveningDiscount(Order o) {
-
-        BigDecimal price = getBasePrice(o);
-        BigDecimal factor = new BigDecimal(0.5);
-
-        if (getCount()[0] > 0 || getCount()[1] > 0) {
-
-            if (getItemType(o) == 'F') {
-
-                price = price.multiply(factor);
-                o.setPricePaid(price);
-
-            }
-
-        } else {
-
-            o.setPricePaid(price);
-
-        }
-
-    }
-
+    // Figures out what discount may apply and attempts to
     public void applyDiscount() {
 
         // Nothing to do if the basket is empty, sanity check
@@ -251,7 +230,26 @@ public class OrderBasket extends OrderList {
         } else if (hour >= 12 && hour < 14) {
             // TODO: Afternoon discount
         } else if (hour >= 17) {
-            // TODO: Evening discount
+            discount3();
+        }
+    }
+
+    // Applys discount 3 if basket qualifies
+    // Discount 3 = food 50% off
+    private void discount3() {
+        for (Order order : orders) {
+            if (order.getItemId().startsWith("F")) {
+                // Skip orders already discounted
+                if (!order.getFullPrice().equals(order.getPricePaid()))
+                    continue;
+
+                BigDecimal price = order.getFullPrice();
+
+                price = price.multiply(new BigDecimal("0.5"));
+                price = price.setScale(2, RoundingMode.HALF_EVEN);
+
+                order.setPricePaid(price);
+            }
         }
     }
 

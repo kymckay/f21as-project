@@ -156,11 +156,12 @@ public class OrderBasketTest {
         BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
         BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
 
-        // Find sum if food is 50% off (rounded half even as expected)
-        BigDecimal discountPrice = drinkPrice.add(foodPrice.multiply(new BigDecimal("0.5")));
+        // Food price is rounded before summation
+        foodPrice = foodPrice.multiply(new BigDecimal("0.5"));
+        foodPrice = foodPrice.setScale(2, RoundingMode.HALF_EVEN);
 
-        // Rounded half even as expected
-        discountPrice = discountPrice.setScale(2, RoundingMode.HALF_EVEN);
+        // Find sum if food is 50% off (rounded half even as expected)
+        BigDecimal discountPrice = drinkPrice.add(foodPrice);
 
         setupOrder("2021-03-07T18:15Z");
         assertEquals(discountPrice, testBasket.getTotalIncome());
