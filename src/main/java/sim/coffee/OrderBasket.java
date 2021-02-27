@@ -295,20 +295,22 @@ public class OrderBasket extends OrderList {
         return added;
     }
     
-    //writeReport Method
+  //writeReport Method
    	public void writeReport(String fileName)
        {
        	
     	String report = "";
-    	int totalIncome = 0;
+  
        	for(String menuItemKey : menu.keySet())
        	{
        		
        		report += String.format("%s\t%s\n",menu.getKey(menuItemKey).getOrderCount());
-       	    totalIncome += MenuItem.getOrderCount();
-       }
+       	    
+        }
        	
-       String message = "The Total Income Generated from all the Orders today is ";
-       report += String.format("%s%d",message,totalIncome);			
+       String message = "The Total Income obtained from the today's Orders is £";
+       report += String.format("%%s%d",message,orderList.getTotalIncome());	
+       
+       
    	}
 }
