@@ -89,8 +89,9 @@ public class CustomerGUI {
         // Top of UI contains menu category buttons
         guiFrame.add(setupMenuButtons(), BorderLayout.NORTH);
 
-        // Center of UI has menu and basket tables stacked with their controls to the
-        // right, easily achieved using a GridBagLayout
+        // Grid layout ensures tables are same width and controls placed to their right
+        // Would have liked to change the column widths but that involves a
+        // GridBagLayout which gets complicated fast (had issues with element scaling)
         JPanel mainPanel = new JPanel(new GridLayout(2, 2));
 
         mainPanel.add(setupMenu());
@@ -180,7 +181,15 @@ public class CustomerGUI {
     private JPanel setupCheckout() {
         JPanel panel = new JPanel();
 
+        // Stack controls vertically
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Price and label will be side by side within subpanel
+        JPanel pricePanel = new JPanel();
+        pricePanel.add(new JLabel("Basket total:"));
+        // Price element is updated elsewhere in the code
         basketPrice = new JLabel("£0.00");
+        pricePanel.add(basketPrice);
 
         JButton add = new JButton("Add to Basket");
         JButton checkout = new JButton("Checkout");
@@ -188,9 +197,9 @@ public class CustomerGUI {
         add.addActionListener(this::addToBasket);
         checkout.addActionListener(this::onCheckout);
 
-        panel.add(basketPrice);
         panel.add(add);
         panel.add(checkout);
+        panel.add(pricePanel);
 
         return panel;
     }
@@ -241,64 +250,64 @@ public class CustomerGUI {
 
  // Tells the basket to log all orders in the order history
     private void onCheckout(ActionEvent e) {
-    	
-    	// 
+
+    	//
     	JDialog frame = new JDialog(guiFrame, true);
     	frame.setAlwaysOnTop(true);
-    	
+
     	// Local table of the basket
         JTable checkoutTable = new JTable(basket);
 
         // Scroll pane contains table to enable scrollbar
         JScrollPane basketPane = new JScrollPane();
         basketPane.setViewportView(checkoutTable);
-        
+
         // Get order total price
         String orderTotal = "£" + basket.getTotalPrice().toString();
         JLabel totalBold  = new JLabel(orderTotal);
         totalBold.setFont(new Font(null, Font.BOLD, 13));
-        
+
         // Get all text nicely aligned with FlowLayout
         JPanel billTotal = new JPanel(new FlowLayout(FlowLayout.LEFT));
         billTotal.add(new JLabel("Grand Total: "));
         billTotal.add(totalBold);
-        
+
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottom.add(new JLabel("Do you want to proceed with checkout?"));
-        
+
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         top.add(new JLabel("Your final bill:"));
-       
-    	JPanel billPanel = new JPanel(); 
+
+    	JPanel billPanel = new JPanel();
     	billPanel.setLayout((new BoxLayout(billPanel, BoxLayout.Y_AXIS)));
     	billPanel.add(top);
     	billPanel.add(basketPane);
     	billPanel.add(billTotal);
     	billPanel.add(bottom);
-    	
+
     	frame.add(billPanel);
-   
+
     	// Custom labels for the checkout dialog
     	Object [] options = {"Yes, confirm order", "No, I want to keep shopping"};
-    	
+
     	// Set the dialog box message
     	int action = JOptionPane.showOptionDialog(frame, billPanel, "Checkout",
     	        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
     	        null, options, options[0]);
-    	
-    	// Determines the action selected 
+
+    	// Determines the action selected
     	if (action == 0) { // "Yes"
-    		customer = nextCustomer(); // customer id updates 
+    		customer = nextCustomer(); // customer id updates
             // Refresh the UI table to reflect data change
-            
-    		basket.fireTableDataChanged();	// not working atm, tried implementing a clearList() method 
+
+    		basket.fireTableDataChanged();	// not working atm, tried implementing a clearList() method
     										// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
     		frame.dispose();
-    		
+
     	} else if (action == 1) { // "Cancel"
     		frame.dispose();
-    		
-    	}		
+
+    	}
     }
 
     /**
