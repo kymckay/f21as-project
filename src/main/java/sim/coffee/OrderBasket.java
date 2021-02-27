@@ -278,9 +278,7 @@ public class OrderBasket extends OrderList {
     public boolean add(Order o) {
         super.add(o);
         applyDiscount();
-        String a = o.getItemId();
-        menu.getKey(a).setCount();
-        // count.put(a, count.get(a) + 1);
+        menu.getKey(o.getItemId()).setCount();
         return true;
     }
 }
