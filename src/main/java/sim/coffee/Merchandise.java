@@ -32,6 +32,8 @@ public class Merchandise extends MenuItem {
 
     // A chosen label influences the price of this item
     public BigDecimal getPrice(Label l) {
-        return getPrice().add(BigDecimal.valueOf(l.getAddOnPrice()));
+        BigDecimal price = getPrice().add(BigDecimal.valueOf(l.getAddOnPrice()));
+
+        return roundPrice(price);
     }
 }

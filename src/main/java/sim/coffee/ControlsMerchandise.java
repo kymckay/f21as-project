@@ -97,9 +97,8 @@ public class ControlsMerchandise extends JPanel {
 
         Label l = (Label) labels.getSelectedItem();
 
-        // Prices should always display to 2 decimal places
-        // Half even typically rounding method for finance
-        BigDecimal newPrice = currentItem.getPrice(l).setScale(2, RoundingMode.HALF_EVEN);
+        // Price already given to the right accuracy
+        BigDecimal newPrice = currentItem.getPrice(l);
 
         price.setText("£" + newPrice.toString());
     }

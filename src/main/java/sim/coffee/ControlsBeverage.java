@@ -110,9 +110,8 @@ public class ControlsBeverage extends JPanel {
         Size s = (Size) sizes.getSelectedItem();
         Milk m = (Milk) milks.getSelectedItem();
 
-        // Prices should always display to 2 decimal places
-        // Half even typically rounding method for finance
-        BigDecimal newPrice = currentItem.getPrice(s, m).setScale(2, RoundingMode.HALF_EVEN);
+        // Price already given to the right accuracy
+        BigDecimal newPrice = currentItem.getPrice(s, m);
 
         price.setText("£" + newPrice.toString());
     }

@@ -47,21 +47,21 @@ public class Menu {
 	private void processLine (String line) throws IllegalIDException {
 		// Splitting with regex trims excess whitespace near commas
 		String details [] = line.split("\\s*,\\s*");
-		
+
 		// All rows in csv file have same columns
 		if (details.length == 4) {
-			
+
 			MenuItem newItem;
 			String id            = details[0];
 			String description   = details[1];
 			BigDecimal basePrice = new BigDecimal(details[2]);
-			String itemDetails   = details[3]; 
-			
+			String itemDetails   = details[3];
+
 			// First character of item ID diferentiates the types
 			switch (id.substring(0,1)) {
 				case "B":
 					String beverageDetails [] = itemDetails.split("\\s*!\\s*");
-			
+
 					boolean isHot = Boolean.parseBoolean(beverageDetails[0]);
 
 					Size[] sizes =
@@ -90,7 +90,7 @@ public class Menu {
 					break;
 				case "M":
 					String merchDetails [] = itemDetails.split("\\s*!\\s*");
-					
+
 					Label[] labels =
 						Arrays.stream(merchDetails[0].split(PIPE_SEP))
 							.map(String::toUpperCase)
@@ -114,20 +114,17 @@ public class Menu {
 	}
 
 
-	public String getReport()
-	{
+	public String getReport() {
 		return null;
 	}
 
 
-	public MenuItem getKey(String key)		//Method to get key. Key is the id from MenuItem??
-	{
+	public MenuItem getKey(String key) {
 		return menuMap.get(key);
 	}
 
 
-	public Set<String> keySet()		//keyset method to return set of keys.
-	{
+	public Set<String> keySet() {
 		return menuMap.keySet();
 	}
 

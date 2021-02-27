@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -66,8 +65,7 @@ public class OrderList {
 		}
 	}
 
-	public void writeFile(String variable) // Method to write to output file
-	{
+	public void writeFile(String variable) {
 		FileWriter writeFile;
 
 		try {
@@ -94,27 +92,23 @@ public class OrderList {
 		return orders.get(index);
 	}
 
-	public String getReport()
-	{
+	public String getReport() {
 		return null;
-
 	}
 
 
-	public BigDecimal getTotalIncome() // Method to get the total income
-	{
+	public BigDecimal getTotalIncome() {
 		BigDecimal sum = new BigDecimal("0");
 
 		for (Order o : orders) {
 			sum = sum.add(o.getPricePaid());
 		}
 
-		return sum.setScale(2, RoundingMode.HALF_UP);
-
+		// No rounding needed as prices already rounded
+		return sum;
 	}
 
-	public int size() // Getting size of LinkedList
-	{
+	public int size() {
 		return orders.size();
 	}
 }

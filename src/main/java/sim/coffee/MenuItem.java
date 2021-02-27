@@ -31,7 +31,14 @@ abstract class MenuItem {
 	}
 
 	public BigDecimal getPrice() {
-		return price.setScale(2, RoundingMode.DOWN);
+		return roundPrice(price);
+	}
+
+	// Convenient way to ensure price outputs are all same rounding and precision
+	protected BigDecimal roundPrice(BigDecimal price) {
+		// Prices should always be to 2 decimal places (no fractional pennies)
+		// Half even typically rounding method for finance
+		return price.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public String getDescription() {
