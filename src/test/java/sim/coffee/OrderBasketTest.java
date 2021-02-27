@@ -108,7 +108,7 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that any sandwich and drink combo is 30% off between 08:00 and 10:00
+     * Tests that any sandwich and hot drink combo is 30% off between 08:00 and 11:00
      */
     @Test
     public void discount1() {

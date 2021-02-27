@@ -239,32 +239,19 @@ public class OrderBasket extends OrderList {
 
     public void applyDiscount() {
 
-        // Order has to have more than 1 item
-        if (getSumCount() > 0) {
+        // Nothing to do if the basket is empty, sanity check
+        if (orders.isEmpty()) return;
 
-            // Loops through the element - order in orderList
-            for (Order o : this.orders) {
+        // First element in the list is when overall customer order started
+        int hour = orders.get(0).getTime().getHour();
 
-                // Switch case for the 3 different discount rules based on the order hour
-                switch (o.getTime().getHour()) {
-                    // For orders ordered at 8.00 a.m. to 10.59 a.m. (Excluding 11.00 a.m.)
-                    // Hence, order hours 8, 9, 10
-                    case 8: case 9: case 10:
-                        morningDiscount(o);
-                        break;
-                    // For orders made between 12.00 p.m. to 1.59 p.m.
-                    case 12: case 13: case 11:
-                        afternoonDiscount(o);
-                        break;
-                    // For orders made between 5.00 p.m. to 6.59 p.m.
-                    case 17: case 18: case 23:
-                        eveningDiscount(o);
-                        break;
-                    default:
-                        o.setPricePaid(getBasePrice(o));
-                        break;
-                }
-            }
+        // Different discount applies based on hour the order initiated
+        if (hour >= 8 && hour < 11) {
+            // TODO: Morning discount
+        } else if (hour >= 12 && hour < 14) {
+            // TODO: Afternoon discount
+        } else if (hour >= 17) {
+            // TODO: Evening discount
         }
     }
 
