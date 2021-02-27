@@ -95,9 +95,9 @@ public class OrderBasketTest {
     public void getSumCount() {
         setupOrder("2021-03-07T12:15Z");
         assertEquals(2, testBasket.getSumCount());
-        assertEquals(1, testBasket.getCount(0));
-        assertEquals(1, testBasket.getCount(2));
-        assertNotEquals(1, testBasket.getCount(1));
+        assertEquals(1, testBasket.getCount()[0]);
+        assertEquals(1, testBasket.getCount()[2]);
+        assertNotEquals(1, testBasket.getCount()[1]);
     }
 
     /**
