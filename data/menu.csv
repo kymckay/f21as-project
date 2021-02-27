@@ -39,16 +39,16 @@ B102, Latte,3.1, true! S|M|L! Regular|Soy|Oat
 B103, Macchiato,3, true! S|M|L! Regular|Soy|Oat
 B104, Mocha,3, true! S|M|L! Regular|Soy|Oat
 B105, Cappuccino,2.8, true! S|M|L! Regular|Soy|Oat
-B106, Americano,3.89, false! S|M|L! None
+B106, Americano,3.89, true! S|M|L! None
 B107, Expresso,2, true! M|L! None
-B108, Cold Brew,3.5, true! S|M|L! Regular|Soy|Oat
+B108, Cold Brew,3.5, false! S|M|L! Regular|Soy|Oat
 B109, Iced Tea,2.5, false! S|M|L! None
-B110, Iced Coffee,2.5, true! S|M! Regular|Soy|Oat
+B110, Iced Coffee,2.5, false! S|M! Regular|Soy|Oat
 B111, Water,1.8, false! L! None
 B112, Milkshake,4, false! S|M|L! Regular
-B113, Banana Smoothie,4.2, true! M! None
-B114, Strawbery Smoothie,4.3, true! S|M|L! None
+B113, Banana Smoothie,4.2, false! M! None
+B114, Strawbery Smoothie,4.3, false! S|M|L! None
 B115, Frappuccino,3.8, true! S|M|L! Soy
-B116, Hot Chocolate,3.5, false! S|M|L! Regular|Oat
-B117, Orange Juice ,2.8, true! M! None
+B116, Hot Chocolate,3.5, true! S|M|L! Regular|Oat
+B117, Orange Juice ,2.8, false! M! None
 B118, Apple Juice,2.8, false! M! None
