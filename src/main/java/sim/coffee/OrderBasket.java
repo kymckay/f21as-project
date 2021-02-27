@@ -1,5 +1,7 @@
 package sim.coffee;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -311,6 +313,12 @@ public class OrderBasket extends OrderList {
        String message = "The Total Income obtained from the today's Orders is £";
        report += String.format("%%s%d",message,orderList.getTotalIncome());	
        
-       
+       try {													//Writes the report and message to the file
+			FileWriter orderWriter = new FileWriter(fileName);
+			orderWriter.write(report);
+			orderWriter.close();   					
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
    	}
 }
