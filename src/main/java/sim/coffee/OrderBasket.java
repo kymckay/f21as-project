@@ -239,9 +239,8 @@ public class OrderBasket extends OrderList {
     private void discount3() {
         for (Order order : orders) {
             if (order.getItemId().startsWith("F")) {
-                // Skip orders already discounted
-                if (!order.getFullPrice().equals(order.getPricePaid()))
-                    continue;
+                // Skip over orders already discounted
+                if (!order.hasDiscount()) continue;
 
                 BigDecimal price = order.getFullPrice();
 

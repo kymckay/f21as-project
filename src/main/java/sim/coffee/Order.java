@@ -44,6 +44,11 @@ public class Order {
         item.setPricePaid(newPrice);
     }
 
+    public boolean hasDiscount() {
+        // Compare to ignores scale, just compares value
+        return getPricePaid().compareTo(getFullPrice()) == 0;
+    }
+
     // Calculates the percentage discount (between 0 and 1)
     public BigDecimal getDiscount() {
         BigDecimal menuPrice = getFullPrice();
