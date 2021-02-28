@@ -3,7 +3,6 @@ package sim.coffee;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
