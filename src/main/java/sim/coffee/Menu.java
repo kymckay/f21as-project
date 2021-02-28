@@ -3,12 +3,15 @@ package sim.coffee;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
 
 public class Menu {
+	// Repeatedly used to split pipe seperated strings
+	static final String PIPE_SEP = "\\s*\\|\\s*";
 
 	HashMap<String, MenuItem> menuMap = new HashMap<>();
 
@@ -25,117 +28,97 @@ public class Menu {
 	public void readFile(String filename) throws FileNotFoundException {
 		File inputFile = new File(filename);
 
+		// Track parsed lines for useful error output
+		int line = 1;
+
 		try (
 			Scanner scan = new Scanner(inputFile);
 		) {
 			while (scan.hasNextLine()) {
 				processLine(scan.nextLine());
+				line++;
 			}
+		}
+		catch (IllegalIDException e) {
+			System.out.println("Parsing error on line " + line + ": " + e.getMessage());
 		}
 	}
 
-	private void processLine (String line) {
+	private void processLine (String line) throws IllegalIDException {
+		// Splitting with regex trims excess whitespace near commas
+		String details [] = line.split("\\s*,\\s*");
 
+		// All rows in csv file have same columns
+		if (details.length == 4) {
 
-		try {
-			String details [] = line.split(","); // a local array list with object from the input line separated by a comma
-
+			MenuItem newItem;
 			String id            = details[0];
 			String description   = details[1];
 			BigDecimal basePrice = new BigDecimal(details[2]);
+			String itemDetails   = details[3];
 
-			if (details[0].matches("^B")) { //identify which MenuItem subclass the input line belongs to based on the id
+			// First character of item ID diferentiates the types
+			switch (id.substring(0,1)) {
+				case "B":
+					String beverageDetails [] = itemDetails.split("\\s*!\\s*");
 
-				boolean isHot = Boolean.parseBoolean(details[3]); //need to add boolean isHot values to the sample data
+					boolean isHot = Boolean.parseBoolean(beverageDetails[0]);
 
-				String[] size    = details[4].split("|"); // a local array list with object from the input line separated by |
-				Size[] sizeEnums = new Size[size.length - 1];
-				for(int i = 0; i < size.length; i++) { //iterate through all the size array's elements and add them to sizeEnums array
-					sizeEnums[i] = Size.valueOf(size[i].toUpperCase());
+					Size[] sizes =
+							Arrays.stream(beverageDetails[1].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Size::valueOf)
+							.toArray(Size[]::new);
 
+					Milk[] milks =
+							Arrays.stream(beverageDetails[2].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Milk::valueOf)
+							.toArray(Milk[]::new);
 
-				}
+					newItem = new Beverage(sizes, isHot, milks, id, basePrice, description);
 
-				String[] milk      = details[5].split("|");
-				Milk[]   milkEnums = new Milk[milk.length - 1];
-				for(int i = 0; i < milk.length; i++) {
-					milkEnums[i] = Milk.valueOf(milk[i].toUpperCase());
-				}
+					break;
+				case "F":
+					DietaryClass[] dietaryClasses =
+						Arrays.stream(itemDetails.split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(DietaryClass::valueOf)
+							.toArray(DietaryClass[]::new);
 
-				Beverage beverage = new Beverage(sizeEnums, isHot, milkEnums, id, basePrice, description);
-				this.add(id, beverage);
+					newItem = new Food(dietaryClasses, id, basePrice, description);
+					break;
+				case "M":
+					String merchDetails [] = itemDetails.split("\\s*!\\s*");
 
+					Label[] labels =
+						Arrays.stream(merchDetails[0].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Label::valueOf)
+							.toArray(Label[]::new);
 
-			} else if (details[0].matches("^F")) {
-				String[] dietaryClass = details[3].split("|");
-				DietaryClass[] dietaryEnums = new DietaryClass[dietaryClass.length - 1];
-				for(int i = 0; i < dietaryClass.length; i++) {
-					dietaryEnums[i] = DietaryClass.valueOf(dietaryClass[i].replace("\\s","").toUpperCase()); //remove whitespace in the input
-				}
+					Colour[] colours =
+						Arrays.stream(merchDetails[1].split(PIPE_SEP))
+							.map(String::toUpperCase)
+							.map(Colour::valueOf)
+							.toArray(Colour[]::new);
 
-				Food food = new Food(dietaryEnums, id, basePrice, description);
-				this.add(id, food);
-
-
-			} else if (details[0].matches("^M")) {
-				String[] label = details[3].split("|");
-				Label[] labelEnums = new Label[label.length - 1];
-				for(int i = 0; i < label.length; i++) {
-					labelEnums[i] = Label.valueOf(label[i].toUpperCase());
-				}
-
-				String[] colour = details[4].split("|");
-				Colour[] colourEnums = new Colour[colour.length - 1];
-				for(int i = 0; i < colour.length; i++) {
-					colourEnums[i] = Colour.valueOf(colour[i].toUpperCase());
-				}
-
-				Merchandise merch = new Merchandise(labelEnums, colourEnums, id, basePrice, description);
-				this.add(id, merch);
-
+					newItem = new Merchandise(labels, colours, id, basePrice, description);
+					break;
+				default:
+					throw new IllegalArgumentException("Line contains invalid Item ID");
 			}
 
+			this.add(id, newItem);
 		}
-
-		catch (NumberFormatException nfe) {
-			String error = "Number formatting error in line  '" + line;
-			System.out.println(error);
-			System.exit(0);
-		}
-
-		catch (ArrayIndexOutOfBoundsException e) {
-			String error = "Array Index Out Of Bounds error: " + e.getMessage();
-			System.out.println(error);
-			System.exit(1);
-		}
-
-		catch (NullPointerException npe)  {
-			System.out.println(npe.getMessage());
-			System.exit(2);
-		}
-
-		catch (IllegalIDException iie) {
-			System.out.println(iie.getMessage());
-			System.exit(3);
-		}
-
 	}
 
-
-	public String getReport()
-	{
-		return null;
-	}
-
-
-	public MenuItem getKey(String key)		//Method to get key. Key is the id from MenuItem??
-	{
+	public MenuItem getItem(String key) {
 		return menuMap.get(key);
 	}
 
 
-	public Set<String> keySet()		//keyset method to return set of keys.
-	{
+	public Set<String> keySet() {
 		return menuMap.keySet();
 	}
 

@@ -5,18 +5,14 @@ import java.time.LocalDateTime;
 
 public class Order {
 
-
-    // Instance variables
     private LocalDateTime time;
-    public String customerId;
-    private OrderItem itemDetails;
-    private BigDecimal pricePaid;
-    
-    public Order(LocalDateTime t, String id, OrderItem deets, BigDecimal price) {
+    private String customerId;
+    private OrderItem item;
+
+    public Order(LocalDateTime t, String customerId, OrderItem item) {
         time = t;
-        this.customerId = id;
-        itemDetails = deets;
-        pricePaid = price;
+        this.customerId = customerId;
+        this.item = item;
     }
 
     public LocalDateTime getTime() {
@@ -27,13 +23,38 @@ public class Order {
         return customerId;
     }
 
-    public OrderItem getItemDetails() {
-        return itemDetails;
+    public String getItemDetails() {
+        return item.getItemDetails();
+    }
+
+    public BigDecimal getFullPrice() {
+        return item.getFullPrice();
     }
 
     public BigDecimal getPricePaid() {
-        return pricePaid;
+        return item.getPricePaid();
     }
 
+    public String getItemId() {
+        return item.getItemId();
+    }
 
+    // Used to apply discounts in the basket
+    public void setPricePaid(BigDecimal newPrice) {
+        item.setPricePaid(newPrice);
+    }
+
+    public boolean hasDiscount() {
+        // Compare to ignores scale, just compares value
+        // returns -1, since getPricePaid() > getFullPrice
+        return getPricePaid().compareTo(getFullPrice()) == -1;
+    }
+
+    // Calculates the percentage discount (between 0 and 1)
+    public BigDecimal getDiscount() {
+        BigDecimal menuPrice = getFullPrice();
+        BigDecimal finalPrice = getPricePaid();
+
+        return new BigDecimal("1").subtract(finalPrice.divide(menuPrice));
+    }
 }
