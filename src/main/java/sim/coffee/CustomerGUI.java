@@ -82,7 +82,7 @@ public class CustomerGUI {
         guiFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
             	JOptionPane.showMessageDialog(guiFrame, "End of day report saved to file.");
-            	//basket.writeReport();
+            	basket.writeReport("report.txt");
             }
         });
 
