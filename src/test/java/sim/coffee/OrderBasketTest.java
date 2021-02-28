@@ -115,10 +115,13 @@ public class OrderBasketTest {
         BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
         BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
 
-        BigDecimal discountPrice = drinkPrice.add(foodPrice).multiply(new BigDecimal("0.7"));
+        BigDecimal factor = new BigDecimal("0.7");
 
-        // Rounded half even as expected
-        discountPrice = discountPrice.setScale(2, RoundingMode.HALF_EVEN);
+        // Prices are rounded before added
+        foodPrice = foodPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+        drinkPrice = drinkPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+
+        BigDecimal discountPrice = drinkPrice.add(foodPrice);
 
         setupOrder("2021-03-07T09:15Z");
         assertEquals(discountPrice, testBasket.getTotalIncome());
