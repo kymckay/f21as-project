@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,8 +43,8 @@ public class OrderList {
 	}
 
 	private void processLine(String line) {
-		// Split regex trims excess whitespace near commas
-		String[] cols = line.split("\\s*,\\s*");
+		// Remove whitespace *after* spliting to avoid missing empty columns (valid)
+		String[] cols = Arrays.stream(line.split(",")).map(String::strip).toArray(String[]::new);
 
 		// All rows in csv file have same columns
 		if (cols.length == 6) {
