@@ -21,11 +21,7 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
-    // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00
-    // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00
-    // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00
-    // Parses through basket list and checks for discount
-    public boolean ifSandwich(Order o) {
+    private boolean isSandwich(Order o) {
         // Use Regex to track the food item and differentiate
         // // between pastry and sandwich
         String desc = menu.getKey(o.getItemId()).getDescription();
@@ -35,132 +31,12 @@ public class OrderBasket extends OrderList {
         return matchFound;
     }
 
-    // Create counter to keep track no. of each type of items ordered
-    public int[] getCount() {
-        int[] count = {0, 0, 0, 0, 0}; // {Sandwich, Pastry, 'B–hot', 'B-cold', 'M'}
-        for (Order o : this.orders) {
-            switch (o.getItemId().charAt(0)) {
-                case 'F':
-                    if (ifSandwich(o)) {
-                        count[0]++; // If ifSandwich = true, the sandwich count ++
-                    } else {
-                        count[1]++;
-                    }
-                    break;
-                case 'B':
-                    if (isHot(o)) {
-                        count[2]++;
-                    } else {
-                        count[3]++;
-                    }
-                    break;
-                default:
-                    count[4]++;
-                    break;
-            }
-        }
-        return count;
-    }
-
-    // Get sum of counter array
-    public int getSumCount() {
-        int count = 0;
-        for (int i = 0; i < 5; i++) {
-            count = count + getCount()[i];
-        }
-        return count;
-    }
-
-    public BigDecimal getBasePrice(Order o) {
-        return o.getFullPrice();
-    }
-
-    public boolean isHot(Order o) {
+    private boolean isHot(Order o) {
         return o.getItemDetails().split("\\|")[1].charAt(0) == 't';
     }
 
-    public Character getItemType(Order o) {
-        return o.getItemId().charAt(0);
-    }
-
-    // Applies only if order contains pastry [1] and hot drink [2]
-    // Only applies when getCount[0] = getCount[2], getCount[1] = getCount[2]
-    // // and getCount[0], getCount[1], getCount[2] > 0
-    public void morningDiscount(Order o) {
-
-        BigDecimal price = getBasePrice(o);
-
-        if (getCount()[0] > 0 || getCount()[2] > 0) {
-
-            if (ifSandwich(o) == false || !isHot(o) || getItemType(o) == 'M') {
-
-                o.setPricePaid(price);
-
-            } else {
-
-                BigDecimal sandwich = new BigDecimal(getCount()[0]);
-                BigDecimal hotBev = new BigDecimal(getCount()[2]);
-                BigDecimal countD = hotBev.subtract(sandwich);
-                BigDecimal discount = new BigDecimal(0.3);
-                BigDecimal baseFactor = new BigDecimal(1);
-                BigDecimal factor = new BigDecimal(1);
-
-                if (sandwich.equals(hotBev)) {
-
-                    factor = baseFactor.subtract(discount);
-                    price = price.multiply(factor);
-                    o.setPricePaid(price);
-
-                } else if (countD.signum() < 0) {
-
-                    if (getItemType(o) == 'F') {
-
-                        BigDecimal num = countD.multiply(new BigDecimal(-1));
-                        num = num.add(hotBev);
-                        discount = discount.divide(num);
-                        factor = baseFactor.add(discount);
-                        price = price.multiply(factor);
-                        o.setPricePaid(price);
-
-                    } else {
-
-                        factor = baseFactor.subtract(discount);
-                        price = price.multiply(factor);
-                        o.setPricePaid(price);
-
-                    }
-
-                } else {
-
-                    if (getItemType(o) == 'B') {
-
-                        BigDecimal num = countD.add(sandwich);
-                        discount = discount.divide(num);
-                        factor = baseFactor.add(discount);
-                        price = price.multiply(factor);
-
-                    } else {
-
-                        factor = baseFactor.subtract(discount);
-                        price = price.multiply(factor);
-                        o.setPricePaid(price);
-
-                    }
-
-                }
-
-            }
-
-        } else {
-
-            o.setPricePaid(price);
-
-        }
-
-    }
-
     // Figures out what discount may apply and attempts to
-    public void applyDiscount(Order newOrder) {
+    private void applyDiscount(Order newOrder) {
 
         // Nothing to do if the basket is empty, sanity check
         if (orders.isEmpty()) return;
@@ -195,7 +71,7 @@ public class OrderBasket extends OrderList {
                 && order.getItemId().startsWith(target)
                 && (
                     (target.equals("B") && isHot(order)) // Beverage must be hot
-                    || (target.equals("F") && ifSandwich(order)) // Food must be a sandwich
+                    || (target.equals("F") && isSandwich(order)) // Food must be a sandwich
                 )
             ) {
                 saveOrder = order;

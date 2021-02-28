@@ -98,15 +98,6 @@ public class OrderBasketTest {
         testBasket.add(drink);
     }
 
-    @Test
-    public void getSumCount() {
-        setupOrder("2021-03-07T12:15Z");
-        assertEquals(2, testBasket.getSumCount());
-        assertEquals(1, testBasket.getCount()[0]);
-        assertEquals(1, testBasket.getCount()[2]);
-        assertNotEquals(1, testBasket.getCount()[1]);
-    }
-
     /**
      * Tests that any sandwich and hot drink combo is 30% off between 08:00 and 11:00
      */
