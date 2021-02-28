@@ -77,7 +77,7 @@ public class CustomerGUI {
         // Prevent making the window too small to use
         guiFrame.setMinimumSize(new Dimension(500, 500));
 
-        guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        guiFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         // Inform user that a report has been generated on close
         guiFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
