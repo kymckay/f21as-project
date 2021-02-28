@@ -249,9 +249,20 @@ public class OrderBasket extends OrderList {
         // Track items as we go since list is unsorted
         ArrayList<Order> foodFound = new ArrayList<>();
         ArrayList<Order> drinkFound = new ArrayList<>();
+        BigDecimal mealDealPrice = new BigDecimal(4).setScale(2, RoundingMode.HALF_EVEN);
 
         for (Order order : orders) {
             // TODO build lists, skipping already discounted
+            if (order.hasDiscount()) continue;
+
+            if (order.getItemId().startsWith("F")) {
+                foodFound.add(order);
+            } else {
+                drinkFound.add(order);
+            }
+
+            BigDecimal
+            
         }
 
         // Once we know all the food/drink orders, apply discounts
