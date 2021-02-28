@@ -38,46 +38,6 @@ public class OrderBasketTest {
         testBasket.checkout();
     }
 
-    /**
-     * Tests that upon adding a new order the basket size increases
-     * Also tests that the menu item order tally is incremented
-     * (tallying may be moved to checkout in future)
-     */
-    @Test
-    public void itemAdded() {
-        int sizeBefore = testBasket.size();
-        int tallyBefore = testMenu.getKey("F001").getOrderCount();
-
-        testBasket.add(testOrder);
-
-        // The basket should contain one more item and
-        // the corresponding item should be tallied once
-        assertEquals(sizeBefore + 1, testBasket.size());
-        assertEquals(tallyBefore + 1, testMenu.getKey("F001").getOrderCount());
-    }
-
-    /**
-     * Tests that upon checkout the basket is emptied of all orders and the contents
-     * are moved to the historic list
-     */
-    @Test
-    public void checkout() {
-        testBasket.add(testOrder);
-
-        int size = testBasket.size();
-        int listSize = testList.size();
-
-        // Basket should successfully contain something before it can checkout
-        assertNotEquals(0, size);
-
-        testBasket.checkout();
-
-        // The basket should now be cleared after checkout
-        assertEquals(0, testBasket.size());
-        // The order list should have grown by the corresponding size
-        assertEquals(listSize + size, testList.size());
-    }
-
     // Helper method to add orders to basket for discount testing
     // Always adds a food item and large hot coffee which should cover all discounts
     // Time of day changes via input
@@ -98,13 +58,62 @@ public class OrderBasketTest {
         testBasket.add(drink);
     }
 
+    /**
+     * Tests that upon adding a new order the basket size increases
+     */
     @Test
-    public void getSumCount() {
-        setupOrder("2021-03-07T12:15Z");
-        assertEquals(2, testBasket.getSumCount());
-        assertEquals(1, testBasket.getCount()[0]);
-        assertEquals(1, testBasket.getCount()[2]);
-        assertNotEquals(1, testBasket.getCount()[1]);
+    public void itemAdded() {
+        int sizeBefore = testBasket.size();
+
+        testBasket.add(testOrder);
+
+        // The basket should contain one more item
+        assertEquals(sizeBefore + 1, testBasket.size());
+    }
+
+    /**
+     * Tests that upon adding a new order the menu item order tally is incremented
+     * (tallying may be moved to checkout in future)
+     */
+    @Test
+    public void itemTallyIncrease() {
+        int tallyBefore = testMenu.getKey("F001").getOrderCount();
+
+        testBasket.add(testOrder);
+
+        // The corresponding item should be tallied once
+        assertEquals(tallyBefore + 1, testMenu.getKey("F001").getOrderCount());
+    }
+
+    /**
+     * Tests that upon checkout the basket is emptied of all orders
+     */
+    @Test
+    public void checkoutClearsBasket() {
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
+        testBasket.checkout();
+
+        // The basket should now be cleared after checkout
+        assertEquals(0, testBasket.size());
+    }
+
+    /**
+     * Tests that upon checkout the basket contents are moved to the historic list
+     */
+    @Test
+    public void checkoutMovesOrders() {
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
+
+        int size = testBasket.size();
+        int listSize = testList.size();
+        testBasket.checkout();
+
+        // The order list should have grown by the corresponding size
+        assertEquals(listSize + size, testList.size());
     }
 
     /**
@@ -152,7 +161,7 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that all food items are 50% off after 17:00
+     * Tests that food items are 50% off after 17:00
      */
     @Test
     public void discount3() {
