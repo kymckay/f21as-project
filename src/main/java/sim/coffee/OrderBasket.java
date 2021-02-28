@@ -2,7 +2,6 @@ package sim.coffee;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class OrderBasket extends OrderList {
         if (hour >= 8 && hour < 11) {
             discount1(newOrder);
         } else if (hour >= 12 && hour < 14) {
-            discount2();
+            discount2(newOrder);
         } else if (hour >= 17) {
             discount3();
         }
@@ -75,7 +74,7 @@ public class OrderBasket extends OrderList {
 
         // Food/beverage combines with opposite for discount
         String target = newOrder.getItemId().startsWith("F") ? "B" : "F";
-        Order saveOrder = null;
+        Order combo = null;
 
         for (Order order : orders) {
             if (
@@ -86,73 +85,49 @@ public class OrderBasket extends OrderList {
                     || (target.equals("F") && ifSandwich(order)) // Food must be a sandwich
                 )
             ) {
-                saveOrder = order;
+                combo = order;
                 break;
             }
         }
 
         // If a suitable combo is found discount applies
-        if (saveOrder != null) {
+        if (combo != null) {
             BigDecimal factor = new BigDecimal("0.7");
 
-            BigDecimal price = saveOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
-            saveOrder.setPricePaid(price);
+            BigDecimal price = combo.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+            combo.setPricePaid(price);
 
             price = newOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
             newOrder.setPricePaid(price);
         }
-
     }
 
     // Applys discount 2 if basket qualifies
     // Discount 2 = food and drink combo is £4.00
-    private void discount2() {
-        // Track items as we go since list is unsorted
-        ArrayList<Order> foodFound = new ArrayList<>();
-        ArrayList<Order> drinkFound = new ArrayList<>();
-        ArrayList<Order> merchFound = new ArrayList<>();
-        BigDecimal mealDealPrice = new BigDecimal(4).setScale(2, RoundingMode.HALF_EVEN);
+    private void discount2(Order newOrder) {
+        // Merchandise never applies for this discount
+        if (newOrder.getItemId().startsWith("M")) return;
+
+        // Food/beverage combines with opposite for discount
+        String target = newOrder.getItemId().startsWith("F") ? "B" : "F";
+        Order combo = null;
 
         for (Order order : orders) {
-            // TODO build lists, skipping already discounted
-            if (order.hasDiscount()) continue;
-
-            if (order.getItemId().startsWith("F")) {
-                foodFound.add(order);
-            } else if (order.getItemId().startsWith("B")) {
-                drinkFound.add(order);
-            } else {
-                merchFound.add(order);
+            if (
+                !order.hasDiscount() // Already part of a combo
+                && order.getItemId().startsWith(target)
+            ) {
+                combo = order;
+                break;
             }
         }
 
-        // Once we know all the food/drink orders, apply discounts
-        BigDecimal singleItemPrice = mealDealPrice.divide(new BigDecimal(2)).setScale(2, RoundingMode.HALF_EVEN);
-        int foodCount = foodFound.size();
-        int drinkCount = drinkFound.size();
-
-        if (foodCount == drinkCount) {
-            for (int i = 0; i < foodCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
-                drinkFound.get(i).setPricePaid(singleItemPrice);
-            }
-        } else if (foodCount < drinkCount) {
-            for (int i = 0; i < foodCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
-                drinkFound.get(i).setPricePaid(singleItemPrice);
-            }
-        } else {
-            for (int i = 0; i < drinkCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
-                drinkFound.get(i).setPricePaid(singleItemPrice);
-            }
+        // If a suitable combo is found discount applies
+        if (combo != null) {
+            BigDecimal newPrice = new BigDecimal("2.00");
+            combo.setPricePaid(newPrice);
+            newOrder.setPricePaid(newPrice);
         }
-
-        orders.clear();
-        orders.addAll(foodFound);
-        orders.addAll(drinkFound);
-        orders.addAll(merchFound);
-
     }
 
     // Applys discount 3 if basket qualifies
