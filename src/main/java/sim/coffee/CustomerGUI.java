@@ -310,7 +310,8 @@ public class CustomerGUI {
             // Refresh the UI table to reflect data change
 
     		basket.fireTableDataChanged();	// not working atm, tried implementing a clearList() method
-    										// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
+   								// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
+    		basket.checkout();
     		frame.dispose();
 
     	} else if (action == 1) { // "Cancel"
