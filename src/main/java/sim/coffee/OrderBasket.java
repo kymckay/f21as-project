@@ -181,23 +181,29 @@ public class OrderBasket extends OrderList {
     // Applys discount 1 if basket qualifies
     // Discount 1 = 30% off hot drink and sandwich combos
     private void discount1(Order incomingOrder) {
-        if (incomingOrder.getItemId().startsWith("M"))
+        if (incomingOrder.getItemId().startsWith("M") || !ifSandwich(incomingOrder))
             return;
 
-        String target = incomingOrder.getItemId().startsWith("F") ? "B" : "F";
+        String target = ifSandwich(incomingOrder) ? "B" : "F";
 
         Order saveOrder;
 
         for (Order order : orders) {
             if (order.hasDiscount()) continue;
 
+            BigDecimal searchPrice = order.getFullPrice();
+            BigDecimal incomingOrderPrice = incomingOrder.getFullPrice();
+            BigDecimal factor = new BigDecimal(0.7).setScale(2, RoundingMode.HALF_EVEN);
+            BigDecimal newSearchPrice = searchPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+            BigDecimal newIncomingOrderPrice = incomingOrderPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+
             if (order.getItemId().startsWith(target)) {
-                saveOrder = order;
+                incomingOrder.setPricePaid(newPrice);
                 break;
             }
         }
 
-        
+
     }
 
     // Applys discount 2 if basket qualifies
