@@ -61,7 +61,7 @@ public class OrderBasket extends OrderList {
         } else if (hour >= 12 && hour < 14) {
             discount2(newOrder);
         } else if (hour >= 17) {
-            discount3();
+            discount3(newOrder);
         }
     }
 
@@ -132,19 +132,14 @@ public class OrderBasket extends OrderList {
 
     // Applys discount 3 if basket qualifies
     // Discount 3 = food 50% off
-    private void discount3() {
-        for (Order order : orders) {
-            if (order.getItemId().startsWith("F")) {
-                // Skip over orders already discounted
-                if (order.hasDiscount()) continue;
+    private void discount3(Order newOrder) {
+        if (newOrder.getItemId().startsWith("F")) {
+            BigDecimal price = newOrder.getFullPrice();
 
-                BigDecimal price = order.getFullPrice();
+            price = price.multiply(new BigDecimal("0.5"));
+            price = price.setScale(2, RoundingMode.HALF_EVEN);
 
-                price = price.multiply(new BigDecimal("0.5"));
-                price = price.setScale(2, RoundingMode.HALF_EVEN);
-
-                order.setPricePaid(price);
-            }
+            newOrder.setPricePaid(price);
         }
     }
 
