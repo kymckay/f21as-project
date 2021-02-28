@@ -188,23 +188,13 @@ public class OrderBasket extends OrderList {
         // Discounts should be updated each time an item is added
         applyDiscount(o);
 
+        // Item count should increment (move to checkout if we enable "remove from basket")
+        menu.getKey(o.getItemId()).setCount();
+
         return added;
     }
 
-  //writeReport Method
-   	public void writeReport(String fileName)
-       {
-		// Increment count for menu items to reflect orders added (from order.csv)
-		for (int i = 0; i < orderList.size(); i++) {
-			String order = orderList.get(i).getItemId();
-			for (String m: menu.keySet()) {
-				String menuItem = menu.getKey(m).getID();
-				if (menuItem.equals(order)) {
-					menu.getKey(m).setCount();
-				}
-			}
-		}
-
+   	public void writeReport(String fileName) {
     	String report = "";
     	report += String.format("%-25s", "Menu Item");
        	report += "Times Ordered" + "\n";
