@@ -189,6 +189,7 @@ public class OrderBasket extends OrderList {
         // Track items as we go since list is unsorted
         ArrayList<Order> foodFound = new ArrayList<>();
         ArrayList<Order> drinkFound = new ArrayList<>();
+        ArrayList<Order> merchFound = new ArrayList<>();
         BigDecimal mealDealPrice = new BigDecimal(4).setScale(2, RoundingMode.HALF_EVEN);
 
         for (Order order : orders) {
@@ -197,10 +198,11 @@ public class OrderBasket extends OrderList {
 
             if (order.getItemId().startsWith("F")) {
                 foodFound.add(order);
-            } else {
+            } else if (order.getItemId().startsWith("B")) {
                 drinkFound.add(order);
+            } else {
+                merchFound.add(order);
             }
-            
         }
 
         // Once we know all the food/drink orders, apply discounts
@@ -210,7 +212,7 @@ public class OrderBasket extends OrderList {
 
         if (foodCount == drinkCount) {
             for (int i = 0; i < foodCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
+                orders.get(i).setPricePaid(singleItemPrice);
                 drinkFound.get(i).setPricePaid(singleItemPrice);
             }
         } else if (foodCount < drinkCount) {
@@ -224,6 +226,11 @@ public class OrderBasket extends OrderList {
                 drinkFound.get(i).setPricePaid(singleItemPrice);
             }
         }
+
+        orders.clear();
+        orders.addAll(foodFound);
+        orders.addAll(drinkFound);
+        orders.addAll(merchFound);
         
     }
 
