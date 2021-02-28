@@ -40,19 +40,28 @@ public class OrderBasketTest {
 
     /**
      * Tests that upon adding a new order the basket size increases
-     * Also tests that the menu item order tally is incremented
-     * (tallying may be moved to checkout in future)
      */
     @Test
     public void itemAdded() {
         int sizeBefore = testBasket.size();
+
+        testBasket.add(testOrder);
+
+        // The basket should contain one more item
+        assertEquals(sizeBefore + 1, testBasket.size());
+    }
+
+    /**
+     * Tests that upon adding a new order the menu item order tally is incremented
+     * (tallying may be moved to checkout in future)
+     */
+    @Test
+    public void itemTallyIncrease() {
         int tallyBefore = testMenu.getKey("F001").getOrderCount();
 
         testBasket.add(testOrder);
 
-        // The basket should contain one more item and
-        // the corresponding item should be tallied once
-        assertEquals(sizeBefore + 1, testBasket.size());
+        // The corresponding item should be tallied once
         assertEquals(tallyBefore + 1, testMenu.getKey("F001").getOrderCount());
     }
 
