@@ -81,7 +81,7 @@ public class CustomerGUI {
         // Inform user that a report has been generated on close
         guiFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
-            	JOptionPane.showMessageDialog(guiFrame, "End of day report saved to file.");
+            	JOptionPane.showMessageDialog(guiFrame, "End of day report saved to \"report.txt\".");
             	basket.writeReport("report.txt");
             }
         });
