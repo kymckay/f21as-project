@@ -212,7 +212,7 @@ public class OrderBasket extends OrderList {
 
         if (foodCount == drinkCount) {
             for (int i = 0; i < foodCount; i++) {
-                orders.get(i).setPricePaid(singleItemPrice);
+                foodFound.get(i).setPricePaid(singleItemPrice);
                 drinkFound.get(i).setPricePaid(singleItemPrice);
             }
         } else if (foodCount < drinkCount) {
