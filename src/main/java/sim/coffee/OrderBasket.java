@@ -23,9 +23,9 @@ public class OrderBasket extends OrderList {
     // Method to check if order is a sandwich, 
     // Only used for the breakfast deal - discount1()
     public boolean ifSandwich(Order o) {
-        // Use Regex to track the food item and differentiate
-        // // between pastry and sandwich
+        // Use Regex to track the food item and return a boolean - true, if item is a sandwich
         String desc = menu.getItem(o.getItemId()).getDescription();
+        // match to see if String desc contains the string "Sandwich"
         Pattern pattern = Pattern.compile("Sandwich", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(desc);
         boolean matchFound = matcher.find();
