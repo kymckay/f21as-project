@@ -65,19 +65,6 @@ public class OrderList {
 		}
 	}
 
-	public void writeFile(String variable) {
-		FileWriter writeFile;
-
-		try {
-			writeFile = new FileWriter("output.txt");
-			writeFile.write(variable);
-			writeFile.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	// Simple wrapper method
 	public boolean add(Order o) {
 		return orders.add(o);
@@ -90,10 +77,6 @@ public class OrderList {
 	// Simple wrapper method
 	public Order get(int index) {
 		return orders.get(index);
-	}
-
-	public String getReport() {
-		return null;
 	}
 
 

@@ -82,7 +82,7 @@ public class CustomerGUI {
         guiFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
             	JOptionPane.showMessageDialog(guiFrame, "End of day report saved to file.");
-            	//basket.writeReport();
+            	basket.writeReport("report.txt");
             }
         });
 
@@ -310,7 +310,8 @@ public class CustomerGUI {
             // Refresh the UI table to reflect data change
 
     		basket.fireTableDataChanged();	// not working atm, tried implementing a clearList() method
-    										// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
+   								// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
+    		basket.checkout();
     		frame.dispose();
 
     	} else if (action == 1) { // "Cancel"

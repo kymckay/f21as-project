@@ -113,12 +113,6 @@ public class Menu {
 		}
 	}
 
-
-	public String getReport() {
-		return null;
-	}
-
-
 	public MenuItem getKey(String key) {
 		return menuMap.get(key);
 	}

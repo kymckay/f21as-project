@@ -290,28 +290,61 @@ public class OrderBasket extends OrderList {
         // Discounts should be updated each time an item is added
         applyDiscount();
 
-        // Item tally can be incremented here (unless a remove from cart option is
-        // added)
-        menu.getKey(o.getItemId()).setCount();
-
         return added;
     }
     
   //writeReport Method
    	public void writeReport(String fileName)
        {
+		// Increment count for menu items to reflect orders added (from order.csv)
+		for (int i = 0; i < orderList.size(); i++) {
+			String order = orderList.get(i).getItemId();
+			for (String m: menu.keySet()) {
+				String menuItem = menu.getKey(m).getID();
+				if (menuItem.equals(order)) {
+					menu.getKey(m).setCount();
+				}
+			}
+		}	
        	
     	String report = "";
+    	report += String.format("%-25s", "Menu Item");
+       	report += "Times Ordered" + "\n";
   
        	for(String menuItemKey : menu.keySet())
        	{
        		
-       		report += String.format("%s\t%s\n",menu.getKey(menuItemKey).getOrderCount());
+       		
+       		report += String.format("%-30s", menu.getKey(menuItemKey).getDescription() + " " );
+       		report += String.format("%s\n",menu.getKey(menuItemKey).getOrderCount());
        	    
         }
        	
        String message = "The Total Income obtained from the today's Orders is £";
-       report += String.format("%%s%d",message,orderList.getTotalIncome());	
+       report += "\n" + message;
+       report += orderList.getTotalIncome();
+       
+       // Loop through all the items in Menu to determine the item(s) with highest count
+       int highestCount = 0;
+       for(String m: menu.keySet()) {
+    	   int count = menu.getKey(m).getOrderCount();
+    	   if (highestCount < count) {
+    		   highestCount = count;   
+    	   }
+       }
+       // Add all menu items with a count equal to highest count to a string
+       String mostPopularItem = "";
+       for(String m: menu.keySet()) {
+    	   int itemCount = menu.getKey(m).getOrderCount();
+    	   if (highestCount == itemCount) {
+    		   mostPopularItem += menu.getKey(m).getDescription();
+    		   mostPopularItem += ", ";
+    	   }
+       }
+       
+       report += "\n" + "The most popular menu item(s) today: " + mostPopularItem + "ordered " + highestCount + " times";
+       
+       
        
        try {													//Writes the report and message to the file
 			FileWriter orderWriter = new FileWriter(fileName);
