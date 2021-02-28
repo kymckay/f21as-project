@@ -181,28 +181,38 @@ public class OrderBasket extends OrderList {
     // Applys discount 1 if basket qualifies
     // Discount 1 = 30% off hot drink and sandwich combos
     private void discount1(Order incomingOrder) {
-        if (incomingOrder.getItemId().startsWith("M") || !ifSandwich(incomingOrder))
+        // Merchandise never applies for this discount
+        if (incomingOrder.getItemId().startsWith("M"))
             return;
 
-        String target = ifSandwich(incomingOrder) ? "B" : "F";
-
-        Order saveOrder;
+        // Food/beverage combines with opposite for discount
+        String target = incomingOrder.getItemId().startsWith("F") ? "B" : "F";
+        Order saveOrder = null;
 
         for (Order order : orders) {
-            if (order.hasDiscount()) continue;
-
-            BigDecimal searchPrice = order.getFullPrice();
-            BigDecimal incomingOrderPrice = incomingOrder.getFullPrice();
-            BigDecimal factor = new BigDecimal(0.7).setScale(2, RoundingMode.HALF_EVEN);
-            BigDecimal newSearchPrice = searchPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
-            BigDecimal newIncomingOrderPrice = incomingOrderPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
-
-            if (order.getItemId().startsWith(target)) {
-                incomingOrder.setPricePaid(newPrice);
+            if (
+                !order.hasDiscount() // Already part of a combo
+                && order.getItemId().startsWith(target)
+                && (
+                    (target.equals("B") && isHot(order)) // Beverage must be hot
+                    || (target.equals("F") && ifSandwich(order)) // Food must be a sandwich
+                )
+            ) {
+                saveOrder = order;
                 break;
             }
         }
 
+        // If a suitable combo is found discount applies
+        if (saveOrder != null) {
+            BigDecimal factor = new BigDecimal("0.7");
+
+            BigDecimal price = saveOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+            saveOrder.setPricePaid(price);
+
+            price = incomingOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+            incomingOrder.setPricePaid(price);
+        }
 
     }
 
@@ -254,7 +264,7 @@ public class OrderBasket extends OrderList {
         orders.addAll(foodFound);
         orders.addAll(drinkFound);
         orders.addAll(merchFound);
-        
+
     }
 
     // Applys discount 3 if basket qualifies
@@ -292,7 +302,7 @@ public class OrderBasket extends OrderList {
 
         return added;
     }
-    
+
   //writeReport Method
    	public void writeReport(String fileName)
        {
@@ -305,31 +315,31 @@ public class OrderBasket extends OrderList {
 					menu.getKey(m).setCount();
 				}
 			}
-		}	
-       	
+		}
+
     	String report = "";
     	report += String.format("%-25s", "Menu Item");
        	report += "Times Ordered" + "\n";
-  
+
        	for(String menuItemKey : menu.keySet())
        	{
-       		
-       		
+
+
        		report += String.format("%-30s", menu.getKey(menuItemKey).getDescription() + " " );
        		report += String.format("%s\n",menu.getKey(menuItemKey).getOrderCount());
-       	    
+
         }
-       	
+
        String message = "The Total Income obtained from the today's Orders is £";
        report += "\n" + message;
        report += orderList.getTotalIncome();
-       
+
        // Loop through all the items in Menu to determine the item(s) with highest count
        int highestCount = 0;
        for(String m: menu.keySet()) {
     	   int count = menu.getKey(m).getOrderCount();
     	   if (highestCount < count) {
-    		   highestCount = count;   
+    		   highestCount = count;
     	   }
        }
        // Add all menu items with a count equal to highest count to a string
@@ -341,15 +351,15 @@ public class OrderBasket extends OrderList {
     		   mostPopularItem += ", ";
     	   }
        }
-       
+
        report += "\n" + "The most popular menu item(s) today: " + mostPopularItem + "ordered " + highestCount + " times";
-       
-       
-       
+
+
+
        try {													//Writes the report and message to the file
 			FileWriter orderWriter = new FileWriter(fileName);
 			orderWriter.write(report);
-			orderWriter.close();   					
+			orderWriter.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
