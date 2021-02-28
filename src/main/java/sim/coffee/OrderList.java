@@ -79,10 +79,6 @@ public class OrderList {
 		return orders.get(index);
 	}
 
-	public String getReport() {
-		return null;
-	}
-
 
 	public BigDecimal getTotalIncome() {
 		BigDecimal sum = new BigDecimal("0");
