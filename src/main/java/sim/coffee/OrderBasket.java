@@ -186,7 +186,10 @@ public class OrderBasket extends OrderList {
     // Applys discount 2 if basket qualifies
     // Discount 2 = food and drink combo is £4.00
     private void discount2() {
-        
+        // Track items as we go since list is unsorted
+        ArrayList<Order> foodFound = new ArrayList<>();
+        ArrayList<Order> drinkFound = new ArrayList<>();
+        BigDecimal mealDealPrice = new BigDecimal(4).setScale(2, RoundingMode.HALF_EVEN);
 
         for (Order order : orders) {
             // TODO build lists, skipping already discounted
