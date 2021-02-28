@@ -260,12 +260,31 @@ public class OrderBasket extends OrderList {
             } else {
                 drinkFound.add(order);
             }
-
-            BigDecimal
             
         }
 
         // Once we know all the food/drink orders, apply discounts
+        BigDecimal singleItemPrice = mealDealPrice.divide(new BigDecimal(2)).setScale(2, RoundingMode.HALF_EVEN);
+        int foodCount = foodFound.size();
+        int drinkCount = drinkFound.size();
+
+        if (foodCount == drinkCount) {
+            for (int i = 0; i < foodCount; i++) {
+                foodFound.get(i).setPricePaid(singleItemPrice);
+                drinkFound.get(i).setPricePaid(singleItemPrice);
+            }
+        } else if (foodCount < drinkCount) {
+            for (int i = 0; i < foodCount; i++) {
+                foodFound.get(i).setPricePaid(singleItemPrice);
+                drinkFound.get(i).setPricePaid(singleItemPrice);
+            }
+        } else {
+            for (int i = 0; i < drinkCount; i++) {
+                foodFound.get(i).setPricePaid(singleItemPrice);
+                drinkFound.get(i).setPricePaid(singleItemPrice);
+            }
+        }
+        
     }
 
     // Applys discount 3 if basket qualifies
