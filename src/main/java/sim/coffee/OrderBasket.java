@@ -158,66 +158,6 @@ public class OrderBasket extends OrderList {
 
     }
 
-    public void afternoonDiscount(Order o) {
-
-        BigDecimal price = getBasePrice(o);
-        int foodInt = getCount()[0] + getCount()[1];
-        int bevInt = getCount()[2] + getCount()[3];
-
-
-        if (foodInt >= 1 && bevInt >= 1) {
-
-            BigDecimal food = new BigDecimal(foodInt);
-            BigDecimal bev = new BigDecimal(bevInt);
-            BigDecimal countD = bev.subtract(food);
-            // £4/2 = £2
-            BigDecimal dealPrice = new BigDecimal(2);
-
-            if (countD.equals(BigDecimal.ZERO)) {
-
-                o.setPricePaid(dealPrice);
-
-            } else if (countD.signum() < 0) {
-
-                if (getItemType(o) == 'F') {
-
-                    countD = countD.multiply(new BigDecimal(-1));
-                    price = countD.multiply(price);
-                    price = price.add(food.multiply(dealPrice));
-                    price = price.divide(food);
-                    o.setPricePaid(price.setScale(2, RoundingMode.HALF_EVEN));
-
-                } else {
-
-                    o.setPricePaid(dealPrice.setScale(2));
-
-                }
-
-            } else {
-
-                if (getItemType(o) == 'B') {
-
-                    price = countD.multiply(price);
-                    price = price.add(bev.multiply(dealPrice));
-                    price = price.divide(bev);
-                    o.setPricePaid(price);
-
-                } else {
-
-                    o.setPricePaid(price);
-
-                }
-
-            }
-
-        } else {
-
-            o.setPricePaid(price);
-
-        }
-
-    }
-
     // Figures out what discount may apply and attempts to
     public void applyDiscount() {
 
