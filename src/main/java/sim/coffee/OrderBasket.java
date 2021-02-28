@@ -65,7 +65,7 @@ public class OrderBasket extends OrderList {
         }
     }
 
-    // Applys discount 1 if basket qualifies
+    // Applies discount 1 if basket qualifies
     // Discount 1 = 30% off hot drink and sandwich combos
     private void discount1(Order newOrder) {
         // Merchandise never applies for this discount
@@ -102,7 +102,7 @@ public class OrderBasket extends OrderList {
         }
     }
 
-    // Applys discount 2 if basket qualifies
+    // Applies discount 2 if basket qualifies
     // Discount 2 = food and drink combo is £4.00
     private void discount2(Order newOrder) {
         // Merchandise never applies for this discount
@@ -130,7 +130,7 @@ public class OrderBasket extends OrderList {
         }
     }
 
-    // Applys discount 3 if basket qualifies
+    // Applies discount 3 if basket qualifies
     // Discount 3 = food 50% off
     private void discount3(Order newOrder) {
         if (newOrder.getItemId().startsWith("F")) {
