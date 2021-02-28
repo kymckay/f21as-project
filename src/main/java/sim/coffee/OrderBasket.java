@@ -54,7 +54,7 @@ public class OrderBasket extends OrderList {
         if (orders.isEmpty()) return;
 
         // First element in the list is when overall customer order started
-        int hour = orders.get(0).getTime().getHour();
+        int hour = newOrder.getTime().getHour();
 
         // Different discount applies based on hour the order initiated
         if (hour >= 8 && hour < 11) {
