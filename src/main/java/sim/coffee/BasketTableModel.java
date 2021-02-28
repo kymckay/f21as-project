@@ -76,4 +76,8 @@ public class BasketTableModel extends AbstractTableModel {
 	public BigDecimal getTotalPrice() {
 		return basket.getTotalIncome();
 	}
+	
+	public void writeReport(String filename) {
+		basket.writeReport(filename);
+	}
 }
