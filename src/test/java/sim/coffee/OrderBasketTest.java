@@ -38,6 +38,26 @@ public class OrderBasketTest {
         testBasket.checkout();
     }
 
+    // Helper method to add orders to basket for discount testing
+    // Always adds a food item and large hot coffee which should cover all discounts
+    // Time of day changes via input
+    private void setupOrder(String isoDate) {
+        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+
+        // These must match the test data menu input
+        OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
+        OrderItem drinkItem = new OrderItem("B001", "L|true|None", drinkPrice, drinkPrice);
+
+        LocalDateTime time = LocalDateTime.parse(isoDate, DateTimeFormatter.ISO_DATE_TIME);
+
+        Order food = new Order(time, "TS001", foodItem);
+        Order drink = new Order(time, "TS001", drinkItem);
+
+        testBasket.add(food);
+        testBasket.add(drink);
+    }
+
     /**
      * Tests that upon adding a new order the basket size increases
      */
@@ -66,45 +86,34 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that upon checkout the basket is emptied of all orders and the contents
-     * are moved to the historic list
+     * Tests that upon checkout the basket is emptied of all orders
      */
     @Test
-    public void checkout() {
+    public void checkoutClearsBasket() {
         testBasket.add(testOrder);
-
-        int size = testBasket.size();
-        int listSize = testList.size();
-
-        // Basket should successfully contain something before it can checkout
-        assertNotEquals(0, size);
-
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
         testBasket.checkout();
 
         // The basket should now be cleared after checkout
         assertEquals(0, testBasket.size());
-        // The order list should have grown by the corresponding size
-        assertEquals(listSize + size, testList.size());
     }
 
-    // Helper method to add orders to basket for discount testing
-    // Always adds a food item and large hot coffee which should cover all discounts
-    // Time of day changes via input
-    private void setupOrder(String isoDate) {
-        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
-        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+    /**
+     * Tests that upon checkout the basket contents are moved to the historic list
+     */
+    @Test
+    public void checkoutMovesOrders() {
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
+        testBasket.add(testOrder);
 
-        // These must match the test data menu input
-        OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
-        OrderItem drinkItem = new OrderItem("B001", "L|true|None", drinkPrice, drinkPrice);
+        int size = testBasket.size();
+        int listSize = testList.size();
+        testBasket.checkout();
 
-        LocalDateTime time = LocalDateTime.parse(isoDate, DateTimeFormatter.ISO_DATE_TIME);
-
-        Order food = new Order(time, "TS001", foodItem);
-        Order drink = new Order(time, "TS001", drinkItem);
-
-        testBasket.add(food);
-        testBasket.add(drink);
+        // The order list should have grown by the corresponding size
+        assertEquals(listSize + size, testList.size());
     }
 
     /**
@@ -152,7 +161,7 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that all food items are 50% off after 17:00
+     * Tests that food items are 50% off after 17:00
      */
     @Test
     public void discount3() {
