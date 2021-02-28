@@ -2,6 +2,7 @@ package sim.coffee;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.annotation.Target;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -179,8 +180,24 @@ public class OrderBasket extends OrderList {
 
     // Applys discount 1 if basket qualifies
     // Discount 1 = 30% off hot drink and sandwich combos
-    private void discount1() {
-        // TODO
+    private void discount1(Order incomingOrder) {
+        if (incomingOrder.getItemId().startsWith("M"))
+            return;
+
+        String target = incomingOrder.getItemId().startsWith("F") ? "B" : "F";
+
+        Order saveOrder;
+
+        for (Order order : orders) {
+            if (order.hasDiscount()) continue;
+
+            if (order.getItemId().startsWith(target)) {
+                saveOrder = order;
+                break;
+            }
+        }
+
+        
     }
 
     // Applys discount 2 if basket qualifies
