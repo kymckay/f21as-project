@@ -42,8 +42,8 @@ public class OrderBasketTest {
     // Always adds a food item and large hot coffee which should cover all discounts
     // Time of day changes via input
     private void setupOrder(String isoDate) {
-        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
-        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+        BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
 
         // These must match the test data menu input
         OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
@@ -77,12 +77,12 @@ public class OrderBasketTest {
      */
     @Test
     public void itemTallyIncrease() {
-        int tallyBefore = testMenu.getKey("F001").getOrderCount();
+        int tallyBefore = testMenu.getItem("F001").getOrderCount();
 
         testBasket.add(testOrder);
 
         // The corresponding item should be tallied once
-        assertEquals(tallyBefore + 1, testMenu.getKey("F001").getOrderCount());
+        assertEquals(tallyBefore + 1, testMenu.getItem("F001").getOrderCount());
     }
 
     /**
@@ -121,8 +121,8 @@ public class OrderBasketTest {
      */
     @Test
     public void discount1() {
-        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
-        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+        BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
 
         BigDecimal factor = new BigDecimal("0.7");
 
@@ -165,8 +165,8 @@ public class OrderBasketTest {
      */
     @Test
     public void discount3() {
-        BigDecimal foodPrice = testMenu.getKey("F001").getPrice();
-        BigDecimal drinkPrice = testMenu.getKey("B001").getPrice();
+        BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
 
         // Food price is rounded before summation
         foodPrice = foodPrice.multiply(new BigDecimal("0.5"));

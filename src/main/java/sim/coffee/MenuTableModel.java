@@ -64,6 +64,6 @@ public class MenuTableModel extends AbstractTableModel {
     }
 
     public MenuItem getRowItem(int index) {
-        return menu.getKey(rowIDs[index]);
+        return menu.getItem(rowIDs[index]);
     }
 }

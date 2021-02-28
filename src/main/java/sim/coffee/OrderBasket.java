@@ -28,7 +28,7 @@ public class OrderBasket extends OrderList {
     public boolean ifSandwich(Order o) {
         // Use Regex to track the food item and differentiate
         // // between pastry and sandwich
-        String desc = menu.getKey(o.getItemId()).getDescription();
+        String desc = menu.getItem(o.getItemId()).getDescription();
         Pattern pattern = Pattern.compile("Sandwich", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(desc);
         boolean matchFound = matcher.find();
@@ -189,7 +189,7 @@ public class OrderBasket extends OrderList {
         applyDiscount(o);
 
         // Item count should increment (move to checkout if we enable "remove from basket")
-        menu.getKey(o.getItemId()).setCount();
+        menu.getItem(o.getItemId()).setCount();
 
         return added;
     }
@@ -203,8 +203,8 @@ public class OrderBasket extends OrderList {
        	{
 
 
-       		report += String.format("%-30s", menu.getKey(menuItemKey).getDescription() + " " );
-       		report += String.format("%s\n",menu.getKey(menuItemKey).getOrderCount());
+       		report += String.format("%-30s", menu.getItem(menuItemKey).getDescription() + " " );
+       		report += String.format("%s\n",menu.getItem(menuItemKey).getOrderCount());
 
         }
 
@@ -215,7 +215,7 @@ public class OrderBasket extends OrderList {
        // Loop through all the items in Menu to determine the item(s) with highest count
        int highestCount = 0;
        for(String m: menu.keySet()) {
-    	   int count = menu.getKey(m).getOrderCount();
+    	   int count = menu.getItem(m).getOrderCount();
     	   if (highestCount < count) {
     		   highestCount = count;
     	   }
@@ -223,9 +223,9 @@ public class OrderBasket extends OrderList {
        // Add all menu items with a count equal to highest count to a string
        String mostPopularItem = "";
        for(String m: menu.keySet()) {
-    	   int itemCount = menu.getKey(m).getOrderCount();
+    	   int itemCount = menu.getItem(m).getOrderCount();
     	   if (highestCount == itemCount) {
-    		   mostPopularItem += menu.getKey(m).getDescription();
+    		   mostPopularItem += menu.getItem(m).getDescription();
     		   mostPopularItem += ", ";
     	   }
        }

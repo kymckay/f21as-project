@@ -113,7 +113,7 @@ public class Menu {
 		}
 	}
 
-	public MenuItem getKey(String key) {
+	public MenuItem getItem(String key) {
 		return menuMap.get(key);
 	}
 
