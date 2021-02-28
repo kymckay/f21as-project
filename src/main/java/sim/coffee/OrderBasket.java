@@ -160,7 +160,7 @@ public class OrderBasket extends OrderList {
     }
 
     // Figures out what discount may apply and attempts to
-    public void applyDiscount() {
+    public void applyDiscount(Order newOrder) {
 
         // Nothing to do if the basket is empty, sanity check
         if (orders.isEmpty()) return;
@@ -170,7 +170,7 @@ public class OrderBasket extends OrderList {
 
         // Different discount applies based on hour the order initiated
         if (hour >= 8 && hour < 11) {
-            discount1();
+            discount1(newOrder);
         } else if (hour >= 12 && hour < 14) {
             discount2();
         } else if (hour >= 17) {
@@ -180,13 +180,13 @@ public class OrderBasket extends OrderList {
 
     // Applys discount 1 if basket qualifies
     // Discount 1 = 30% off hot drink and sandwich combos
-    private void discount1(Order incomingOrder) {
+    private void discount1(Order newOrder) {
         // Merchandise never applies for this discount
-        if (incomingOrder.getItemId().startsWith("M"))
+        if (newOrder.getItemId().startsWith("M"))
             return;
 
         // Food/beverage combines with opposite for discount
-        String target = incomingOrder.getItemId().startsWith("F") ? "B" : "F";
+        String target = newOrder.getItemId().startsWith("F") ? "B" : "F";
         Order saveOrder = null;
 
         for (Order order : orders) {
@@ -210,8 +210,8 @@ public class OrderBasket extends OrderList {
             BigDecimal price = saveOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
             saveOrder.setPricePaid(price);
 
-            price = incomingOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
-            incomingOrder.setPricePaid(price);
+            price = newOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+            newOrder.setPricePaid(price);
         }
 
     }
@@ -298,7 +298,7 @@ public class OrderBasket extends OrderList {
         boolean added = super.add(o);
 
         // Discounts should be updated each time an item is added
-        applyDiscount();
+        applyDiscount(o);
 
         return added;
     }
