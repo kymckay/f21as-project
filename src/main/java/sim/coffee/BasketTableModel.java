@@ -67,6 +67,7 @@ public class BasketTableModel extends AbstractTableModel {
 
     public void checkout() {
         basket.checkout();
+        this.fireTableDataChanged(); // re-render data in UI
     }
 
     public boolean add(Order o) {
@@ -76,7 +77,7 @@ public class BasketTableModel extends AbstractTableModel {
 	public BigDecimal getTotalPrice() {
 		return basket.getTotalIncome();
 	}
-	
+
 	public void writeReport(String filename) {
 		basket.writeReport(filename);
 	}

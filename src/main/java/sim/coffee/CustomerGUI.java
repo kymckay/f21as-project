@@ -307,13 +307,8 @@ public class CustomerGUI {
     	// Determines the action selected
     	if (action == 0) { // "Yes"
     		customer = nextCustomer(); // customer id updates
-            // Refresh the UI table to reflect data change
-
-    		basket.fireTableDataChanged();	// not working atm, tried implementing a clearList() method
-   								// using order.clear() and add it to checkout() but code is not reachable in OrderBasket
     		basket.checkout();
     		frame.dispose();
-
     	} else if (action == 1) { // "Cancel"
     		frame.dispose();
 
