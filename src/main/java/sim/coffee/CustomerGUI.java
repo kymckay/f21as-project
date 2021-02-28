@@ -253,11 +253,15 @@ public class CustomerGUI {
         basket.fireTableDataChanged();
 
         // Update the basket total price display
+        updateBasketPrice();
+    }
+
+    private void updateBasketPrice() {
         // Value should be 2 decimal places already
         basketPrice.setText("£" + basket.getTotalPrice().toString());
     }
 
- // Tells the basket to log all orders in the order history
+    // Tells the basket to log all orders in the order history
     private void onCheckout(ActionEvent e) {
 
     	//
@@ -308,6 +312,7 @@ public class CustomerGUI {
     	if (action == 0) { // "Yes"
     		customer = nextCustomer(); // customer id updates
     		basket.checkout();
+            updateBasketPrice();
     		frame.dispose();
     	} else if (action == 1) { // "Cancel"
     		frame.dispose();
