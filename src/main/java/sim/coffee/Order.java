@@ -1,6 +1,7 @@
 package sim.coffee;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Order {
@@ -17,6 +18,11 @@ public class Order {
 
     public LocalDateTime getTime() {
         return time;
+    }
+
+    // added getDate() to get date without time. 
+    public LocalDate getDate() {
+        return time.toLocalDate();
     }
 
     public String getCustomerID() {
