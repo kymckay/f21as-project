@@ -182,7 +182,7 @@ public class OrderBasket extends OrderList {
 
        String message = "The Total Income obtained from the today's Orders is £";
        report += "\n" + message;
-       report += orderList.getTodayIncome(today);
+       report += orderList.getDayIncome(today);
 
        // Loop through all the items in Menu to determine the item(s) with highest count
        int highestCount = 0;

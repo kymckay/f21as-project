@@ -84,7 +84,7 @@ public class OrderListTest {
         BigDecimal todayPrice = foodPrice.add(drinkPrice);
 
         setupOrder();
-        assertEquals(todayPrice, testList.getTodayIncome(timeToday.toLocalDate()));
+        assertEquals(todayPrice, testList.getDayIncome(timeToday.toLocalDate()));
         assertNotEquals(todayPrice, testList.getTotalIncome());
     }
 }

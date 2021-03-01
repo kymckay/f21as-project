@@ -98,7 +98,7 @@ public class OrderList {
 	 * Income method for the day, 
 	 * @return cummulative income for orders received for a specific day
 	 */
-	public BigDecimal getTodayIncome(LocalDate date) {
+	public BigDecimal getDayIncome(LocalDate date) {
 
 		// create variable to be returned after looping through orders
 		BigDecimal sum = new BigDecimal("0");
