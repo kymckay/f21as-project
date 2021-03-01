@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -98,6 +99,19 @@ public class OrderBasketTest {
         // The basket should now be cleared after checkout
         assertEquals(0, testBasket.size());
     }
+
+    /**
+     * Test to make sure that getDate() only date without time. 
+     */
+    @Test
+    public void checkDate() {
+        setupOrder("2021-03-07T09:15Z");
+        LocalDate testDate = LocalDate.of(2021, 3, 07);
+
+        assertEquals(testDate, testBasket.get(1).getDate());
+        assertNotEquals(testDate, testBasket.get(1).getTime());
+    }
+
 
     /**
      * Tests that upon checkout the basket contents are moved to the historic list
