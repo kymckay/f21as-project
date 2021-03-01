@@ -85,8 +85,8 @@ public class OrderList {
 		// create variable to be returned after looping through orders
 		BigDecimal sum = new BigDecimal("0");
 
-		// Today's Date without time
-		LocalDate dateToday = orders.get(orders.size() -1).getDate();
+		// Today's Date without time by using date from the last order placed
+		LocalDate dateToday = orders.get(orders.size()-1).getDate();
 
 		// Loop through all the orders
 		for (Order o : orders) {
