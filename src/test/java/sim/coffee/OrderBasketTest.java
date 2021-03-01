@@ -106,9 +106,13 @@ public class OrderBasketTest {
     @Test
     public void checkDate() {
         setupOrder("2021-03-07T09:15Z");
+
+        // testDate only has year, month, day and no time.
         LocalDate testDate = LocalDate.of(2021, 3, 07);
 
+        // getDate() method should only return date without time
         assertEquals(testDate, testBasket.get(1).getDate());
+        // getTime() method should return date with time. 
         assertNotEquals(testDate, testBasket.get(1).getTime());
     }
 
