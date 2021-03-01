@@ -3,6 +3,7 @@ package sim.coffee;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -68,6 +69,7 @@ public class OrderList {
 		return orders.add(o);
 	}
 
+	// dumps basket to OrderList
 	public boolean addAll(List<Order> l) {
 		return orders.addAll(l);
 	}
@@ -77,12 +79,22 @@ public class OrderList {
 		return orders.get(index);
 	}
 
-
+	// getTotalIncome for the day only. Not the entire history and entire list.
 	public BigDecimal getTotalIncome() {
+
+		// create variable to be returned after looping through orders
 		BigDecimal sum = new BigDecimal("0");
 
+		// Today's Date without time
+		LocalDate dateToday = LocalDate.now();
+
+		// Loop through all the orders
 		for (Order o : orders) {
-			sum = sum.add(o.getPricePaid());
+			// only add the income for orders that are
+			// from the same day the report is being created
+			if (o.getDate().equals(dateToday)) {
+				sum = sum.add(o.getPricePaid());
+			}
 		}
 
 		// No rounding needed as prices already rounded
