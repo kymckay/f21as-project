@@ -202,9 +202,12 @@ public class OrderBasket extends OrderList {
     	   }
        }
 
-       report += "\n" + "The most popular menu item(s) today: " + mostPopularItem + "ordered " + highestCount + " times";
-
-
+       if (orderList.getDayIncome(today).signum() > 0) {
+           report += "\n" + "The most popular menu item(s) today: " 
+           + mostPopularItem + "ordered " + highestCount + " times";
+       } else {
+           report += "\n" + "No items are being sold today, don't give up, try again tomorrow! :)";
+       }
 
        try {													//Writes the report and message to the file
 			FileWriter orderWriter = new FileWriter(fileName);
