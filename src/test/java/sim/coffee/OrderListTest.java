@@ -32,17 +32,8 @@ public class OrderListTest {
     public static void init() throws FileNotFoundException {
         testMenu = new Menu("data/test/menu.csv");
         testList = new OrderList(new ArrayList<>());
-
-        testBasket = new OrderBasket(testMenu, testList, new ArrayList<>());
-
         testOrder = new Order(LocalDateTime.now(), "JK001",
                 new OrderItem("F001", "", new BigDecimal("0"), new BigDecimal("0")));
-    }
-
-    // Remove any lingering data between tests
-    @After
-    public void clearBasket() {
-        testBasket.checkout();
     }
 
     // Helper method to add orders to basket for discount testing
@@ -61,10 +52,11 @@ public class OrderListTest {
         Order foodToday = new Order(timeToday, "TS001", foodItem);
         Order drinkToday = new Order(timeToday, "TS001", drinkItem);
 
-        testBasket.add(foodNotToday);
-        testBasket.add(drinkNotToday);
-        testBasket.add(foodToday);
-        testBasket.add(drinkToday);
+        // Populating the list with items from the past and 'Today'
+        testList.add(foodNotToday);
+        testList.add(drinkNotToday);
+        testList.add(foodToday);
+        testList.add(drinkToday);
     }
 
     /**
@@ -76,21 +68,23 @@ public class OrderListTest {
         
         // testDate only has year, month, day and no time.
         LocalDate testDate = timeToday.toLocalDate();
-
         // getDate() method should only return date without time
-        assertEquals(testDate, testBasket.get(2).getDate());
+        assertEquals(testDate, testList.get(2).getDate());
         // getTime() method should return date with time. 
-        assertNotEquals(testDate, testBasket.get(1).getTime());
+        assertNotEquals(testDate, testList.get(1).getTime());
     }
 
     @Test
-    public void checkTodayBasketPrice() {
+    public void checkTodayListPrice() {
+
         BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
         BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
+
+        // Today's price should only return food + drink and not 2x of that
         BigDecimal todayPrice = foodPrice.add(drinkPrice);
 
         setupOrder();
-        assertEquals(todayPrice, testBasket.getTodayIncome(timeToday.toLocalDate()));
-        assertNotEquals(todayPrice, testBasket.getTotalIncome());
+        assertEquals(todayPrice, testList.getTodayIncome(timeToday.toLocalDate()));
+        assertNotEquals(todayPrice, testList.getTotalIncome());
     }
 }
