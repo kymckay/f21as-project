@@ -79,26 +79,42 @@ public class OrderList {
 		return orders.get(index);
 	}
 
-	// getTotalIncome for the day only. Not the entire history and entire list.
+	// general getter method for income
 	public BigDecimal getTotalIncome() {
 
 		// create variable to be returned after looping through orders
 		BigDecimal sum = new BigDecimal("0");
 
-		// Today's Date without time by using date from the last order placed
-		LocalDate dateToday = orders.get(orders.size()-1).getDate();
+		// Loop through all the orders
+		for (Order o : orders) {
+			sum = sum.add(o.getPricePaid());
+		}
+
+		// No rounding needed as prices already rounded
+		return sum;
+	}
+
+	/**
+	 * Income method for the day, 
+	 * @return cummulative income for orders received for a specific day
+	 */
+	public BigDecimal getTodayIncome(LocalDate date) {
+
+		// create variable to be returned after looping through orders
+		BigDecimal sum = new BigDecimal("0");
 
 		// Loop through all the orders
 		for (Order o : orders) {
 			// only add the income for orders that are
 			// from the same day the report is being created
-			if (o.getDate().equals(dateToday)) {
+			if (o.getDate().equals(date)) {
 				sum = sum.add(o.getPricePaid());
 			}
 		}
 
 		// No rounding needed as prices already rounded
 		return sum;
+
 	}
 
 	public int size() {
