@@ -86,7 +86,7 @@ public class OrderList {
 		BigDecimal sum = new BigDecimal("0");
 
 		// Today's Date without time
-		LocalDate dateToday = LocalDate.now();
+		LocalDate dateToday = orders.get(orders.size() -1).getDate();
 
 		// Loop through all the orders
 		for (Order o : orders) {
