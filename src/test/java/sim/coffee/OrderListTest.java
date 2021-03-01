@@ -10,12 +10,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class OrderListTest {
-    static OrderBasket testBasket;
     static Order testOrder;
     static OrderList testList;
     static Menu testMenu;
@@ -32,8 +30,6 @@ public class OrderListTest {
     public static void init() throws FileNotFoundException {
         testMenu = new Menu("data/test/menu.csv");
         testList = new OrderList(new ArrayList<>());
-        testOrder = new Order(LocalDateTime.now(), "JK001",
-                new OrderItem("F001", "", new BigDecimal("0"), new BigDecimal("0")));
     }
 
     // Helper method to add orders to basket for discount testing
