@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -163,6 +163,10 @@ public class OrderBasket extends OrderList {
     }
 
    	public void writeReport(String fileName) {
+        // Local Variable, parsing today into getTodayIncome() to prevent
+        // the program from returning the sum of income from all the oders in the past
+        LocalDate today = LocalDate.now();
+
     	String report = "";
     	report += String.format("%-25s", "Menu Item");
        	report += "Times Ordered" + "\n";
@@ -178,7 +182,7 @@ public class OrderBasket extends OrderList {
 
        String message = "The Total Income obtained from the today's Orders is £";
        report += "\n" + message;
-       report += orderList.getTotalIncome();
+       report += orderList.getDayIncome(today);
 
        // Loop through all the items in Menu to determine the item(s) with highest count
        int highestCount = 0;

@@ -1,7 +1,6 @@
 package sim.coffee;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -98,6 +97,7 @@ public class OrderBasketTest {
         // The basket should now be cleared after checkout
         assertEquals(0, testBasket.size());
     }
+
 
     /**
      * Tests that upon checkout the basket contents are moved to the historic list
