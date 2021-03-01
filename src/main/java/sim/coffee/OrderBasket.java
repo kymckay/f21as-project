@@ -163,7 +163,8 @@ public class OrderBasket extends OrderList {
     }
 
    	public void writeReport(String fileName) {
-        // Local Variable
+        // Local Variable, parsing today into getTodayIncome() to prevent
+        // the program from returning the sum of income from all the oders in the past
         LocalDate today = LocalDate.now();
 
     	String report = "";
