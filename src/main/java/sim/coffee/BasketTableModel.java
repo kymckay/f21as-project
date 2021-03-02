@@ -58,7 +58,9 @@ public class BasketTableModel extends AbstractTableModel {
             case 3:
                 return rowOrder.getPricePaid();
             case 4:
-                return String.format("%s%%", rowOrder.getDiscount().multiply(new BigDecimal("100")));
+                // Show discount as % out of 100, with no decimals
+                BigDecimal discount = rowOrder.getDiscount().multiply(new BigDecimal("100"));
+                return String.format("%s%%", discount.setScale(0));
             default:
                 // Should never be reached
                 throw new IndexOutOfBoundsException(columnIndex);
