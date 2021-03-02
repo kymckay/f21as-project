@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 import org.junit.Before;
@@ -47,7 +46,7 @@ public class OrderListTest {
     @Test
     public void dayIncome() {
         // Time at 7.00 am since no discount applies at that time
-        LocalDateTime timeToday = LocalDateTime.parse("2020-03-08T07:15Z", DateTimeFormatter.ISO_DATE_TIME);
+        LocalDateTime timeToday = LocalDateTime.now();
 
         // Add an order today, tomorrow and yesterday
         testList.add(testOrder(timeToday));
