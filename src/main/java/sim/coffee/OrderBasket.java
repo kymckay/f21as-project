@@ -180,36 +180,39 @@ public class OrderBasket extends OrderList {
 
         }
 
-       String message = "The Total Income obtained from the today's Orders is £";
-       report += "\n" + message;
-       report += orderList.getDayIncome(today);
+        // includes a report for the cummulative income up till this day – "today"
+        report += "\n" + "The cumulative income from all orders are " + orderList.getTotalIncome();
 
-       // Loop through all the items in Menu to determine the item(s) with highest count
-       int highestCount = 0;
-       for(String m: menu.keySet()) {
-    	   int count = menu.getItem(m).getOrderCount();
-    	   if (highestCount < count) {
-    		   highestCount = count;
-    	   }
-       }
-       // Add all menu items with a count equal to highest count to a string
-       String mostPopularItem = "";
-       for(String m: menu.keySet()) {
-    	   int itemCount = menu.getItem(m).getOrderCount();
-    	   if (highestCount == itemCount) {
-    		   mostPopularItem += menu.getItem(m).getDescription();
-    		   mostPopularItem += ", ";
-    	   }
-       }
+        String message = "The Total Income obtained from the today's Orders is £";
+        report += "\n" + message;
+        report += orderList.getDayIncome(today);
 
-       if (orderList.getDayIncome(today).signum() > 0) {
-           report += "\n" + "The most popular menu item(s) today: " 
-           + mostPopularItem + "ordered " + highestCount + " times";
-       } else {
-           report += "\n" + "No items are being sold today, don't give up, try again tomorrow! :)";
-       }
+        // Loop through all the items in Menu to determine the item(s) with highest count
+        int highestCount = 0;
+        for(String m: menu.keySet()) {
+            int count = menu.getItem(m).getOrderCount();
+            if (highestCount < count) {
+                highestCount = count;
+            }
+        }
+        // Add all menu items with a count equal to highest count to a string
+        String mostPopularItem = "";
+        for(String m: menu.keySet()) {
+            int itemCount = menu.getItem(m).getOrderCount();
+            if (highestCount == itemCount) {
+                mostPopularItem += menu.getItem(m).getDescription();
+                mostPopularItem += ", ";
+            }
+        }
 
-       try {													//Writes the report and message to the file
+        if (orderList.getDayIncome(today).signum() > 0) {
+            report += "\n" + "The most popular menu item(s) today: " 
+            + mostPopularItem + "ordered " + highestCount + " times";
+        } else {
+            report += "\n" + "No items are being sold today, don't give up, try again tomorrow! :)";
+        }
+
+        try {													//Writes the report and message to the file
 			FileWriter orderWriter = new FileWriter(fileName);
 			orderWriter.write(report);
 			orderWriter.close();
