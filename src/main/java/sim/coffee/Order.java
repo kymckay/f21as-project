@@ -1,6 +1,7 @@
 package sim.coffee;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -61,6 +62,10 @@ public class Order {
         BigDecimal menuPrice = getFullPrice();
         BigDecimal finalPrice = getPricePaid();
 
-        return new BigDecimal("1").subtract(finalPrice.divide(menuPrice));
+        // Percentage of total, rounded to avoid repeating decimals (half up for standard rounding)
+        BigDecimal percentage = finalPrice.divide(menuPrice, 2, RoundingMode.HALF_UP);
+
+        // Want to return percentage off total
+        return new BigDecimal("1").subtract(percentage);
     }
 }
