@@ -43,8 +43,10 @@ public class OrderList {
 	}
 
 	private void processLine(String line) {
-		// Split regex trims excess whitespace near commas
-		String[] cols = line.split("\\s*,\\s*");
+		// Remove whitespace while splitting using regex delimiter
+		// Java's split operator discards empty strings by default, -1 keeps them (empty
+		// csv columns are valid)
+		String[] cols = line.split("\\s*,\\s*", -1);
 
 		// All rows in csv file have same columns
 		if (cols.length == 6) {

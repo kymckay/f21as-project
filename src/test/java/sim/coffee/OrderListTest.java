@@ -5,16 +5,14 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class OrderListTest {
-    static Order testOrder;
     static OrderList testList;
     static Menu testMenu;
 
@@ -22,14 +20,28 @@ public class OrderListTest {
     // Using a time in the past for timePast so that there
     // will be no overlapping of the same day as "TODAY" >> see next variable
     LocalDateTime timePast = LocalDateTime.parse("2020-03-07T07:15Z", DateTimeFormatter.ISO_DATE_TIME);
-    // "TODAY" --- Both date uses time 7.00 am since no discount applies at that time
+    // "TODAY" --- Both date uses time 7.00 am since no discount applies at that
+    // time
     LocalDateTime timeToday = LocalDateTime.parse("2020-03-08T07:15Z", DateTimeFormatter.ISO_DATE_TIME);
 
     // If file isn't found tests fail automatically
     @BeforeClass
     public static void init() throws FileNotFoundException {
         testMenu = new Menu("data/test/menu.csv");
-        testList = new OrderList(new ArrayList<>());
+        testList = new OrderList(new LinkedList<>());
+    }
+
+    /**
+     * Tests that the list successfully creates the number of orders in the input
+     * data (assuming they're made right)
+     */
+    @Test
+    public void readFile() throws FileNotFoundException {
+        int sizeBefore = testList.size();
+
+        testList.readFile("data/test/orders.csv");
+
+        assertEquals(sizeBefore + 3, testList.size());
     }
 
     // Helper method to add orders to basket for discount testing
@@ -53,21 +65,6 @@ public class OrderListTest {
         testList.add(drinkNotToday);
         testList.add(foodToday);
         testList.add(drinkToday);
-    }
-
-    /**
-     * Test to make sure that getDate() only date without time. 
-     */
-    @Test
-    public void checkDate() {
-        setupOrder();
-        
-        // testDate only has year, month, day and no time.
-        LocalDate testDate = timeToday.toLocalDate();
-        // getDate() method should only return date without time
-        assertEquals(testDate, testList.get(2).getDate());
-        // getTime() method should return date with time. 
-        assertNotEquals(testDate, testList.get(1).getTime());
     }
 
     @Test
