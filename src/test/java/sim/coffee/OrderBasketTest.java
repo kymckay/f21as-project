@@ -1,7 +1,6 @@
 package sim.coffee;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -99,6 +98,7 @@ public class OrderBasketTest {
         assertEquals(0, testBasket.size());
     }
 
+
     /**
      * Tests that upon checkout the basket contents are moved to the historic list
      */
@@ -117,7 +117,7 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that any sandwich and hot drink combo is 30% off between 08:00 and 11:00
+     * Tests that a sandwich and hot drink combo is 30% off between 08:00 and 11:00
      */
     @Test
     public void discount1() {
@@ -137,7 +137,30 @@ public class OrderBasketTest {
     }
 
     /**
-     * Tests that any drink and food item ordered between 12:00 and 14:00 costs £4.00
+     * Tests that discount 1 doesn't re-apply to items already paired together
+     */
+    @Test
+    public void discount1multi() {
+        BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
+
+        BigDecimal factor = new BigDecimal("0.7");
+
+        // Prices are rounded before added
+        foodPrice = foodPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+        drinkPrice = drinkPrice.multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+
+        // Discount is exactly doubled this time
+        BigDecimal discountPrice = drinkPrice.add(foodPrice).multiply(new BigDecimal("2"));
+
+        setupOrder("2021-03-07T09:15Z");
+        setupOrder("2021-03-07T09:15Z");
+        assertEquals(discountPrice, testBasket.getTotalIncome());
+    }
+
+
+    /**
+     * Tests that a drink and food item ordered between 12:00 and 14:00 costs £4.00
      */
     @Test
     public void discount2() {
@@ -146,18 +169,18 @@ public class OrderBasketTest {
         // Discount should automatically apply once added
         setupOrder("2021-03-07T12:15Z");
         assertEquals(discountPrice, testBasket.getTotalIncome());
+    }
 
-        clearBasket();
+    /**
+     * Tests that discount 2 doesn't re-apply to items already paired together
+     */
+    @Test
+    public void discount2multi() {
+        BigDecimal discountPrice = new BigDecimal("8.00");
 
-        // Discount should not apply after 14:00
-        setupOrder("2021-03-07T14:01Z");
-        assertNotEquals(discountPrice, testBasket.getTotalIncome());
-
-        clearBasket();
-
-        // Discount should not apply before 12:00
-        setupOrder("2021-03-07T11:59Z");
-        assertNotEquals(discountPrice, testBasket.getTotalIncome());
+        setupOrder("2021-03-07T12:15Z");
+        setupOrder("2021-03-07T12:15Z");
+        assertEquals(discountPrice, testBasket.getTotalIncome());
     }
 
     /**

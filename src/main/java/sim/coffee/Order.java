@@ -1,6 +1,7 @@
 package sim.coffee;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Order {
@@ -17,6 +18,11 @@ public class Order {
 
     public LocalDateTime getTime() {
         return time;
+    }
+
+    // added getDate() to get date without time.
+    public LocalDate getDate() {
+        return time.toLocalDate();
     }
 
     public String getCustomerID() {
@@ -47,7 +53,7 @@ public class Order {
     public boolean hasDiscount() {
         // Compare to ignores scale, just compares value
         // returns -1, since getPricePaid() > getFullPrice
-        return getPricePaid().compareTo(getFullPrice()) == -1;
+        return getPricePaid().compareTo(getFullPrice()) < 0;
     }
 
     // Calculates the percentage discount (between 0 and 1)

@@ -1,8 +1,12 @@
 package sim.coffee;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 import org.junit.BeforeClass;
@@ -10,9 +14,20 @@ import org.junit.Test;
 
 public class OrderListTest {
     static OrderList testList;
+    static Menu testMenu;
 
+    // Local Variables
+    // Using a time in the past for timePast so that there
+    // will be no overlapping of the same day as "TODAY" >> see next variable
+    LocalDateTime timePast = LocalDateTime.parse("2020-03-07T07:15Z", DateTimeFormatter.ISO_DATE_TIME);
+    // "TODAY" --- Both date uses time 7.00 am since no discount applies at that
+    // time
+    LocalDateTime timeToday = LocalDateTime.parse("2020-03-08T07:15Z", DateTimeFormatter.ISO_DATE_TIME);
+
+    // If file isn't found tests fail automatically
     @BeforeClass
-    public static void init() {
+    public static void init() throws FileNotFoundException {
+        testMenu = new Menu("data/test/menu.csv");
         testList = new OrderList(new LinkedList<>());
     }
 
@@ -27,5 +42,42 @@ public class OrderListTest {
         testList.readFile("data/test/orders.csv");
 
         assertEquals(sizeBefore + 3, testList.size());
+    }
+
+    // Helper method to add orders to basket for discount testing
+    // Always adds a food item and large hot coffee with a date in the past
+    // as well as adds a food item and large hot coffee with today's date
+    private void setupOrder() {
+        BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
+
+        // These must match the test data menu input
+        OrderItem foodItem = new OrderItem("F001", "", foodPrice, foodPrice);
+        OrderItem drinkItem = new OrderItem("B001", "L|true|None", drinkPrice, drinkPrice);
+
+        Order foodNotToday = new Order(timePast, "TS001", foodItem);
+        Order drinkNotToday = new Order(timePast, "TS001", drinkItem);
+        Order foodToday = new Order(timeToday, "TS001", foodItem);
+        Order drinkToday = new Order(timeToday, "TS001", drinkItem);
+
+        // Populating the list with items from the past and 'Today'
+        testList.add(foodNotToday);
+        testList.add(drinkNotToday);
+        testList.add(foodToday);
+        testList.add(drinkToday);
+    }
+
+    @Test
+    public void checkTodayListPrice() {
+
+        BigDecimal foodPrice = testMenu.getItem("F001").getPrice();
+        BigDecimal drinkPrice = testMenu.getItem("B001").getPrice();
+
+        // Today's price should only return food + drink and not 2x of that
+        BigDecimal todayPrice = foodPrice.add(drinkPrice);
+
+        setupOrder();
+        assertEquals(todayPrice, testList.getDayIncome(timeToday.toLocalDate()));
+        assertNotEquals(todayPrice, testList.getTotalIncome());
     }
 }

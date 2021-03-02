@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,14 +20,12 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
-    // Breakfast Deal – 30% off any hot drink + pastry ordered between 8:00 and 11:00
-    // Meal Deal – Any drink + sandwich + pastry ordered between 12:00 and 14:00 costs £4.00
-    // End-of-the-Day Deal – 50% off all pastries and sandwiches food ordered after 17:00 and before closing – 19:00
-    // Parses through basket list and checks for discount
+    // Method to check if order is a sandwich, 
+    // Only used for the breakfast deal - discount1()
     public boolean ifSandwich(Order o) {
-        // Use Regex to track the food item and differentiate
-        // // between pastry and sandwich
+        // Use Regex to track the food item and return a boolean - true, if item is a sandwich
         String desc = menu.getItem(o.getItemId()).getDescription();
+        // match to see if String desc contains the string "Sandwich"
         Pattern pattern = Pattern.compile("Sandwich", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(desc);
         boolean matchFound = matcher.find();
@@ -59,13 +57,13 @@ public class OrderBasket extends OrderList {
         if (hour >= 8 && hour < 11) {
             discount1(newOrder);
         } else if (hour >= 12 && hour < 14) {
-            discount2();
+            discount2(newOrder);
         } else if (hour >= 17) {
-            discount3();
+            discount3(newOrder);
         }
     }
 
-    // Applys discount 1 if basket qualifies
+    // Applies discount 1 if basket qualifies
     // Discount 1 = 30% off hot drink and sandwich combos
     private void discount1(Order newOrder) {
         // Merchandise never applies for this discount
@@ -74,7 +72,7 @@ public class OrderBasket extends OrderList {
 
         // Food/beverage combines with opposite for discount
         String target = newOrder.getItemId().startsWith("F") ? "B" : "F";
-        Order saveOrder = null;
+        Order combo = null;
 
         for (Order order : orders) {
             if (
@@ -85,90 +83,61 @@ public class OrderBasket extends OrderList {
                     || (target.equals("F") && ifSandwich(order)) // Food must be a sandwich
                 )
             ) {
-                saveOrder = order;
+                combo = order;
                 break;
             }
         }
 
         // If a suitable combo is found discount applies
-        if (saveOrder != null) {
+        if (combo != null) {
             BigDecimal factor = new BigDecimal("0.7");
 
-            BigDecimal price = saveOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
-            saveOrder.setPricePaid(price);
+            BigDecimal price = combo.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
+            combo.setPricePaid(price);
 
             price = newOrder.getFullPrice().multiply(factor).setScale(2, RoundingMode.HALF_EVEN);
             newOrder.setPricePaid(price);
         }
-
     }
 
-    // Applys discount 2 if basket qualifies
+    // Applies discount 2 if basket qualifies
     // Discount 2 = food and drink combo is £4.00
-    private void discount2() {
-        // Track items as we go since list is unsorted
-        ArrayList<Order> foodFound = new ArrayList<>();
-        ArrayList<Order> drinkFound = new ArrayList<>();
-        ArrayList<Order> merchFound = new ArrayList<>();
-        BigDecimal mealDealPrice = new BigDecimal(4).setScale(2, RoundingMode.HALF_EVEN);
+    private void discount2(Order newOrder) {
+        // Merchandise never applies for this discount
+        if (newOrder.getItemId().startsWith("M")) return;
+
+        // Food/beverage combines with opposite for discount
+        String target = newOrder.getItemId().startsWith("F") ? "B" : "F";
+        Order combo = null;
 
         for (Order order : orders) {
-            // TODO build lists, skipping already discounted
-            if (order.hasDiscount()) continue;
-
-            if (order.getItemId().startsWith("F")) {
-                foodFound.add(order);
-            } else if (order.getItemId().startsWith("B")) {
-                drinkFound.add(order);
-            } else {
-                merchFound.add(order);
+            if (
+                !order.hasDiscount() // Already part of a combo
+                && order.getItemId().startsWith(target)
+            ) {
+                combo = order;
+                break;
             }
         }
 
-        // Once we know all the food/drink orders, apply discounts
-        BigDecimal singleItemPrice = mealDealPrice.divide(new BigDecimal(2)).setScale(2, RoundingMode.HALF_EVEN);
-        int foodCount = foodFound.size();
-        int drinkCount = drinkFound.size();
-
-        if (foodCount == drinkCount) {
-            for (int i = 0; i < foodCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
-                drinkFound.get(i).setPricePaid(singleItemPrice);
-            }
-        } else if (foodCount < drinkCount) {
-            for (int i = 0; i < foodCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
-                drinkFound.get(i).setPricePaid(singleItemPrice);
-            }
-        } else {
-            for (int i = 0; i < drinkCount; i++) {
-                foodFound.get(i).setPricePaid(singleItemPrice);
-                drinkFound.get(i).setPricePaid(singleItemPrice);
-            }
+        // If a suitable combo is found discount applies
+        if (combo != null) {
+            BigDecimal newPrice = new BigDecimal("2.00");
+            combo.setPricePaid(newPrice);
+            newOrder.setPricePaid(newPrice);
         }
-
-        orders.clear();
-        orders.addAll(foodFound);
-        orders.addAll(drinkFound);
-        orders.addAll(merchFound);
-
     }
 
-    // Applys discount 3 if basket qualifies
+    // Applies discount 3 if basket qualifies
     // Discount 3 = food 50% off
-    private void discount3() {
-        for (Order order : orders) {
-            if (order.getItemId().startsWith("F")) {
-                // Skip over orders already discounted
-                if (order.hasDiscount()) continue;
+    private void discount3(Order newOrder) {
+        if (newOrder.getItemId().startsWith("F")) {
+            BigDecimal price = newOrder.getFullPrice();
 
-                BigDecimal price = order.getFullPrice();
+            price = price.multiply(new BigDecimal("0.5"));
+            price = price.setScale(2, RoundingMode.HALF_EVEN);
 
-                price = price.multiply(new BigDecimal("0.5"));
-                price = price.setScale(2, RoundingMode.HALF_EVEN);
-
-                order.setPricePaid(price);
-            }
+            newOrder.setPricePaid(price);
         }
     }
 
@@ -194,6 +163,10 @@ public class OrderBasket extends OrderList {
     }
 
    	public void writeReport(String fileName) {
+        // Local Variable, parsing today into getTodayIncome() to prevent
+        // the program from returning the sum of income from all the oders in the past
+        LocalDate today = LocalDate.now();
+
     	String report = "";
     	report += String.format("%-25s", "Menu Item");
        	report += "Times Ordered" + "\n";
@@ -209,7 +182,7 @@ public class OrderBasket extends OrderList {
 
        String message = "The Total Income obtained from the today's Orders is £";
        report += "\n" + message;
-       report += orderList.getTotalIncome();
+       report += orderList.getDayIncome(today);
 
        // Loop through all the items in Menu to determine the item(s) with highest count
        int highestCount = 0;
@@ -229,9 +202,12 @@ public class OrderBasket extends OrderList {
     	   }
        }
 
-       report += "\n" + "The most popular menu item(s) today: " + mostPopularItem + "ordered " + highestCount + " times";
-
-
+       if (orderList.getDayIncome(today).signum() > 0) {
+           report += "\n" + "The most popular menu item(s) today: " 
+           + mostPopularItem + "ordered " + highestCount + " times";
+       } else {
+           report += "\n" + "No items are being sold today, don't give up, try again tomorrow! :)";
+       }
 
        try {													//Writes the report and message to the file
 			FileWriter orderWriter = new FileWriter(fileName);
