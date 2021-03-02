@@ -46,7 +46,7 @@ public class OrderListTest {
     @Test
     public void dayIncome() {
         // Time at 7.00 am since no discount applies at that time
-        LocalDateTime timeToday = LocalDateTime.now();
+        LocalDateTime timeToday = LocalDateTime.now().withHour(7);
 
         // Add an order today, tomorrow and yesterday
         testList.add(testOrder(timeToday));
