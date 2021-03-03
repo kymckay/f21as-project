@@ -11,10 +11,9 @@ F111, Jam Doughnut,2, Vegetarian
 F112, French Toast,3.9, Vegetarian
 F113, Frozen Yogurt,2.1, Vegetarian|GlutenFree
 F114, Fruit Salad,3.5, Vegan|Vegetarian|DairyFree|GlutenFree
-F115, Honey,0.5, Vegetarian|GlutenFree
 F116, Ice Cream Cake,3.5, Vegetarian
 F117, Lemon Meringue Pie,3.8, Vegetarian
-F118, Panna Cotta,1.8, Vegan|Vegetarian|DairyFree|GlutenFree
+F118, Panna Cotta,2.1, Vegan|Vegetarian|DairyFree|GlutenFree
 F119, Chocolate Pastry,3, Vegetarian
 F120, Strawberry Shortcake,2.1, Vegetarian
 F121, Sorbet,2.2, Vegan|Vegetarian|DairyFree|GlutenFree
@@ -44,7 +43,7 @@ B107, Expresso,2, true! M|L! None
 B108, Cold Brew,3.5, false! S|M|L! Regular|Soy|Oat
 B109, Iced Tea,2.5, false! S|M|L! None
 B110, Iced Coffee,2.5, false! S|M! Regular|Soy|Oat
-B111, Water,1.8, false! L! None
+B111, Water,2.0, false! L! None
 B112, Milkshake,4, false! S|M|L! Regular
 B113, Banana Smoothie,4.2, false! M! None
 B114, Strawbery Smoothie,4.3, false! S|M|L! None
