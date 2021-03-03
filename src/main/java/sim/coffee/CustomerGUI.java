@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -60,8 +62,9 @@ public class CustomerGUI {
     private MenuItem selectedItem;
 
     // Controls interact with the item properties
-    ControlsBeverage controlsB = new ControlsBeverage();
-    ControlsMerchandise controlsM = new ControlsMerchandise();
+    private ControlsBeverage controlsB = new ControlsBeverage();
+    private ControlsMerchandise controlsM = new ControlsMerchandise();
+    private DefaultListModel<DietaryClass> dietary = new DefaultListModel<>();
 
     private JLabel basketPrice;
 
@@ -215,9 +218,11 @@ public class CustomerGUI {
 
     private JPanel foodControls() {
         JPanel panel = new JPanel();
+        JList<DietaryClass> list = new JList<>();
+        list.setModel(dietary);
 
-        // TODO show dietary classes
-        panel.add(new JLabel("No food controls to show."));
+        panel.add(new JLabel("Dietary Classifications:"));
+        panel.add(list);
 
         return panel;
     }
@@ -349,7 +354,12 @@ public class CustomerGUI {
 
             // Controls to populate depend on the type of item
             if (selectedItem instanceof Food) {
-                // TODO: Show dietary classes
+                dietary.removeAllElements();
+
+                Food casted = (Food) selectedItem;
+                for (DietaryClass dc : casted.getDietaryClass()) {
+                    dietary.addElement(dc);
+                }
             } else if (selectedItem instanceof Beverage) {
                 controlsB.populate((Beverage) selectedItem);
             } else {
