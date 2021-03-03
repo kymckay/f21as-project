@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class OrderBasket extends OrderList {
 
@@ -170,52 +172,52 @@ public class OrderBasket extends OrderList {
         // the program from returning the sum of income from all the oders in the past
         LocalDate today = LocalDate.now();
 
-    	String report = "";
-    	report += String.format("%-25s", "Menu Item");
-       	report += "Times Ordered" + "\n";
+        // Set a reasonable inital character capacity knowing 4 = length of an ID
+    	StringBuilder report = new StringBuilder(menu.keySet().size() * 10);
+    	report.append(String.format("%-25s", "Menu Item"));
+       	report.append("Times Ordered\n");
 
-       	for(String menuItemKey : menu.keySet())
-       	{
-
-
-       		report += String.format("%-30s", menu.getItem(menuItemKey).getDescription() + " " );
-       		report += String.format("%s\n",menu.getItem(menuItemKey).getOrderCount());
-
+       	for (String k : menu.keySet()) {
+       		report.append(String.format("%-30s %s%n",
+                menu.getItem(k).getDescription(),
+                menu.getItem(k).getOrderCount()
+            ));
         }
 
         // includes a report for the cummulative income up till this day – "today"
-        report += "\n" + "The cumulative income from all orders is £" + orderList.getTotalIncome();
-        report += "\n" + "The income obtained from today's orders is £" + orderList.getDayIncome(today);
+        report.append("\nThe cumulative income from all orders is £" + orderList.getTotalIncome());
+        report.append("\nThe income obtained from today's orders is £" + orderList.getDayIncome(today));
 
         // Loop through all the items in Menu to determine the item(s) with highest count
         int highestCount = 0;
-        for(String m: menu.keySet()) {
-            int count = menu.getItem(m).getOrderCount();
+        ArrayList<MenuItem> popular = new ArrayList<>();
+
+        for (String m: menu.keySet()) {
+            MenuItem item = menu.getItem(m);
+            int count = item.getOrderCount();
+
+            // New highest count, reset the list
             if (highestCount < count) {
                 highestCount = count;
+                popular.clear();
             }
-        }
-        // Add all menu items with a count equal to highest count to a string
-        String mostPopularItem = "";
-        for(String m: menu.keySet()) {
-            int itemCount = menu.getItem(m).getOrderCount();
-            if (highestCount == itemCount) {
-                mostPopularItem += menu.getItem(m).getDescription();
-                mostPopularItem += ", ";
+
+            // Find all items with highest count
+            if (highestCount == count) {
+                popular.add(item);
             }
         }
 
         if (orderList.getDayIncome(today).signum() > 0) {
-            report += "\n" + "The most popular menu item(s) today: "
-            + mostPopularItem + "ordered " + highestCount + " times";
+            report.append("\nThe most popular menu item(s) today: ");
+            report.append(popular.stream().map(MenuItem::getDescription).collect(Collectors.joining(", ")));
+            report.append(String.format(" ordered %d times", highestCount));
         } else {
-            report += "\n" + "No items were sold today";
+            report.append("\nNo items were sold today");
         }
 
-        try {													//Writes the report and message to the file
-			FileWriter orderWriter = new FileWriter(fileName);
-			orderWriter.write(report);
-			orderWriter.close();
+        try (FileWriter orderWriter = new FileWriter(fileName)) {
+			orderWriter.write(report.toString());
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
