@@ -20,7 +20,7 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
-    // Method to check if order is a sandwich, 
+    // Method to check if order is a sandwich,
     // Only used for the breakfast deal - discount1()
     public boolean ifSandwich(Order o) {
         // Use Regex to track the food item and return a boolean - true, if item is a sandwich
@@ -144,6 +144,12 @@ public class OrderBasket extends OrderList {
     // Dumps basket contents into permanent order list and emptys the basket
     public boolean checkout() {
         boolean added = orderList.addAll(this.orders);
+
+        // Item count should increment now that they're purchased
+        for (Order o : orders) {
+            menu.getItem(o.getItemId()).setCount();
+        }
+
         orders.clear();
         return added;
     }
@@ -155,9 +161,6 @@ public class OrderBasket extends OrderList {
 
         // Discounts should be updated each time an item is added
         applyDiscount(o);
-
-        // Item count should increment (move to checkout if we enable "remove from basket")
-        menu.getItem(o.getItemId()).setCount();
 
         return added;
     }
@@ -206,7 +209,7 @@ public class OrderBasket extends OrderList {
         }
 
         if (orderList.getDayIncome(today).signum() > 0) {
-            report += "\n" + "The most popular menu item(s) today: " 
+            report += "\n" + "The most popular menu item(s) today: "
             + mostPopularItem + "ordered " + highestCount + " times";
         } else {
             report += "\n" + "No items are being sold today, don't give up, try again tomorrow! :)";
