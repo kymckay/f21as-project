@@ -87,18 +87,21 @@ public class ControlsMerchandise extends JPanel {
         return Merchandise.formatDetails(l, c);
     }
 
-    private void updatePrice() {
+    // Returns the price of the item given the current control values
+    public BigDecimal getPrice() {
         // Can't update price while in temporary inconsistent state
         // This occurs when items are removed from the list on population
         if (labels.getSelectedIndex() == -1) {
-            return;
+            return new BigDecimal("0");
         }
 
         Label l = (Label) labels.getSelectedItem();
 
         // Price already given to the right accuracy
-        BigDecimal newPrice = currentItem.getPrice(l);
+        return currentItem.getPrice(l);
+    }
 
-        price.setText("£" + newPrice.toString());
+    private void updatePrice() {
+        price.setText("£" + getPrice().toString());
     }
 }

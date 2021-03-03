@@ -96,22 +96,22 @@ public class ControlsBeverage extends JPanel {
         return Beverage.formatDetails(s, hot, m);
     }
 
-    private void updatePrice() {
+    // Returns the price of the item given the current control values
+    public BigDecimal getPrice() {
         // Can't update price while in temporary inconsistent state
         // This occurs when items are removed from the lists on population
-        if (
-            sizes.getSelectedIndex() == -1
-            || milks.getSelectedIndex() == -1
-        ) {
-            return;
+        if (sizes.getSelectedIndex() == -1 || milks.getSelectedIndex() == -1) {
+            return new BigDecimal("0");
         }
 
         Size s = (Size) sizes.getSelectedItem();
         Milk m = (Milk) milks.getSelectedItem();
 
         // Price already given to the right accuracy
-        BigDecimal newPrice = currentItem.getPrice(s, m);
+        return currentItem.getPrice(s, m);
+    }
 
-        price.setText("£" + newPrice.toString());
+    private void updatePrice() {
+        price.setText("£" + getPrice().toString());
     }
 }
