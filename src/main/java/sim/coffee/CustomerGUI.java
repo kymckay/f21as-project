@@ -4,6 +4,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -218,10 +219,17 @@ public class CustomerGUI {
 
     private JPanel foodControls() {
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
         JList<DietaryClass> list = new JList<>();
         list.setModel(dietary);
 
-        panel.add(new JLabel("Dietary Classifications:"));
+        JLabel label = new JLabel("Dietary Classifications:");
+
+        list.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(label);
         panel.add(list);
 
         return panel;
