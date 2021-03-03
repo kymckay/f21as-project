@@ -10,7 +10,7 @@ public class MenuTableModel extends AbstractTableModel {
     // irrelevant to us.
     private static final long serialVersionUID = 1L;
 
-    private String[] columns = new String[] { "ID", "Item", "Price" };
+    private String[] columns = new String[] { "ID", "Item", "Base Price" };
     private String[] rowIDs;
     private transient Menu menu;
 
