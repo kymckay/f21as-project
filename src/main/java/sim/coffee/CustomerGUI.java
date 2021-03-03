@@ -247,9 +247,11 @@ public class CustomerGUI {
         // details
         switch (menuView) {
             case LABEL_B:
+                price = controlsB.getPrice();
                 details = controlsB.getItemDetails();
                 break;
             case LABEL_M:
+                price = controlsM.getPrice();
                 details = controlsM.getItemDetails();
                 break;
             default:
