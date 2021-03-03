@@ -10,7 +10,7 @@ public class BasketTableModel extends AbstractTableModel {
     // irrelevant to us.
     private static final long serialVersionUID = 1L;
 
-    private String[] columns = new String[] { "ID", "Item", "Details", "Price", "Discount" };
+    private String[] columns = new String[] { "Customer", "Item", "Details", "Price", "Discount" };
     private transient OrderBasket basket;
 
     BasketTableModel(OrderBasket basket) {
