@@ -20,7 +20,7 @@ public class OrderBasket extends OrderList {
         orderList = o;
     }
 
-    // Method to check if order is a sandwich, 
+    // Method to check if order is a sandwich,
     // Only used for the breakfast deal - discount1()
     public boolean ifSandwich(Order o) {
         // Use Regex to track the food item and return a boolean - true, if item is a sandwich
@@ -181,11 +181,8 @@ public class OrderBasket extends OrderList {
         }
 
         // includes a report for the cummulative income up till this day – "today"
-        report += "\n" + "The cumulative income from all orders are " + orderList.getTotalIncome();
-
-        String message = "The Total Income obtained from the today's Orders is £";
-        report += "\n" + message;
-        report += orderList.getDayIncome(today);
+        report += "\n" + "The cumulative income from all orders is £" + orderList.getTotalIncome();
+        report += "\n" + "The income obtained from today's orders is £" + orderList.getDayIncome(today);
 
         // Loop through all the items in Menu to determine the item(s) with highest count
         int highestCount = 0;
@@ -206,10 +203,10 @@ public class OrderBasket extends OrderList {
         }
 
         if (orderList.getDayIncome(today).signum() > 0) {
-            report += "\n" + "The most popular menu item(s) today: " 
+            report += "\n" + "The most popular menu item(s) today: "
             + mostPopularItem + "ordered " + highestCount + " times";
         } else {
-            report += "\n" + "No items are being sold today, don't give up, try again tomorrow! :)";
+            report += "\n" + "No items were sold today";
         }
 
         try {													//Writes the report and message to the file
