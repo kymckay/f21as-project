@@ -20,7 +20,7 @@ public void add() throws FileNotFoundException,IllegalIDException {
 	    MenuItem m = new Food(new DietaryClass[0], "F001", new BigDecimal(4.99), "Bacon Sandwich");
 		testMenu.add("F001", m);
 		assertTrue(testMenu.keySet().contains("F001"));
-		
+		assertEquals(m, testMenu.getItem("F001"));
 }  
 
 	 
@@ -32,5 +32,4 @@ public void readFile() throws FileNotFoundException {
 		 assertEquals(testMenu.keySet().toString(),"[B001, M032, F001]");
 	}
 }
-
 
