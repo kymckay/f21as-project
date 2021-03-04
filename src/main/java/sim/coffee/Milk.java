@@ -3,7 +3,7 @@ package sim.coffee;
 //used in Beverage and OrderBeverage objects
 public enum Milk {
 	NONE (0), 
-	REGULAR (0.1),
+	REGULAR (0),
 	SOY (0.1),
 	OAT (0.15);
 	
