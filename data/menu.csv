@@ -47,7 +47,7 @@ B111, Water,2.0, false! L! None
 B112, Milkshake,4, false! S|M|L! Regular
 B113, Banana Smoothie,4.2, false! M! None
 B114, Strawbery Smoothie,4.3, false! S|M|L! None
-B115, Frappuccino,3.8, true! S|M|L! Soy
+B115, Frappuccino,3.8, true! S|M|L! Regular|Soy
 B116, Hot Chocolate,3.5, true! S|M|L! Regular|Oat
 B117, Orange Juice ,2.8, false! M! None
 B118, Apple Juice,2.8, false! M! None
