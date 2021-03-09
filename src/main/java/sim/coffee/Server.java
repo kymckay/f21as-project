@@ -8,12 +8,12 @@ public class Server implements Runnable{
     }
 
     public void run() {
-        while (!queue.getDone()) {
+        while (!queue.getDone) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {}
         }
-        int number = queue.getOrder();
+        queue.setDone()
     }
     
 }
