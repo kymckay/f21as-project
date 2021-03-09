@@ -13,7 +13,8 @@ public class Server implements Runnable{
                 Thread.sleep(100);
             } catch (InterruptedException e) {}
         }
-        queue.setDone()
+        queue.setDone();
+        Thread.sleep(100);
     }
     
 }
