@@ -1,6 +1,8 @@
 package sim.coffee;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Queue {
 	
@@ -66,11 +68,45 @@ public class Queue {
 	public void setDone() {
 		done = true;
 	}
+ 	
+	// determine the number of customers in the queue (i.e. unique IDs)
+	protected int getCustomerCount() {
+		int customerCount = 0;
+ 		String uniqueId = "";
+ 		for (Order o : queue) {
+ 			if (!(o.getCustomerID().equals(uniqueId))) {
+ 				uniqueId = o.getCustomerID();
+ 				customerCount++;
+ 			}	
+ 		}
+ 		return customerCount;
+	}
 	
-//	// displays queue for GUI?
-// 	public String displayQueue() {
-// 		 
-// 		return queue.toString();
-// 	}
-
+	// displays queue for the GUI
+	public StringBuilder displayQueue() {
+		StringBuilder queueLog = new StringBuilder();
+ 		queueLog.append("Customers in the queue: ");
+ 		queueLog.append(getCustomerCount() + "\n");
+ 		
+ 		// adds customer Id + nr of items purchased as value pairs in a HashMap
+ 		// this seems needlessly complex?
+ 		Map<String, Integer> purchase = new HashMap<String, Integer>();
+ 		for (Order o : queue) {
+ 			Integer nrOfOrders = purchase.get(o.getCustomerID());
+ 			if (nrOfOrders == null) { // if the nr of items is 0, customer Id + nr of items = 1  is added to the map
+ 				purchase.put(o.getCustomerID(), 1);
+ 			} 
+ 			else { // otherwise the nr of items is incremented 
+ 				purchase.put(o.getCustomerID(), nrOfOrders + 1);
+ 			}
+ 		}
+ 		
+ 		// add all entries in the HashMap to queueLog
+ 		for (Map.Entry<String, Integer> pair : purchase.entrySet()) {
+ 			queueLog.append(String.format("%-10s", pair.getKey()));
+ 			queueLog.append(pair.getValue());
+ 			queueLog.append(" Item(s) \n");
+ 		}
+ 		return queueLog;
+ 	}
 }
