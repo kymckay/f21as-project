@@ -36,10 +36,6 @@ public class Producer implements Runnable {
      */
     @Override
     public void run() {
-        // Sleep some time based on the number of items to order (simulate customer deciding)
-        // Put orders for one customer into the queue at once (simulates "checkout")
-        // Sleep randomly between each customer (simulate time between arrival)
-
         // Buffered reader provides an efficient way to read files line by line
         int lineNum = 1;
         try (
@@ -54,8 +50,17 @@ public class Producer implements Runnable {
 
                 // Next customer reached, checkout basket and empty
                 if (item.getCustomerID().equals(frontOfLine)) {
+                    // Simulate customer takes 2s per item to order
+                    sleep(basket.size() * 2000l);
+
+                    // Customer's items are all added as a grouping into the queue ("checkout")
                     out.addOrder(basket.toArray()); // TODO: This will add en empty array first iteration
                     basket.clear();
+
+                    // Some random time may pass before the next customer arrives
+                    if (Math.random() < 0.5) {
+                        sleep((long) Math.floor(Math.random() * 5000l));
+                    }
                 }
 
                 basket.add(item);
@@ -71,6 +76,15 @@ public class Producer implements Runnable {
             System.out.println(in.getName() + " could not be read.");
         } catch(IllegalArgumentException e) {
             System.out.println("Order parsing error on line " + lineNum + ": " + e.getMessage());
+        }
+    }
+
+    // Extracted to method for readability and common handling of interruption
+    private void sleep(long milli) {
+        try {
+            Thread.sleep(milli);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
