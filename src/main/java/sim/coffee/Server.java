@@ -8,13 +8,19 @@ public class Server implements Runnable{
     }
 
     public void run() {
-        while (!queue.getDone) {
+        while (queue.getCustomerCount() == 0) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {}
         }
-        queue.setDone();
-        Thread.sleep(100);
+        queue.getCustomerOrder();
+        if (queue.getDone()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        } else {
+            queue.setDone();
+        }
     }
     
 }
