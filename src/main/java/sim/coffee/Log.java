@@ -13,8 +13,8 @@ public class Log {
 	}
 
 	
-	//adds an entry in the log when an order is added to queue 
-	public void orderAddedToQueue(Order[] o, String state) {
+	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
+	public void add(Order[] o, String state) {
 		LocalDate time = LocalDate.now();
 		log.append(String.format("%-15s", time));
 		
