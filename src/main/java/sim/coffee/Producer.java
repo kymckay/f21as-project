@@ -62,6 +62,9 @@ public class Producer implements Runnable {
 
                 lineNum++;
             }
+
+            // Once end of file is reached mark the queue as completed
+            out.setDone();
         } catch (FileNotFoundException e) {
             System.out.println(in.getName() + " does not exist.");
         } catch (IOException e) {
