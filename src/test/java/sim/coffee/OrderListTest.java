@@ -3,7 +3,6 @@ package sim.coffee;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -18,19 +17,6 @@ public class OrderListTest {
     @Before
     public void init() {
         testList = new OrderList(new LinkedList<>());
-    }
-
-    /**
-     * Tests that the list successfully creates the number of orders in the input
-     * data (assuming they're made right)
-     */
-    @Test
-    public void readFile() throws FileNotFoundException {
-        int sizeBefore = testList.size();
-
-        testList.readFile("data/test/orders.csv");
-
-        assertEquals(sizeBefore + 3, testList.size());
     }
 
     // Helper method to build empty orders for testing
