@@ -2,7 +2,7 @@ package sim.coffee;
 
 public class Server implements Runnable {
 
-    public Server(Queue orders) {
+    public Server(SharedQueue orders) {
     }
 
     @Override

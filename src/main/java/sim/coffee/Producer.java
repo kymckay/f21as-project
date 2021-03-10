@@ -20,12 +20,12 @@ import java.util.LinkedList;
 public class Producer implements Runnable {
     File in; // orders come from here
     Menu menu; // used to produce orders
-    Queue out; // orders go here
+    SharedQueue out; // orders go here
 
     String frontOfLine; // Customer ID currently at the front of the line
     LinkedList<Order> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
-    public Producer(File in, Menu menu, Queue out) {
+    public Producer(File in, Menu menu, SharedQueue out) {
         this.in = in;
         this.menu = menu;
         this.out = out;

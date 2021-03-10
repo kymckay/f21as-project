@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 public class Manager {
     public static void main(String[] args) {
         // Queue of orders populated by producer for staff to serve
-        Queue orders = new Queue();
+        SharedQueue orders = new SharedQueue();
 
         // If input menu or orders file isn't found program cannot continue
         try {
