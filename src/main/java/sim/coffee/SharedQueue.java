@@ -66,6 +66,7 @@ public class SharedQueue {
     public void addOrder(Object[] array) {
     }
 
+	// returns boolean if queue is empty
 	public boolean isEmpty() {
 		if (queue.size() == 0) {
 			return true;
