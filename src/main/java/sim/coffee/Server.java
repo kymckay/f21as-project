@@ -14,13 +14,5 @@ public class Server implements Runnable{
             } catch (InterruptedException e) {}
         }
         queue.getCustomerOrder();
-        if (queue.getDone()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {}
-        } else {
-            queue.setDone();
-        }
     }
-    
 }
