@@ -1,9 +1,9 @@
 package sim.coffee;
 
 public class Server implements Runnable{
-    private Queue queue;
+    private SharedQueue queue;
 
-    public Server(Queue queue) {
+    public Server(SharedQueue queue) {
         this.queue = queue;
     }
 
