@@ -9,12 +9,11 @@ public class Server implements Runnable{
 
     @Override
     public void run() {
-        while (!queue.getDone()) {
+        while (!queue.getDone() && queue.isEmpty()) {
             try {
-                queue.getCustomerOrder();
-                Thread.sleep(100);
+                int queueSize = queue.getCustomerOrder().length;
+                Thread.sleep(200*queueSize);
             } catch (InterruptedException e) {}
         }
-        
     }
 }
