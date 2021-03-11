@@ -7,6 +7,7 @@ public class Server implements Runnable{
         this.queue = queue;
     }
 
+    @Override
     public void run() {
         while (!queue.getDone()) {
             try {
