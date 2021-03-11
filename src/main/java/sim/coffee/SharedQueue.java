@@ -65,4 +65,12 @@ public class SharedQueue {
 
     public void addOrder(Object[] array) {
     }
+
+	public boolean isEmpty() {
+		if (queue.size() == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
