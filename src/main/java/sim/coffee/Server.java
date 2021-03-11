@@ -7,9 +7,12 @@ public class Server implements Runnable{
         this.queue = queue;
     }
 
+    /**
+     * Run only while its not done and queue isn't empty
+     */
     @Override
     public void run() {
-        while (!queue.getDone() && queue.isEmpty()) {
+        while (!queue.getDone() && !queue.isEmpty()) {
             try {
                 int queueSize = queue.getCustomerOrder().length;
                 Thread.sleep(200*queueSize);
