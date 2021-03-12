@@ -61,6 +61,9 @@ public class Producer implements Runnable {
                     if (Math.random() < 0.5) {
                         sleep((long) Math.floor(Math.random() * 5000l));
                     }
+
+                    // New customer is now front of line
+                    frontOfLine = item.getCustomerID();
                 }
 
                 basket.add(item);
