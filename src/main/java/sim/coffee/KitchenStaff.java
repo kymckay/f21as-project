@@ -14,14 +14,12 @@ public class KitchenStaff implements Runnable{
      */
     @Override
     public void run() {
-        while (!queue.getDone() && !queue.isEmpty()) {
+        int queueSize = queue.getCustomerOrder().length;
+        while (!queue.getDone() && queueSize > 0) {
             try {
                 // Tries to simulate no. of orders * time it take to prepare one order
-                int queueSize = queue.getCustomerOrder().length;
                 Thread.sleep(60000*queueSize);
             } catch (InterruptedException e) {}
         }
     }
-
-
 }
