@@ -54,7 +54,7 @@ public class Producer implements Runnable {
                     sleep(basket.size() * 2000l);
 
                     // Customer's items are all added as a grouping into the queue ("checkout")
-                    out.addOrder(basket.toArray()); // TODO: This will add en empty array first iteration
+                    out.addOrder(basket.toArray(Order[]::new)); // TODO: This will add en empty array first iteration
                     basket.clear();
 
                     // Some random time may pass before the next customer arrives
