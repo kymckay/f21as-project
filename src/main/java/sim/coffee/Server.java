@@ -17,7 +17,7 @@ public class Server implements Runnable{
                 // Tries to simulate no. of orders * time it take to serve
                 // // one single order
                 int queueSize = queue.getCustomerOrder().length;
-                Thread.sleep(200*queueSize);
+                Thread.sleep(2000*queueSize);
             } catch (InterruptedException e) {}
         }
     }
