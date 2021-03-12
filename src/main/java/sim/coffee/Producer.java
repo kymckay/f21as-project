@@ -50,12 +50,15 @@ public class Producer implements Runnable {
 
                 // Next customer reached, checkout basket and empty
                 if (!item.getCustomerID().equals(frontOfLine)) {
-                    // Simulate customer takes 2s per item to order
-                    sleep(basket.size() * 2000l);
+                    // Don't checkout if there was no previous customer
+                    if (frontOfLine != null) {
+                        // Simulate customer takes 2s per item to order
+                        sleep(basket.size() * 2000l);
 
-                    // Customer's items are all added as a grouping into the queue ("checkout")
-                    out.addOrder(basket.toArray(Order[]::new)); // TODO: This will add en empty array first iteration
-                    basket.clear();
+                        // Customer's items are all added as a grouping into the queue ("checkout")
+                        out.addOrder(basket.toArray(Order[]::new));
+                        basket.clear();
+                    }
 
                     // Some random time may pass before the next customer arrives
                     if (Math.random() < 0.5) {
