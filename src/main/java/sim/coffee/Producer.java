@@ -49,7 +49,7 @@ public class Producer implements Runnable {
                 Order item = processLine(line);
 
                 // Next customer reached, checkout basket and empty
-                if (item.getCustomerID().equals(frontOfLine)) {
+                if (!item.getCustomerID().equals(frontOfLine)) {
                     // Simulate customer takes 2s per item to order
                     sleep(basket.size() * 2000l);
 
