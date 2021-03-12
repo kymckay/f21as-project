@@ -14,7 +14,8 @@ public class Server implements Runnable{
     public void run() {
         while (!queue.getDone() && !queue.isEmpty()) {
             try {
-                // Tries to simulate no. of orders * time it take to prepare
+                // Tries to simulate no. of orders * time it take to serve
+                // // one single order
                 int queueSize = queue.getCustomerOrder().length;
                 Thread.sleep(200*queueSize);
             } catch (InterruptedException e) {}
