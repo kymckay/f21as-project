@@ -33,7 +33,7 @@ public class Log {
 		log.append(String.format("%-25s", "Customer ID: " + o[0].getCustomerID()));
 		log.append(String.format("%-7s", "Order: "));
 		for (Order order : o) {
-			log.append(order.getItemDetails());
+			log.append(order.getItemDetails() + " ");
 		}
 		log.append("\n");
 	}
