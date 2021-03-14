@@ -7,11 +7,13 @@ public class SharedQueue {
 	private LinkedList<Order[]> queue;
 	private boolean empty;
 	private boolean done;
+	private Log log;
 
 	public SharedQueue() {
 		queue = new LinkedList<Order[]>();
 		empty = true;
 		done = false;
+		log = Log.getInstance();
 	}
 
 	// returns an array of order at the top of the queue
@@ -26,18 +28,21 @@ public class SharedQueue {
 		}
 
 		Order[] customerOrder = queue.getFirst();
+		log.add(customerOrder, "exit");
 		queue.removeFirst();
 
 		if (queue.size() == 0) {
 			empty = true;
 			notifyAll();
 		}
+		
 		return customerOrder;
 	}
 
 	// adds an array of orders to the queue
 	public synchronized void addOrder(Order[] o) {
 		queue.addLast(o);
+		log.add(o, "enter"); //adds an entry in the log every time the method is called
 		empty = false;
 		notifyAll();
 	}
@@ -62,7 +67,4 @@ public class SharedQueue {
  		}
  		return queueLog;
  	}
-
-    public void addOrder(Object[] array) {
-    }
 }
