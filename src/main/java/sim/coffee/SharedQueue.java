@@ -69,4 +69,8 @@ public class SharedQueue {
 	public boolean isEmpty() {
 		return empty;
 	}
+
+	public int getSharedQueueSize() {
+		return queue.size();
+	}
 }
