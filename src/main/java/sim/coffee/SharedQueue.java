@@ -65,8 +65,5 @@ public class SharedQueue {
 
     public void addOrder(Object[] array) {
     }
-
-	public boolean isEmpty() {
-		return empty;
-	}
+	
 }
