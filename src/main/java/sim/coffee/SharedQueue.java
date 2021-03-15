@@ -7,13 +7,13 @@ public class SharedQueue {
 	private LinkedList<Order[]> queue;
 	private boolean empty;
 	private boolean done;
-	private Log log;
+	private Logger log;
 
 	public SharedQueue() {
 		queue = new LinkedList<Order[]>();
 		empty = true;
 		done = false;
-		log = Log.getInstance();
+		log = Logger.getInstance();
 	}
 
 	// returns an array of order at the top of the queue
