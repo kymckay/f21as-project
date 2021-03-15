@@ -14,7 +14,7 @@ public class KitchenStaff implements Runnable{
      */
     @Override
     public void run() {
-        while (!queue.getDone() && queue.getSharedQueueSize() > 0) {
+        while (!queue.getDone() && !queue.isEmpty()) {
             try {
                 // Tries to simulate no. of orders * time it take to prepare one order
                 int orderSize = queue.getCustomerOrder().length;
