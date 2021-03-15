@@ -35,7 +35,7 @@ public class SharedQueue {
 			empty = true;
 			notifyAll();
 		}
-		
+
 		return customerOrder;
 	}
 
@@ -67,4 +67,8 @@ public class SharedQueue {
  		}
  		return queueLog;
  	}
+
+	public boolean isEmpty() {
+		return empty;
+	}
 }
