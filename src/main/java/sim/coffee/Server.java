@@ -12,11 +12,12 @@ public class Server implements Runnable{
      */
     @Override
     public void run() {
-        int queueSize = queue.getCustomerOrder().length;
-        while (!queue.getDone() && queueSize > 0) {
+        while (!queue.getDone() && !queue.isEmpty()) {
             try {
                 // Tries to simulate no. of orders * time it take to prepare one order
-                Thread.sleep(2000*queueSize);
+                // queue.getCustomerOrder() // TODO: Implement in the future
+                int orderSize = queue.getCustomerOrder().length;
+                Thread.sleep(2000*orderSize);
             } catch (InterruptedException e) {}
         }
     }
