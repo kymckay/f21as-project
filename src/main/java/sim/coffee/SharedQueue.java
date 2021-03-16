@@ -28,7 +28,7 @@ public class SharedQueue {
 		}
 
 		Order[] customerOrder = queue.getFirst();
-		log.add(customerOrder, "exit");
+		log.add(customerOrder, Logger.OrderState.EXIT);
 		queue.removeFirst();
 
 		if (queue.size() == 0) {
@@ -42,7 +42,7 @@ public class SharedQueue {
 	// adds an array of orders to the queue
 	public synchronized void addOrder(Order[] o) {
 		queue.addLast(o);
-		log.add(o, "enter"); //adds an entry in the log every time the method is called
+		log.add(o, Logger.OrderState.ENTER); //adds an entry in the log every time the method is called
 		empty = false;
 		notifyAll();
 	}
