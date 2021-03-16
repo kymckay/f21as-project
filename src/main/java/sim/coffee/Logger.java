@@ -2,7 +2,7 @@ package sim.coffee;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Logger {
 	
@@ -22,8 +22,8 @@ public class Logger {
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
 	public void add(Order[] o, Logger.OrderState state) {
-		LocalDate time = LocalDate.now();
-		log.append(String.format("%-15s", time));
+		LocalDateTime time = LocalDateTime.now();
+		log.append(String.format("%-35s", time));
 		
 		switch (state) {
 		case ENTER:
@@ -38,9 +38,9 @@ public class Logger {
 		}
 
 		log.append(String.format("%-25s", "Customer ID: " + o[0].getCustomerID()));
-		log.append(String.format("%-7s", "Order: "));
+		log.append(String.format("%-7s", "Order ID: "));
 		for (Order order : o) {
-			log.append(order.getItemDetails() + " ");
+			log.append(order.getItemId() + " ");
 		}
 		log.append("\n");
 	}
