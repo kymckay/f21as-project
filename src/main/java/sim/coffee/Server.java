@@ -2,9 +2,11 @@ package sim.coffee;
 
 public class Server implements Runnable{
     private SharedQueue queue;
+    private Logger log;
 
     public Server(SharedQueue queue) {
         this.queue = queue;
+        log = Logger.getInstance();
     }
 
     /**
@@ -12,13 +14,15 @@ public class Server implements Runnable{
      */
     @Override
     public void run() {
-        while (!queue.getDone() && !queue.isEmpty()) {
-            try {
+        while (!queue.getDone()) {
+            Order [] order = queue.getCustomerOrder();
+        	try {
                 // Tries to simulate no. of orders * time it take to prepare one order
-                // queue.getCustomerOrder() // TODO: Implement in the future
-                int orderSize = queue.getCustomerOrder().length;
-                Thread.sleep(2000*orderSize);
+                int orderSize = order.length;
+                Thread.sleep(5000 * orderSize);
+                
             } catch (InterruptedException e) {}
         }
+        log.writeReport("log.txt");
     }
 }
