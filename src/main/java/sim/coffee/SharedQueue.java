@@ -30,7 +30,7 @@ public class SharedQueue {
 		log.add(customerOrder, Logger.OrderState.EXIT);
 		queue.removeFirst();
 
-		if (queue.size() == 0) {
+		if (queue.isEmpty()) {
 			empty = true;
 			notifyAll();
 		}
