@@ -23,7 +23,7 @@ public class Manager {
             System.exit(1);
         }
         
-        SimulationGUI gui = new SimulationGUI(orders, 4);   
+        SimulationGUI gui = new SimulationGUI(orders, 2);   
 
     }
 }
