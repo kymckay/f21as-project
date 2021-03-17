@@ -8,13 +8,14 @@ public class SharedQueue implements Subject {
 	private LinkedList<Observer> observers;
 	private boolean empty;
 	private boolean done;
+	private Logger log;
 
 	public SharedQueue() {
 		queue = new LinkedList<Order[]>();
 		observers = new LinkedList<Observer>();
 		empty = true;
 		done = false;
-		
+		log = Logger.getInstance();
 	}
 
 	// returns an array of order at the top of the queue
@@ -29,6 +30,7 @@ public class SharedQueue implements Subject {
 		}
 
 		Order[] customerOrder = queue.getFirst();
+		log.add(customerOrder, Logger.OrderState.EXIT);
 		queue.removeFirst();
 		notifyObservers();
 
@@ -36,14 +38,14 @@ public class SharedQueue implements Subject {
 			empty = true;
 			notifyAll();
 		}
-		
+
 		return customerOrder;
 	}
 
 	// adds an array of orders to the queue
 	public synchronized void addOrder(Order[] o) {
 		queue.addLast(o);
-		
+		log.add(o, Logger.OrderState.ENTER); //adds an entry in the log every time the method is called
 		empty = false;
 		notifyAll();
 		notifyObservers();
@@ -69,7 +71,9 @@ public class SharedQueue implements Subject {
  			queueLog.append(" Item(s) \n");
  		}
  		return queueLog;
+
 	}
+
 
 	public boolean isEmpty() {
 		return empty;

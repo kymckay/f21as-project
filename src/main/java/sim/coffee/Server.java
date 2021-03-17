@@ -6,11 +6,14 @@ public class Server implements Runnable, Subject {
     private SharedQueue queue;
     private StringBuilder currentOrder;
     private LinkedList<Observer> observers;
+    private Logger log;
+
 
     public Server(SharedQueue queue) {
         this.queue = queue;
         currentOrder = new StringBuilder();
         observers = new LinkedList<Observer>();
+        log = Logger.getInstance();
     }
 
     /**
@@ -19,15 +22,19 @@ public class Server implements Runnable, Subject {
     @Override
     public void run() {
         while (!queue.getDone()) {
+
         	Order [] order = queue.getCustomerOrder();
         	setCurrentOrder(order);
         	notifyObservers();
             try {
+
                 // Tries to simulate no. of orders * time it take to prepare one order
                 int orderSize = order.length;
                 Thread.sleep(10000 * orderSize);
+
             } catch (InterruptedException e) {}
         }
+        log.writeReport("log.txt");
     }
     
     // adds details of the order being processed by the Server
