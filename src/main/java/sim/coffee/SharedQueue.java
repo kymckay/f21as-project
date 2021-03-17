@@ -4,17 +4,10 @@ import java.util.LinkedList;
 
 public class SharedQueue {
 
-	private LinkedList<Order[]> queue;
-	private boolean empty;
-	private boolean done;
-	private Logger log;
-
-	public SharedQueue() {
-		queue = new LinkedList<Order[]>();
-		empty = true;
-		done = false;
-		log = Logger.getInstance();
-	}
+	private LinkedList<Order[]> queue = new LinkedList<>();
+	private boolean empty = true;
+	private boolean done = false;
+	private Logger log = Logger.getInstance();
 
 	// returns an array of order at the top of the queue
 	public synchronized Order[] getCustomerOrder() {
