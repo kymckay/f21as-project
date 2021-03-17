@@ -16,11 +16,11 @@ public class Server implements Runnable{
         while (!queue.getDone() || !queue.isEmpty()) {
             Order [] order = queue.getCustomerOrder();
         	try {
-                // Tries to simulate no. of orders * time it take to prepare one order
-                int orderSize = order.length;
-                Thread.sleep(5000 * orderSize);
-                
-            } catch (InterruptedException e) {}
+                // Time to process order depends on number of items
+                Thread.sleep(10000l * order.length);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         log.writeReport("log.txt");
     }
