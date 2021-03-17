@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class Logger {
-	
+
 	//enums for the add() method
 	public enum OrderState {
 		ENTER,
 		EXIT,
 		PROCESSED;
 	}
-	
+
 	private static Logger instance;
 	private StringBuilder log;
 
@@ -21,10 +21,10 @@ public class Logger {
 	}
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public void add(Order[] o, Logger.OrderState state) {
+	public void add(Order[] o, OrderState state) {
 		LocalDateTime time = LocalDateTime.now();
 		log.append(String.format("%-35s", time));
-		
+
 		switch (state) {
 		case ENTER:
 			log.append(String.format("%-15s", "Enter queue"));
