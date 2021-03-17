@@ -22,11 +22,8 @@ public class Manager {
             e.printStackTrace();
             System.exit(1);
         }
+        
+        SimulationGUI gui = new SimulationGUI(orders, 4);   
 
-        Thread server1 = new Thread(new Server(orders));
-        Thread server2 = new Thread(new Server(orders));
-
-        server1.start();
-        server2.start();
     }
 }
