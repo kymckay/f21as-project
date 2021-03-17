@@ -21,9 +21,8 @@ public class SharedQueue {
 		while (empty) {
 			try {
 				wait();
-			}
-		 	catch (InterruptedException e) {
-		 		e.printStackTrace();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 		 	}
 		}
 
