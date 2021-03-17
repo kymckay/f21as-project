@@ -11,7 +11,6 @@ public class Server implements Runnable, Subject {
         this.queue = queue;
         currentOrder = new StringBuilder();
         observers = new LinkedList<Observer>();
-        
     }
 
     /**
@@ -22,6 +21,7 @@ public class Server implements Runnable, Subject {
         while (!queue.getDone()) {
         	Order [] order = queue.getCustomerOrder();
         	setCurrentOrder(order);
+        	notifyObservers();
             try {
                 // Tries to simulate no. of orders * time it take to prepare one order
                 int orderSize = order.length;
@@ -30,12 +30,12 @@ public class Server implements Runnable, Subject {
         }
     }
     
+    // adds details of the order being processed by the Server
     public void setCurrentOrder(Order[] o) {
     	currentOrder.replace(0, currentOrder.length(), "");
-    	currentOrder.append("Customer being served: ");
-    	currentOrder.append(o[0].getCustomerID() + "\n");
-    	currentOrder.append("Customer being served: ");
-    	currentOrder.append("Orders: \n");
+    	currentOrder.append("Customer being served: \n");
+    	currentOrder.append(String.format("%10s", o[0].getCustomerID()) + "\n");
+    	currentOrder.append("Ordered items: \n");
     	for (Order order : o) {
     		currentOrder.append(String.format("%10s", order.getItemId()) + "\n");
     	}
@@ -45,19 +45,21 @@ public class Server implements Runnable, Subject {
     	return currentOrder;
     }
 
-    // implements Observer pattern
+    // Subject methods
+    // add observers to a list
 	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
-
+	
+	// removes observers from a list 
 	public void removeObserver(Observer o) {
 		observers.remove(o);	
 	}
 
+	// notifies all observers in the observers list
 	public void notifyObservers() {
 		for (Observer o : observers) {
 			o.update();
-		}
-		
+		}	
 	}
 }
