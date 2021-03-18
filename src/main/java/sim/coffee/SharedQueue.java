@@ -9,6 +9,12 @@ public class SharedQueue implements Subject {
 	private boolean empty = true;
 	private boolean done = false;
 	private Logger log = Logger.getInstance();
+	private QueueType queueType;
+	
+	public SharedQueue (QueueType queueType) {
+		this.queueType = queueType;
+		
+	}
 
 	// returns an array of order at the top of the queue
 	public synchronized Order[] getCustomerOrder() {
@@ -21,7 +27,16 @@ public class SharedQueue implements Subject {
 		}
 
 		Order[] customerOrder = queue.getFirst();
-		log.add(customerOrder, Logger.OrderState.EXIT);
+		
+		switch (queueType) {
+		case CUSTOMER:
+			log.add(customerOrder, Logger.OrderState.EXIT);
+			break;
+		case KITCHEN:
+			log.add(customerOrder, Logger.OrderState.EXITKITCHEN);
+			break;
+		}
+		
 		queue.removeFirst();
 		notifyObservers();
 
@@ -36,7 +51,15 @@ public class SharedQueue implements Subject {
 	// adds an array of orders to the queue
 	public synchronized void addOrder(Order[] o) {
 		queue.addLast(o);
-		log.add(o, Logger.OrderState.ENTER); //adds an entry in the log every time the method is called
+		switch (queueType) { //adds an entry in the log every time the method is called
+		case CUSTOMER:
+			log.add(o, Logger.OrderState.ENTER);
+			break;
+		case KITCHEN:
+			log.add(o, Logger.OrderState.ENTERKITCHEN);
+			break;
+		}
+		 
 		empty = false;
 		notifyAll();
 		notifyObservers();
