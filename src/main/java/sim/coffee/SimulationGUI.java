@@ -18,8 +18,8 @@ import javax.swing.border.EmptyBorder;
 
 public class SimulationGUI extends JFrame implements Observer{
 	
-	private JTextArea queue1, queue2;
-	private JPanel serverStaff, controls;
+	private JTextArea queue1, queue2, priorityQueue;
+	private JPanel serverStaff, queueSection, controls;
 	private SharedQueue queue;
 	private int nrOfThreads;
 	
@@ -45,7 +45,7 @@ public class SimulationGUI extends JFrame implements Observer{
 	private void setup() {
 		JPanel main = new JPanel(new GridLayout(4,1));
 		
-		main.add(setupQueue1());
+		main.add(queueSection());
 		main.add(setupServer());
 		main.add(setupQueue2());
 		main.add(setupKitchen());
@@ -56,13 +56,26 @@ public class SimulationGUI extends JFrame implements Observer{
 	}
 	
 	// sets up the queue with customers waiting to be served 
-	private JScrollPane setupQueue1() {
-		
+	
+	
+	private JPanel queueSection()
+	{
+		queueSection = new JPanel(new GridLayout(1, 2));
 		queue1 = new JTextArea();
 		queue1.setEditable(false);
+		Border qBorder1 = BorderFactory.createTitledBorder("Queue");
 		JScrollPane queue1Pane = new JScrollPane(queue1);
-		return queue1Pane;
+		queue1Pane.setBorder(qBorder1);
+		queueSection.add(queue1Pane);
+		priorityQueue = new JTextArea();
+		priorityQueue.setEditable(false);
+		Border qBorder2 = BorderFactory.createTitledBorder("PriorityQueue");
+		JScrollPane queue3Pane = new JScrollPane(priorityQueue);
+		queue3Pane.setBorder(qBorder2);
+		queueSection.add(queue3Pane);
+		return queueSection;
 	}
+	
 	
 	// sets up the server section
 	// TODO: will need to adjust GUI width if more than 3 servers are added
