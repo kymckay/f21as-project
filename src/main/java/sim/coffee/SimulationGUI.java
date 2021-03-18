@@ -56,8 +56,6 @@ public class SimulationGUI extends JFrame implements Observer{
 	}
 	
 	// sets up the queue with customers waiting to be served 
-	
-	
 	private JPanel queueSection()
 	{
 		queueSection = new JPanel(new GridLayout(1, 2));
@@ -66,12 +64,14 @@ public class SimulationGUI extends JFrame implements Observer{
 		Border qBorder1 = BorderFactory.createTitledBorder("Queue");
 		JScrollPane queue1Pane = new JScrollPane(queue1);
 		queue1Pane.setBorder(qBorder1);
-		queueSection.add(queue1Pane);
+		
 		priorityQueue = new JTextArea();
 		priorityQueue.setEditable(false);
-		Border qBorder2 = BorderFactory.createTitledBorder("PriorityQueue");
+		Border qBorder2 = BorderFactory.createTitledBorder("Priority Queue");
 		JScrollPane queue3Pane = new JScrollPane(priorityQueue);
 		queue3Pane.setBorder(qBorder2);
+		
+		queueSection.add(queue1Pane);
 		queueSection.add(queue3Pane);
 		return queueSection;
 	}
@@ -111,6 +111,7 @@ public class SimulationGUI extends JFrame implements Observer{
 		return queue2Pane;
 	}
 	
+	// this will contain all the interactive elements (e.g. buttons etc)
 	private JPanel setupControlls() {
 		controls = new JPanel();
 		controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
