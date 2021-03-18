@@ -31,7 +31,10 @@ public class Server implements Runnable, Subject {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+        	log.add(order, Logger.OrderState.PROCESSED);
         }
+        currentOrder.replace(0, currentOrder.length(), "");
+        notifyObservers();
         log.writeReport("log.txt");
     }
     
