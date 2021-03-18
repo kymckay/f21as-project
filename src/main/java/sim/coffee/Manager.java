@@ -6,7 +6,8 @@ import java.io.FileNotFoundException;
 public class Manager {
     public static void main(String[] args) {
         // Queue of orders populated by producer for staff to serve
-        SharedQueue orders = new SharedQueue();
+        SharedQueue orders = new SharedQueue(QueueType.CUSTOMER);
+        SharedQueue kitchen = new SharedQueue(QueueType.KITCHEN);
 
         // If input menu or orders file isn't found program cannot continue
         try {
@@ -23,7 +24,8 @@ public class Manager {
             System.exit(1);
         }
         
-        SimulationGUI gui = new SimulationGUI(orders, 2);   
+        SimulationGUI gui = new SimulationGUI(orders, kitchen, 3); 
+        
 
     }
 }
