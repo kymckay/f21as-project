@@ -21,6 +21,7 @@ public class Server implements Runnable{
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+        	log.add(order, Logger.OrderState.PROCESSED);
         }
         log.writeReport("log.txt");
     }
