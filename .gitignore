@@ -24,3 +24,4 @@ hs_err_pid*
 /target/
 
 report.txt
+log.txt
