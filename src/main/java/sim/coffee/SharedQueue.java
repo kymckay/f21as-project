@@ -4,28 +4,19 @@ import java.util.LinkedList;
 
 public class SharedQueue implements Subject {
 
-	private LinkedList<Order[]> queue;
-	private LinkedList<Observer> observers;
-	private boolean empty;
-	private boolean done;
-	private Logger log;
-
-	public SharedQueue() {
-		queue = new LinkedList<Order[]>();
-		observers = new LinkedList<Observer>();
-		empty = true;
-		done = false;
-		log = Logger.getInstance();
-	}
+	private LinkedList<Order[]> queue = new LinkedList<>();
+	private LinkedList<Observer> observers = new LinkedList<>();
+	private boolean empty = true;
+	private boolean done = false;
+	private Logger log = Logger.getInstance();
 
 	// returns an array of order at the top of the queue
 	public synchronized Order[] getCustomerOrder() {
 		while (empty) {
 			try {
 				wait();
-			}
-		 	catch (InterruptedException e) {
-		 		e.printStackTrace();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 		 	}
 		}
 
@@ -34,7 +25,7 @@ public class SharedQueue implements Subject {
 		queue.removeFirst();
 		notifyObservers();
 
-		if (queue.size() == 0) {
+		if (queue.isEmpty()) {
 			empty = true;
 			notifyAll();
 		}

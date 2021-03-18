@@ -16,23 +16,19 @@ public class Server implements Runnable, Subject {
         log = Logger.getInstance();
     }
 
-    /**
-     * Run only while its not done and queue isn't empty
-     */
     @Override
     public void run() {
-        while (!queue.getDone()) {
 
-        	Order [] order = queue.getCustomerOrder();
-        	setCurrentOrder(order);
-        	notifyObservers();
-            try {
-
-                // Tries to simulate no. of orders * time it take to prepare one order
-                int orderSize = order.length;
-                Thread.sleep(10000 * orderSize);
-
-            } catch (InterruptedException e) {}
+        // Service continues as long as customers are still due to arrive or customers
+        // are in the queue
+        while (!queue.getDone() || !queue.isEmpty()) {
+            Order [] order = queue.getCustomerOrder();
+        	try {
+                // Time to process order depends on number of items
+                Thread.sleep(10000l * order.length);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         log.writeReport("log.txt");
     }
