@@ -3,14 +3,15 @@ package sim.coffee;
 import java.util.LinkedList;
 
 public class Server implements Runnable, Subject {
-    private SharedQueue queue;
+    private SharedQueue customerQueue, kitchenQueue;
     private StringBuilder currentOrder;
     private LinkedList<Observer> observers;
     private Logger log;
 
 
-    public Server(SharedQueue queue) {
-        this.queue = queue;
+    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
+        this.customerQueue = customerQueue;
+        this.kitchenQueue = kitchenQueue;
         currentOrder = new StringBuilder();
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
@@ -21,8 +22,8 @@ public class Server implements Runnable, Subject {
 
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
-        while (!queue.getDone() || !queue.isEmpty()) {
-            Order [] order = queue.getCustomerOrder();
+        while (!customerQueue.getDone() || !customerQueue.isEmpty()) {
+            Order [] order = customerQueue.getCustomerOrder();
             setCurrentOrder(order);
             notifyObservers();
         	try {
@@ -32,9 +33,12 @@ public class Server implements Runnable, Subject {
                 Thread.currentThread().interrupt();
             }
         	log.add(order, Logger.OrderState.PROCESSED);
+        	kitchenQueue.addOrder(order);
         }
         currentOrder.replace(0, currentOrder.length(), "");
         notifyObservers();
+        
+        kitchenQueue.setDone();
         log.writeReport("log.txt");
     }
     
