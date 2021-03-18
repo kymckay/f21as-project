@@ -23,6 +23,8 @@ public class Server implements Runnable, Subject {
         // are in the queue
         while (!queue.getDone() || !queue.isEmpty()) {
             Order [] order = queue.getCustomerOrder();
+            setCurrentOrder(order);
+            notifyObservers();
         	try {
                 // Time to process order depends on number of items
                 Thread.sleep(10000l * order.length);
