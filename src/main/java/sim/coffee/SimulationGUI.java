@@ -3,7 +3,7 @@ package sim.coffee;
 import java.awt.BorderLayout;
 
 import java.awt.Dimension;
-
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -20,14 +20,16 @@ public class SimulationGUI extends JFrame implements Observer{
 	
 	private JTextArea queue1, queue2, priorityQueue;
 	private JPanel serverStaff, queueSection, controls;
-	private SharedQueue queue;
+	private SharedQueue customerQueue, kitchenQueue;
 	private int nrOfThreads;
 	
-	public SimulationGUI(SharedQueue queue,  int nrOfThreads) {
+	public SimulationGUI(SharedQueue customerQueue, SharedQueue kitchenQueue,  int nrOfThreads) {
 		
-		this.queue = queue;
+		this.customerQueue = customerQueue;
+		this.kitchenQueue = kitchenQueue;
 		this.nrOfThreads = nrOfThreads;
-		queue.registerObserver(this);
+		customerQueue.registerObserver(this);
+		kitchenQueue.registerObserver(this);
 		
 		setTitle("Coffee Shop Simulation");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +54,7 @@ public class SimulationGUI extends JFrame implements Observer{
 		
 		main.setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(main, BorderLayout.CENTER);
-		add(main, BorderLayout.WEST);
+		//add(main, BorderLayout.WEST);
 	}
 	
 	// sets up the queue with customers waiting to be served 
@@ -87,7 +89,7 @@ public class SimulationGUI extends JFrame implements Observer{
 		// in every iteration Server object is created which is then used to start a thread and create a ServerGUI
 		// ServerGUI is then added to the main serveStaff JPanel 
 		for (int i = 1; i <= nrOfThreads; i++) {
-			Server staff = new Server(queue);
+			Server staff = new Server(customerQueue, kitchenQueue);
 			Thread thread = new Thread(staff);
 			serverStaff.add(new ServerGUI(staff, i));
 			thread.start();
@@ -95,11 +97,17 @@ public class SimulationGUI extends JFrame implements Observer{
 		return serverStaff;
 	}
 	
-	// TODO: will have to set this up once KitchenStaff class is implemented
-	private JTextArea setupKitchen() {
-		JTextArea kitchenStaff = new JTextArea();
-		kitchenStaff.setText("This will show kitchen staff, probably similar to how serveing staff's displayed?");
-		return kitchenStaff;
+	// TODO: not working atm, crashes the application when run
+	private JPanel setupKitchen() {
+		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
+
+		Kitchen kitchen = new Kitchen(kitchenQueue);
+		//Thread kitchenThread = new Thread(kitchen);
+		
+		//kitchenSection.add(new KitchenGUI(kitchen));
+		//kitchenThread.start();
+		return kitchenSection;
+		
 	}
 	
 	// TODO: will set this up when the shared queue between servers and kitchen staff is implemented
@@ -107,7 +115,8 @@ public class SimulationGUI extends JFrame implements Observer{
 		queue2 = new JTextArea();
 		queue2.setEditable(false);
 		JScrollPane queue2Pane = new JScrollPane(queue2);
-		queue2.setText("This will have the kitchen queue");
+		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
+		queue2Pane.setBorder(border);
 		return queue2Pane;
 	}
 	
@@ -120,7 +129,10 @@ public class SimulationGUI extends JFrame implements Observer{
 	
 	// Observer method
 	public void update() {
-		StringBuilder customerQueue = queue.getQueue();
-		queue1.setText(customerQueue.toString());	
+		StringBuilder customerQueueCurrent = customerQueue.getQueue();
+		queue1.setText(customerQueueCurrent.toString());
+		
+		StringBuilder kitchenQueueCurrent = kitchenQueue.getQueue();
+		queue2.setText(kitchenQueueCurrent.toString());
 	}
 }
