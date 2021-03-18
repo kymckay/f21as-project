@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
-
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 public class SimulationGUI extends JFrame implements Observer{
 	
 	private JTextArea queue1, queue2;
-	private JPanel serverStaff;
+	private JPanel serverStaff, controls;
 	private SharedQueue queue;
 	private int nrOfThreads;
 	
@@ -38,6 +38,7 @@ public class SimulationGUI extends JFrame implements Observer{
 		setup();
 		pack();
 		setVisible(true);
+
 	}
 	
 	// sets the overall GUI layout
@@ -51,6 +52,7 @@ public class SimulationGUI extends JFrame implements Observer{
 		
 		main.setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(main, BorderLayout.CENTER);
+		add(main, BorderLayout.WEST);
 	}
 	
 	// sets up the queue with customers waiting to be served 
@@ -94,6 +96,12 @@ public class SimulationGUI extends JFrame implements Observer{
 		JScrollPane queue2Pane = new JScrollPane(queue2);
 		queue2.setText("This will have the kitchen queue");
 		return queue2Pane;
+	}
+	
+	private JPanel setupControlls() {
+		controls = new JPanel();
+		controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
+		return controls;
 	}
 	
 	// Observer method
