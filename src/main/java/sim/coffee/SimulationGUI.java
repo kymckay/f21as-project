@@ -102,21 +102,17 @@ public class SimulationGUI extends JFrame implements Observer{
 		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
 
 		Kitchen kitchen = new Kitchen(kitchenQueue);
-		//Thread kitchenThread = new Thread(kitchen);
+		kitchenSection.add(new KitchenGUI(kitchen));
+		Thread kitchenThread = new Thread(kitchen);
+		kitchenThread.start();
 		
-		//kitchenSection.add(new KitchenGUI(kitchen));
-		//kitchenThread.start();
 		return kitchenSection;
-		
 	}
 	
-	// TODO: will set this up when the shared queue between servers and kitchen staff is implemented
-	private JScrollPane setupQueue2() {
-		queue2 = new JTextArea();
-		queue2.setEditable(false);
-		JScrollPane queue2Pane = new JScrollPane(queue2);
-		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
-		queue2Pane.setBorder(border);
+	// ideally this section would be a JScrollPane but adding  KitchenQueueGUI object to JScrollPane 
+	// (or making  KitchenQueueGUI a JScrollPane) stops the queue section from updating/ or the GUI eventually just freezes 
+	private JTextArea setupQueue2() {
+		KitchenQueueGUI queue2Pane = new KitchenQueueGUI(kitchenQueue);
 		return queue2Pane;
 	}
 	
@@ -131,8 +127,5 @@ public class SimulationGUI extends JFrame implements Observer{
 	public void update() {
 		StringBuilder customerQueueCurrent = customerQueue.getQueue();
 		queue1.setText(customerQueueCurrent.toString());
-		
-		StringBuilder kitchenQueueCurrent = kitchenQueue.getQueue();
-		queue2.setText(kitchenQueueCurrent.toString());
 	}
 }
