@@ -24,7 +24,7 @@ public class Logger {
 	}
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public void add(Order[] o, OrderState state) {
+	public synchronized void add(Order[] o, OrderState state) {
 		LocalDateTime time = LocalDateTime.now();
 		log.append(String.format("%-35s", time));
 
