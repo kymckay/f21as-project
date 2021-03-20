@@ -6,12 +6,12 @@ public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
     private StringBuilder currentOrder;
     private LinkedList<Observer> observers;
-	private Logger log;
+	private Logger log = Logger.getInstance();;
 	
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
 		currentOrder = new StringBuilder();
-		observers = new LinkedList<>();
+		observers = new LinkedList<>(); 
 	}
 
 	@Override
