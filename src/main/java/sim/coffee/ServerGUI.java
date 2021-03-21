@@ -23,7 +23,21 @@ public class ServerGUI extends JTextArea implements Observer {
 	}
 	
 	public void update() {
-		StringBuilder order = server.getCurrentOrder();
-		setText(order.toString());
+		
+		Order[] order = server.getCurrentOrder();
+		
+		if (order == null) {
+			setText("");
+		} else {
+			StringBuilder currentOrder = new StringBuilder();
+			currentOrder.append("Customer being served: \n");
+			currentOrder.append(String.format("%10s", order[0].getCustomerID()) + "\n");
+			currentOrder.append("Ordered items: \n");
+			for (Order o : order) {
+				currentOrder.append(String.format("%10s", o.getItemId()) + "\n");
+			}
+		
+			setText(currentOrder.toString());
+		}
 	}	
 }

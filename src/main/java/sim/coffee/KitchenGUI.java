@@ -22,7 +22,20 @@ public class KitchenGUI extends JTextArea implements Observer {
 	
 	@Override
 	public void update() {
-		StringBuilder order = kitchen.getCurrentOrder();
-		setText(order.toString());
+		Order[] order = kitchen.getCurrentOrder();
+		
+		if (order == null) {
+			setText("");
+		} else {
+			StringBuilder currentOrder = new StringBuilder();
+			currentOrder.replace(0, currentOrder.length(), "");
+			currentOrder.append("Customer being served: \n");
+			currentOrder.append(String.format("%10s", order[0].getCustomerID()) + "\n");
+    		currentOrder.append("Ordered items: \n");
+    		for (Order o : order) {
+    			currentOrder.append(String.format("%10s", o.getItemId()) + "\n");
+    		}
+    		setText(currentOrder.toString());
+		}
 	}
 }
