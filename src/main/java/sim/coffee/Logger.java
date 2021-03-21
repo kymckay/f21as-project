@@ -10,7 +10,10 @@ public class Logger {
 	public enum OrderState {
 		ENTER,
 		EXIT,
-		PROCESSED;
+		PROCESSED,
+		ENTERKITCHEN,
+		EXITKITCHEN,
+		SERVED;
 	}
 
 	private static Logger instance;
@@ -21,7 +24,7 @@ public class Logger {
 	}
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public void add(Order[] o, OrderState state) {
+	public synchronized void add(Order[] o, OrderState state) {
 		LocalDateTime time = LocalDateTime.now();
 		log.append(String.format("%-35s", time));
 
@@ -34,6 +37,18 @@ public class Logger {
 			break;
 		case PROCESSED:
 			log.append(String.format("%-15s", "Processed"));
+			break;
+		
+		case ENTERKITCHEN:
+			log.append(String.format("%-15s", "Enter kitchen"));
+			break;
+		
+		case EXITKITCHEN:
+			log.append(String.format("%-15s", "Exit kitchen"));
+			break;
+		
+		case SERVED:
+			log.append(String.format("%-15s", "Served"));
 			break;
 		}
 
