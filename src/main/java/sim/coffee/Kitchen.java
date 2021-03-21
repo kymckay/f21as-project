@@ -4,13 +4,12 @@ import java.util.LinkedList;
 
 public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
-    private StringBuilder currentOrder;
+    private Order[] currentOrder;
     private LinkedList<Observer> observers;
 	private Logger log = Logger.getInstance();;
 	
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
-		currentOrder = new StringBuilder();
 		observers = new LinkedList<>(); 
 	}
 
@@ -31,23 +30,17 @@ public class Kitchen implements Runnable, Subject {
             }
         	log.add(order, Logger.OrderState.SERVED);
         }
-        currentOrder.replace(0, currentOrder.length(), "");
+        currentOrder = null;
         notifyObservers();
         log.writeReport("log.txt");
     }
 		
     // adds details of the order being processed by the Kitchen
     public void setCurrentOrder(Order[] o) {
-    	currentOrder.replace(0, currentOrder.length(), "");
-    	currentOrder.append("Customer being served: \n");
-    	currentOrder.append(String.format("%10s", o[0].getCustomerID()) + "\n");
-    	currentOrder.append("Ordered items: \n");
-    	for (Order order : o) {
-    		currentOrder.append(String.format("%10s", order.getItemId()) + "\n");
-    	}
+    	currentOrder = o;
     }
     
-    public StringBuilder getCurrentOrder() {
+    public Order[] getCurrentOrder() {
     	return currentOrder;
     }
 	
