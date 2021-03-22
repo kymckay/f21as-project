@@ -6,7 +6,7 @@ public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
     private Order[] currentOrder;
     private LinkedList<Observer> observers;
-	private Logger log = Logger.getInstance();;
+    private Logger log = Logger.getInstance();
 	
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;

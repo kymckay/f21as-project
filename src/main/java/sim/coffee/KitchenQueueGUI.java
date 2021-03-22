@@ -1,5 +1,7 @@
 package sim.coffee;
 
+import java.util.LinkedList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -23,8 +25,18 @@ public class KitchenQueueGUI extends JTextArea implements Observer{
 
 	@Override
 	public void update() {
-		StringBuilder kitchenQueueCurrent = kitchenQueue.getQueue();
-		setText(kitchenQueueCurrent.toString());		
+		LinkedList<Order[]> currentQueue = kitchenQueue.getQueue();
+		
+		StringBuilder queueLog = new StringBuilder();
+ 		queueLog.append("Customers in the queue: ");
+ 		queueLog.append(currentQueue.size() + "\n");
+
+ 		for (Order[] o : currentQueue) {
+ 			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
+ 			queueLog.append(o.length);
+ 			queueLog.append(" Item(s) \n");
+ 		}
+		setText(queueLog.toString());		
 	}
 
 }

@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -125,7 +126,18 @@ public class SimulationGUI extends JFrame implements Observer{
 	
 	// Observer method
 	public void update() {
-		StringBuilder customerQueueCurrent = customerQueue.getQueue();
-		queue1.setText(customerQueueCurrent.toString());
+		LinkedList<Order[]> currentQueue = customerQueue.getQueue();
+		
+		StringBuilder queueLog = new StringBuilder();
+ 		queueLog.append("Customers in the queue: ");
+ 		queueLog.append(currentQueue.size() + "\n");
+
+ 		for (Order[] o : currentQueue) {
+ 			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
+ 			queueLog.append(o.length);
+ 			queueLog.append(" Item(s) \n");
+ 		}
+		
+		queue1.setText(queueLog.toString());
 	}
 }
