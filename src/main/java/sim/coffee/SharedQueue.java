@@ -74,18 +74,8 @@ public class SharedQueue implements Subject {
 	}
 
 	
-	public synchronized StringBuilder getQueue() {
-		StringBuilder queueLog = new StringBuilder();
- 		queueLog.append("Customers in the queue: ");
- 		queueLog.append(queue.size() + "\n");
-
- 		for (Order[] o : queue) {
- 			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
- 			queueLog.append(o.length);
- 			queueLog.append(" Item(s) \n");
- 		}
- 		return queueLog;
-
+	public synchronized LinkedList<Order[]> getQueue() {
+ 		return queue;
 	}
 
 
