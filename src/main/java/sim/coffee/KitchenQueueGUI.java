@@ -17,7 +17,7 @@ public class KitchenQueueGUI extends JPanel implements Observer{
 	public KitchenQueueGUI(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
 		kitchenQueue.registerObserver(this);
-		setLayout(new GridLayout(1,1));
+		setLayout(new GridLayout(1,1)); // ensures JPanel takes up all available space in the GUI
 		setup();	
 	}
 	
