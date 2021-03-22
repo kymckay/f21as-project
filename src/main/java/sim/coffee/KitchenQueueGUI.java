@@ -19,6 +19,7 @@ public class KitchenQueueGUI extends JTextArea implements Observer{
 	
 	public void setup() {
 		setEditable(false);
+		setText("Customers in the queue: 0");
 		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
 		setBorder(border);
 	}

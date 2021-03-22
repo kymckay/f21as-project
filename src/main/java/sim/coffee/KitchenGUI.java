@@ -16,6 +16,7 @@ public class KitchenGUI extends JTextArea implements Observer {
 	
 	public void setup() {
 		setEditable(false);
+		setText("No orders being prepared.");
 		Border border = BorderFactory.createTitledBorder("Kitchen");
 		setBorder(border);
 	}
