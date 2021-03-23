@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import sim.coffee.Menu;
+import sim.coffee.MenuItem;
 
 public class OrderBasket extends OrderList {
 
