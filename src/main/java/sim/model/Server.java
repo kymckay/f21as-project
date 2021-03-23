@@ -11,7 +11,6 @@ public class Server implements Runnable, Subject {
     private LinkedList<Observer> observers;
     private Logger log;
 
-
     public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
@@ -38,6 +37,8 @@ public class Server implements Runnable, Subject {
         	log.add(order, Logger.OrderState.PROCESSED);
         	kitchenQueue.addOrder(order);
         }
+
+        // Finish service
         currentOrder = null;
         notifyObservers();
 

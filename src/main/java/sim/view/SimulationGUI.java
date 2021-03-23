@@ -17,24 +17,22 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import sim.app.Order;
-import sim.model.Kitchen;
+import sim.model.CoffeeShop;
 import sim.model.Server;
-import sim.model.SharedQueue;
 
 public class SimulationGUI extends JFrame implements Observer {
 
-	private JTextArea queue1, queue2, priorityQueue;
-	private JPanel serverStaff, queueSection, controls;
-	private SharedQueue customerQueue, kitchenQueue;
-	private int nrOfThreads;
+	private CoffeeShop coffeeShop;
 
-	public SimulationGUI(SharedQueue customerQueue, SharedQueue kitchenQueue,  int nrOfThreads) {
+	private JTextArea queue1;
+	private JTextArea queue2;
+	private JTextArea priorityQueue;
 
-		this.customerQueue = customerQueue;
-		this.kitchenQueue = kitchenQueue;
-		this.nrOfThreads = nrOfThreads;
-		customerQueue.registerObserver(this);
-		kitchenQueue.registerObserver(this);
+	public SimulationGUI(CoffeeShop coffeeShop) {
+		this.coffeeShop = coffeeShop;
+
+		coffeeShop.getCustomers().registerObserver(this);
+		coffeeShop.getOrders().registerObserver(this);
 
 		setTitle("Coffee Shop Simulation");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -59,13 +57,11 @@ public class SimulationGUI extends JFrame implements Observer {
 
 		main.setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(main, BorderLayout.CENTER);
-		//add(main, BorderLayout.WEST);
 	}
 
 	// sets up the queue with customers waiting to be served
-	private JPanel queueSection()
-	{
-		queueSection = new JPanel(new GridLayout(1, 2));
+	private JPanel queueSection() {
+		JPanel queueSection = new JPanel(new GridLayout(1, 2));
 		queue1 = new JTextArea();
 		queue1.setEditable(false);
 		Border qBorder1 = BorderFactory.createTitledBorder("Queue");
@@ -88,45 +84,38 @@ public class SimulationGUI extends JFrame implements Observer {
 	// TODO: will need to adjust GUI width if more than 3 servers are added
 	// probably should set a limit to the nr of threads that can be initiated
 	private JPanel setupServer() {
+		JPanel serverStaff = new JPanel(new GridLayout(1, 0));
 
-		serverStaff = new JPanel(new GridLayout(1, nrOfThreads));
-		// the number of servers depends on the number of threads specified upon instantiating the GUI
-		// in every iteration Server object is created which is then used to start a thread and create a ServerGUI
-		// ServerGUI is then added to the main serveStaff JPanel
-		for (int i = 1; i <= nrOfThreads; i++) {
-			Server staff = new Server(customerQueue, kitchenQueue);
-			Thread thread = new Thread(staff);
-			serverStaff.add(new ServerGUI(staff, i));
-			thread.start();
+		// Populate server section with a view for each server in the shop
+		for (Server s : coffeeShop.getServers()) {
+			serverStaff.add(new ServerGUI(s));
 		}
+
 		return serverStaff;
 	}
 
 	// TODO: not working atm, crashes the application when run
 	private JPanel setupKitchen() {
 		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
-		Kitchen kitchen = new Kitchen(kitchenQueue);
-		kitchenSection.add(new KitchenGUI(kitchen));
-		Thread kitchenThread = new Thread(kitchen);
-		kitchenThread.start();
+		kitchenSection.add(new KitchenGUI(coffeeShop.getKitchen()));
 		return kitchenSection;
 	}
 
 	// sets up kitchen queue
 	private JPanel setupQueue2() {
-		return new KitchenQueueGUI(kitchenQueue);
+		return new KitchenQueueGUI(coffeeShop.getOrders());
 	}
 
 	// this will contain all the interactive elements (e.g. buttons etc)
 	private JPanel setupControlls() {
-		controls = new JPanel();
+		JPanel controls = new JPanel();
 		controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
 		return controls;
 	}
 
 	// Observer method
 	public void update() {
-		LinkedList<Order[]> currentQueue = customerQueue.getQueue();
+		LinkedList<Order[]> currentQueue = coffeeShop.getCustomers().getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append("Customers in the queue: ");
