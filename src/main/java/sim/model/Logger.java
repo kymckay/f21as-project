@@ -1,8 +1,10 @@
-package sim.coffee;
+package sim.model;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+
+import sim.app.Order;
 
 public class Logger {
 
@@ -38,15 +40,15 @@ public class Logger {
 		case PROCESSED:
 			log.append(String.format("%-15s", "Processed"));
 			break;
-		
+
 		case ENTERKITCHEN:
 			log.append(String.format("%-15s", "Enter kitchen"));
 			break;
-		
+
 		case EXITKITCHEN:
 			log.append(String.format("%-15s", "Exit kitchen"));
 			break;
-		
+
 		case SERVED:
 			log.append(String.format("%-15s", "Served"));
 			break;

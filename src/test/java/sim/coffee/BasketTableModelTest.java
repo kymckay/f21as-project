@@ -12,6 +12,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import sim.app.Order;
+import sim.app.OrderBasket;
+import sim.app.OrderItem;
+import sim.app.OrderList;
+
 /**
  * Unit test for MenuTableModel.
  */

@@ -13,6 +13,11 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import sim.app.Order;
+import sim.app.OrderBasket;
+import sim.app.OrderItem;
+import sim.app.OrderList;
+
 public class OrderBasketTest {
     static OrderBasket testBasket;
     static Order testOrder;

@@ -6,6 +6,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import sim.coffee.Beverage;
+import sim.coffee.Colour;
+import sim.coffee.DietaryClass;
+import sim.coffee.Food;
+import sim.coffee.IllegalIDException;
+import sim.coffee.Label;
+import sim.coffee.Merchandise;
+import sim.coffee.Milk;
+import sim.coffee.Size;
+
 /**
  * JUnit test for IllegalIDException
  */

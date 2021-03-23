@@ -1,6 +1,9 @@
-package sim.coffee;
+package sim.model;
 
 import java.util.LinkedList;
+
+import sim.app.Order;
+import sim.view.Observer;
 
 public class SharedQueue implements Subject {
 
@@ -10,10 +13,10 @@ public class SharedQueue implements Subject {
 	private boolean done = false;
 	private Logger log = Logger.getInstance();
 	private QueueType queueType;
-	
+
 	public SharedQueue (QueueType queueType) {
 		this.queueType = queueType;
-		
+
 	}
 
 	// returns an array of order at the top of the queue
@@ -27,7 +30,7 @@ public class SharedQueue implements Subject {
 		}
 
 		Order[] customerOrder = queue.getFirst();
-		
+
 		switch (queueType) {
 		case CUSTOMER:
 			log.add(customerOrder, Logger.OrderState.EXIT);
@@ -36,7 +39,7 @@ public class SharedQueue implements Subject {
 			log.add(customerOrder, Logger.OrderState.EXITKITCHEN);
 			break;
 		}
-		
+
 		queue.removeFirst();
 		notifyObservers();
 
@@ -59,7 +62,7 @@ public class SharedQueue implements Subject {
 			log.add(o, Logger.OrderState.ENTERKITCHEN);
 			break;
 		}
-		 
+
 		empty = false;
 		notifyAll();
 		notifyObservers();
@@ -73,7 +76,7 @@ public class SharedQueue implements Subject {
 		done = true;
 	}
 
-	
+
 	public synchronized LinkedList<Order[]> getQueue() {
  		return queue;
 	}
@@ -87,20 +90,20 @@ public class SharedQueue implements Subject {
 	// adds observers to a list
 	public void registerObserver(Observer o) {
 		observers.add(o);
-		
+
 	}
 
-	// removes observers from a list 
+	// removes observers from a list
 	public void removeObserver(Observer o) {
 		observers.remove(o);
-		
+
 	}
 
-	// notify all observers in the observers list 
+	// notify all observers in the observers list
 	public void notifyObservers() {
 		for (Observer o : observers) {
 			o.update();
 		}
-		
+
 	}
 }

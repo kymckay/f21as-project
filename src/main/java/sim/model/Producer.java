@@ -1,4 +1,4 @@
-package sim.coffee;
+package sim.model;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
+import sim.app.Order;
+import sim.app.OrderItem;
+
 /**
  * This class simulates the outside world, producing customers as they arrive
  * and join the queue for staff to serve (in the form of Order groupings)
@@ -19,15 +22,13 @@ import java.util.LinkedList;
  */
 public class Producer implements Runnable {
     File in; // orders come from here
-    Menu menu; // used to produce orders
     SharedQueue out; // orders go here
 
     String frontOfLine; // Customer ID currently at the front of the line
     LinkedList<Order> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
-    public Producer(File in, Menu menu, SharedQueue out) {
+    public Producer(File in, SharedQueue out) {
         this.in = in;
-        this.menu = menu;
         this.out = out;
     }
 

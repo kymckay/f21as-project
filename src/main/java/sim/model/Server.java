@@ -1,6 +1,9 @@
-package sim.coffee;
+package sim.model;
 
 import java.util.LinkedList;
+
+import sim.app.Order;
+import sim.view.Observer;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue;
@@ -12,7 +15,7 @@ public class Server implements Runnable, Subject {
     public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
-        
+
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
     }
@@ -37,16 +40,16 @@ public class Server implements Runnable, Subject {
         }
         currentOrder = null;
         notifyObservers();
-        
+
         kitchenQueue.setDone();
         log.writeReport("log.txt");
     }
-    
+
     // adds details of the order being processed by the Server
     public void setCurrentOrder(Order[] o) {
     	currentOrder = o;
     }
-    
+
     public Order[] getCurrentOrder() {
     	return currentOrder;
     }
@@ -56,16 +59,16 @@ public class Server implements Runnable, Subject {
 	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
-	
-	// removes observers from a list 
+
+	// removes observers from a list
 	public void removeObserver(Observer o) {
-		observers.remove(o);	
+		observers.remove(o);
 	}
 
 	// notifies all observers in the observers list
 	public void notifyObservers() {
 		for (Observer o : observers) {
 			o.update();
-		}	
+		}
 	}
 }

@@ -1,4 +1,4 @@
-package sim.coffee;
+package sim.view;
 
 import java.awt.GridLayout;
 import java.util.LinkedList;
@@ -9,18 +9,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
+import sim.app.Order;
+import sim.model.SharedQueue;
+
 public class KitchenQueueGUI extends JPanel implements Observer{
-	
+
 	SharedQueue kitchenQueue;
 	JTextArea queue;
-	
+
 	public KitchenQueueGUI(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
 		kitchenQueue.registerObserver(this);
 		setLayout(new GridLayout(1,1)); // ensures JPanel takes up all available space in the GUI
-		setup();	
+		setup();
 	}
-	
+
 	public void setup() {
 		queue = new JTextArea();
 		queue.setEditable(false);
@@ -34,7 +37,7 @@ public class KitchenQueueGUI extends JPanel implements Observer{
 	@Override
 	public void update() {
 		LinkedList<Order[]> currentQueue = kitchenQueue.getQueue();
-		
+
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append("Customers in the queue: ");
  		queueLog.append(currentQueue.size() + "\n");
@@ -44,7 +47,7 @@ public class KitchenQueueGUI extends JPanel implements Observer{
  			queueLog.append(o.length);
  			queueLog.append(" Item(s) \n");
  		}
-		queue.setText(queueLog.toString());		
+		queue.setText(queueLog.toString());
 	}
 
 }
