@@ -7,9 +7,11 @@ import sim.view.Observer;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue;
-    private Order[] currentOrder;
+    private Order[] currentOrder = null;
     private LinkedList<Observer> observers;
     private Logger log;
+    private Long speed;
+    private static final Long BASE = 10000l;
 
     public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
         this.customerQueue = customerQueue;
@@ -17,6 +19,7 @@ public class Server implements Runnable, Subject {
 
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
+        speed = BASE;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class Server implements Runnable, Subject {
             notifyObservers();
         	try {
                 // Time to process order depends on number of items
-                Thread.sleep(10000l * order.length);
+                Thread.sleep(speed * order.length);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -43,7 +46,6 @@ public class Server implements Runnable, Subject {
         notifyObservers();
 
         kitchenQueue.setDone();
-        log.writeReport("log.txt");
     }
 
     // adds details of the order being processed by the Server
@@ -53,6 +55,14 @@ public class Server implements Runnable, Subject {
 
     public Order[] getCurrentOrder() {
     	return currentOrder;
+    }
+    
+    public void setSpeed(Long l) {
+    	speed = l;
+    }
+    
+    public Long getBaseSpeed() {
+    	return BASE;
     }
 
     // Subject methods
