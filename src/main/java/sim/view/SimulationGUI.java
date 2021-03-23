@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -37,7 +38,7 @@ public class SimulationGUI extends JFrame implements Observer {
 		setTitle("Coffee Shop Simulation");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		setMinimumSize(new Dimension(600, 700));
+		setMinimumSize(new Dimension(600, 800));
 		setLocationRelativeTo(null);
 
 		setup();
@@ -85,6 +86,8 @@ public class SimulationGUI extends JFrame implements Observer {
 	// probably should set a limit to the nr of threads that can be initiated
 	private JPanel setupServer() {
 		JPanel serverStaff = new JPanel(new GridLayout(1, 0));
+		//serverStaff.add(new JLabel("Change the serving speed for each server: "));
+		
 
 		// Populate server section with a view for each server in the shop
 		for (Server s : coffeeShop.getServers()) {
