@@ -8,12 +8,15 @@ import sim.app.Order;
 import sim.model.Server;
 
 public class ServerGUI extends JTextArea implements Observer {
-	private Server server;
-	private int serverNr;
+	// Static variable tracks number of servers that exist
+	private static int count = 0;
 
-	public ServerGUI(Server server, int serverNr) {
+	private Server server;
+	private int number;
+
+	public ServerGUI(Server server) {
 		this.server = server;
-		this.serverNr = serverNr;
+		this.number = ++count;
 		server.registerObserver(this);
 
 		setup();
@@ -21,7 +24,7 @@ public class ServerGUI extends JTextArea implements Observer {
 
 	public void setup() {
 		setEditable(false);
-		Border border1 = BorderFactory.createTitledBorder("Server " + serverNr);
+		Border border1 = BorderFactory.createTitledBorder("Server " + number);
 		setBorder(border1);
 	}
 
