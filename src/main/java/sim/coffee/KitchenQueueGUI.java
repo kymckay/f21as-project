@@ -1,26 +1,34 @@
 package sim.coffee;
 
+import java.awt.GridLayout;
 import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
-public class KitchenQueueGUI extends JTextArea implements Observer{
+public class KitchenQueueGUI extends JPanel implements Observer{
 	
 	SharedQueue kitchenQueue;
+	JTextArea queue;
 	
 	public KitchenQueueGUI(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
 		kitchenQueue.registerObserver(this);
+		setLayout(new GridLayout(1,1)); // ensures JPanel takes up all available space in the GUI
 		setup();	
 	}
 	
 	public void setup() {
-		setEditable(false);
+		queue = new JTextArea();
+		queue.setEditable(false);
+		queue.setText("Customers in the queue: 0");
 		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
-		setBorder(border);
+		JScrollPane queuePane = new JScrollPane(queue);
+		queuePane.setBorder(border);
+		add(queuePane);
 	}
 
 	@Override
@@ -36,7 +44,7 @@ public class KitchenQueueGUI extends JTextArea implements Observer{
  			queueLog.append(o.length);
  			queueLog.append(" Item(s) \n");
  		}
-		setText(queueLog.toString());		
+		queue.setText(queueLog.toString());		
 	}
 
 }

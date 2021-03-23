@@ -101,18 +101,15 @@ public class SimulationGUI extends JFrame implements Observer{
 	// TODO: not working atm, crashes the application when run
 	private JPanel setupKitchen() {
 		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
-
 		Kitchen kitchen = new Kitchen(kitchenQueue);
 		kitchenSection.add(new KitchenGUI(kitchen));
 		Thread kitchenThread = new Thread(kitchen);
 		kitchenThread.start();
-		
 		return kitchenSection;
 	}
 	
-	// ideally this section would be a JScrollPane but adding  KitchenQueueGUI object to JScrollPane 
-	// (or making  KitchenQueueGUI a JScrollPane) stops the queue section from updating/ or the GUI eventually just freezes 
-	private JTextArea setupQueue2() {
+	// sets up kitchen queue
+	private JPanel setupQueue2() {
 		KitchenQueueGUI queue2Pane = new KitchenQueueGUI(kitchenQueue);
 		return queue2Pane;
 	}
