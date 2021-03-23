@@ -1,4 +1,4 @@
-package sim.coffee;
+package sim.app;
 
 import java.math.BigDecimal;
 

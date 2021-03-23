@@ -1,7 +1,9 @@
-package sim.coffee;
+package sim.app;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import sim.view.*;
+import sim.model.*;
 
 public class Manager {
     public static void main(String[] args) {
@@ -12,20 +14,14 @@ public class Manager {
         // If input menu or orders file isn't found program cannot continue
         try {
             // Producer inserts input file of orders into shared queue for staff
-            Thread producer = new Thread(new Producer(
-                new File("data/orders.csv"),
-                new Menu("data/menu.csv"),
-                orders
-            ));
+            Thread producer = new Thread(new Producer(new File("data/orders.csv"), orders));
 
             producer.start();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
         }
-        
-        SimulationGUI gui = new SimulationGUI(orders, kitchen, 3); 
-        
 
+        new SimulationGUI(orders, kitchen, 3);
     }
 }

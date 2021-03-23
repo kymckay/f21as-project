@@ -1,4 +1,4 @@
-package sim.coffee;
+package sim.app;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,12 +11,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import sim.coffee.Menu;
+
 public class OrderBasket extends OrderList {
 
     private OrderList orderList;
     private Menu menu;
 
-    OrderBasket(Menu m, OrderList o, List<Order> list) {
+    public OrderBasket(Menu m, OrderList o, List<Order> list) {
     	super(list);
         menu = m;
         orderList = o;

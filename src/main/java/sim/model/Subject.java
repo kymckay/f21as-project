@@ -1,4 +1,6 @@
-package sim.coffee;
+package sim.model;
+
+import sim.view.Observer;
 
 // Reference: PatternsExampleCode
 public interface Subject {

@@ -1,30 +1,33 @@
-package sim.coffee;
+package sim.view;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
+import sim.app.Order;
+import sim.model.Kitchen;
+
 public class KitchenGUI extends JTextArea implements Observer {
 	private Kitchen kitchen;
-	
+
 	public KitchenGUI(Kitchen kitchen) {
 		this.kitchen = kitchen;
 		kitchen.registerObserver(this);
-		
+
 		setup();
 	}
-	
+
 	public void setup() {
 		setEditable(false);
 		setText("No orders being prepared.");
 		Border border = BorderFactory.createTitledBorder("Kitchen");
 		setBorder(border);
 	}
-	
+
 	@Override
 	public void update() {
 		Order[] order = kitchen.getCurrentOrder();
-		
+
 		if (order == null) {
 			setText("");
 		} else {

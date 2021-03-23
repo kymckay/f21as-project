@@ -1,4 +1,4 @@
-package sim.coffee;
+package sim.app;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ public class OrderList {
 
 	List<Order> orders;
 
-	OrderList(List<Order> list) { // constructor accepts both LinkedList and ArrayList instances
+	public OrderList(List<Order> list) { // constructor accepts both LinkedList and ArrayList instances
 		orders = list;
 	}
 

@@ -1,16 +1,19 @@
-package sim.coffee;
+package sim.model;
 
 import java.util.LinkedList;
+
+import sim.app.Order;
+import sim.view.Observer;
 
 public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
     private Order[] currentOrder;
     private LinkedList<Observer> observers;
     private Logger log = Logger.getInstance();
-	
+
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
-		observers = new LinkedList<>(); 
+		observers = new LinkedList<>();
 	}
 
 	@Override
@@ -34,30 +37,30 @@ public class Kitchen implements Runnable, Subject {
         notifyObservers();
         log.writeReport("log.txt");
     }
-		
+
     // adds details of the order being processed by the Kitchen
     public void setCurrentOrder(Order[] o) {
     	currentOrder = o;
     }
-    
+
     public Order[] getCurrentOrder() {
     	return currentOrder;
     }
-	
+
     @Override
 	public void registerObserver(Observer o) {
-		observers.add(o);	
+		observers.add(o);
 	}
 
 	@Override
 	public void removeObserver(Observer o) {
-		observers.remove(o);	
+		observers.remove(o);
 	}
 
 	@Override
 	public void notifyObservers() {
 		for (Observer o : observers) {
 			o.update();
-		}	
+		}
 	}
 }

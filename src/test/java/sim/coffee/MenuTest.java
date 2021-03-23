@@ -8,6 +8,12 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
+import sim.coffee.DietaryClass;
+import sim.coffee.Food;
+import sim.coffee.IllegalIDException;
+import sim.coffee.Menu;
+import sim.coffee.MenuItem;
+
 public class MenuTest {
 
 @Test

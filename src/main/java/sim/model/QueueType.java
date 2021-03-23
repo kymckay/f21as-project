@@ -1,4 +1,4 @@
-package sim.coffee;
+package sim.model;
 
 public enum QueueType {
 	CUSTOMER,

@@ -32,6 +32,9 @@ import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 
+import sim.app.Order;
+import sim.app.OrderItem;
+
 public class CustomerGUI {
     // Strings shown on buttons also correspond to control panel cards
     private static final String LABEL_F = "Food";

@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 import org.junit.Test;
 
+import sim.app.Order;
+import sim.app.OrderItem;
+
 public class OrderTest {
     /**
      * Test to make sure that getDate() only date without time.
