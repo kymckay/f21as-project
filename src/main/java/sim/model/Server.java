@@ -11,6 +11,9 @@ public class Server implements Runnable, Subject {
     private LinkedList<Observer> observers;
     private Logger log;
 
+    // Set once server is finished serving
+    private boolean done;
+
     public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
@@ -39,11 +42,9 @@ public class Server implements Runnable, Subject {
         }
 
         // Finish service
+        done = true;
         currentOrder = null;
         notifyObservers();
-
-        kitchenQueue.setDone();
-        log.writeReport("log.txt");
     }
 
     // adds details of the order being processed by the Server
@@ -72,4 +73,8 @@ public class Server implements Runnable, Subject {
 			o.update();
 		}
 	}
+
+    public boolean isDone() {
+        return done;
+    }
 }

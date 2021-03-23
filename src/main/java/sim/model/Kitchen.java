@@ -11,6 +11,9 @@ public class Kitchen implements Runnable, Subject {
     private LinkedList<Observer> observers;
     private Logger log = Logger.getInstance();
 
+    // Set once server is finished serving
+    private boolean done;
+
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
 		observers = new LinkedList<>();
@@ -33,9 +36,11 @@ public class Kitchen implements Runnable, Subject {
             }
         	log.add(order, Logger.OrderState.SERVED);
         }
+
+        // Finish service
+        done = true;
         currentOrder = null;
         notifyObservers();
-        log.writeReport("log.txt");
     }
 
     // adds details of the order being processed by the Kitchen
@@ -63,4 +68,8 @@ public class Kitchen implements Runnable, Subject {
 			o.update();
 		}
 	}
+
+    public boolean isDone() {
+        return done;
+    }
 }
