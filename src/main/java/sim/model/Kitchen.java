@@ -11,6 +11,9 @@ public class Kitchen implements Runnable, Subject {
     private LinkedList<Observer> observers;
     private Logger log = Logger.getInstance();
 
+    // Completed orders will be stored for output report later
+    private LinkedList<Order[]> completed = new LinkedList<>();
+
     // Set once server is finished serving
     private boolean done;
 
@@ -25,7 +28,7 @@ public class Kitchen implements Runnable, Subject {
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
         while (!kitchenQueue.getDone() || !kitchenQueue.isEmpty()) {
-            Order [] order = kitchenQueue.getCustomerOrder();
+            Order[] order = kitchenQueue.getCustomerOrder();
             setCurrentOrder(order);
             notifyObservers();
         	try {
@@ -34,6 +37,9 @@ public class Kitchen implements Runnable, Subject {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+
+            // Log order as completed
+            completed.add(order);
         	log.add(order, Logger.OrderState.SERVED);
         }
 
