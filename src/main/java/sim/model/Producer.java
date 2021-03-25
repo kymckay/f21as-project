@@ -23,6 +23,7 @@ import sim.app.OrderItem;
 public class Producer implements Runnable {
     File in; // orders come from here
     SharedQueue out; // orders go here
+    SharedQueue priorityOut;
 
     String frontOfLine; // Customer ID currently at the front of the line
     LinkedList<Order> basket = new LinkedList<>(); // Contains orders for customer at front of line
