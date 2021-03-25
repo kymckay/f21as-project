@@ -28,30 +28,25 @@ public class Kitchen implements Runnable, Subject {
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
         while (!kitchenQueue.getDone() || !kitchenQueue.isEmpty()) {
-            Order[] order = kitchenQueue.getCustomerOrder();
-            setCurrentOrder(order);
+            currentOrder = kitchenQueue.getCustomerOrder();
             notifyObservers();
+
         	try {
                 // Time to process order depends on number of items
-                Thread.sleep(5000l * order.length);
+                Thread.sleep(5000l * currentOrder.length);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
             // Log order as completed
-            completed.add(order);
-        	log.add(order, Logger.OrderState.SERVED);
+            completed.add(currentOrder);
+        	log.add(currentOrder, Logger.OrderState.SERVED);
         }
 
         // Finish service
         done = true;
         currentOrder = null;
         notifyObservers();
-    }
-
-    // adds details of the order being processed by the Kitchen
-    public void setCurrentOrder(Order[] o) {
-    	currentOrder = o;
     }
 
     public Order[] getCurrentOrder() {
