@@ -11,6 +11,7 @@ public class CoffeeShop implements Subject {
     // Staff then populate the kitchen queue
     private SharedQueue customers = new SharedQueue(QueueType.CUSTOMER);
     private SharedQueue orders = new SharedQueue(QueueType.KITCHEN);
+    private SharedQueue priorityOrders = new SharedQueue(QueueType.PRIORITY);
 
     // List of registered observers for observer/subject pattern
     private LinkedList<Observer> observers = new LinkedList<>();
@@ -28,7 +29,7 @@ public class CoffeeShop implements Subject {
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < numStaff; i++) {
             // Track the staff members
-            Server staff = new Server(customers, orders);
+            Server staff = new Server(customers, orders, priorityOrders);
             servers.add(staff);
 
             // Start service
