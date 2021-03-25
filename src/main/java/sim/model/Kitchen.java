@@ -1,6 +1,7 @@
 package sim.model;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import sim.app.Order;
 import sim.view.Observer;
@@ -8,7 +9,8 @@ import sim.view.Observer;
 public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
     private Order[] currentOrder;
-    private LinkedList<Observer> observers;
+
+    private LinkedList<Observer> observers = new LinkedList<>();
     private Logger log = Logger.getInstance();
 
     // Completed orders will be stored for output report later
@@ -19,7 +21,6 @@ public class Kitchen implements Runnable, Subject {
 
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
-		observers = new LinkedList<>();
 	}
 
 	@Override
@@ -51,6 +52,10 @@ public class Kitchen implements Runnable, Subject {
 
     public Order[] getCurrentOrder() {
     	return currentOrder;
+    }
+
+    public List<Order[]> getCompletedOrders() {
+        return completed;
     }
 
     @Override
