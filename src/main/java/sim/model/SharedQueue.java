@@ -64,6 +64,8 @@ public class SharedQueue implements Subject {
 		case KITCHEN:
 			log.add(o, Logger.OrderState.ENTERKITCHEN);
 			break;
+		default:
+			log.add(o, Logger.OrderState.ENTER);
 		}
 
 		empty = false;
@@ -93,13 +95,11 @@ public class SharedQueue implements Subject {
 	// adds observers to a list
 	public void registerObserver(Observer o) {
 		observers.add(o);
-
 	}
 
 	// removes observers from a list
 	public void removeObserver(Observer o) {
 		observers.remove(o);
-
 	}
 
 	// notify all observers in the observers list
@@ -107,6 +107,5 @@ public class SharedQueue implements Subject {
 		for (Observer o : observers) {
 			o.update();
 		}
-
 	}
 }
