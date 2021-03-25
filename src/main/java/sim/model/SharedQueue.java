@@ -38,6 +38,9 @@ public class SharedQueue implements Subject {
 		case KITCHEN:
 			log.add(customerOrder, Logger.OrderState.EXITKITCHEN);
 			break;
+		default:
+			log.add(customerOrder, Logger.OrderState.EXIT);
+			break;
 		}
 
 		queue.removeFirst();
