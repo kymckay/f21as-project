@@ -6,36 +6,52 @@ import sim.app.Order;
 import sim.view.Observer;
 
 public class Server implements Runnable, Subject {
-    private SharedQueue customerQueue, kitchenQueue;
+    private SharedQueue customerQueue, kitchenQueue, priorityQueue;
     private Order[] currentOrder;
     private LinkedList<Observer> observers;
     private Logger log;
 
-    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
+    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue, SharedQueue priorityQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
+        this.priorityQueue = priorityQueue;
 
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
     }
 
+    public void threadAction(Order [] o) {
+        setCurrentOrder(o);
+        notifyObservers();
+        try {
+            // Time to process order depends on number of items
+            Thread.sleep(10000l * o.length);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        log.add(o, Logger.OrderState.PROCESSED);
+        kitchenQueue.addOrder(o);
+    }
+
     @Override
     public void run() {
 
+        // Process queue from priorityQueue over customerQueue if there are still orders in it. 
         // Service continues as long as customers are still due to arrive or customers
-        // are in the queue
-        while (!customerQueue.getDone() || !customerQueue.isEmpty()) {
-            Order [] order = customerQueue.getCustomerOrder();
-            setCurrentOrder(order);
-            notifyObservers();
-        	try {
-                // Time to process order depends on number of items
-                Thread.sleep(10000l * order.length);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+        // // are in the queue
+        while (!customerQueue.getDone() || !customerQueue.isEmpty()
+                || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
+            
+            // If orders still exist in the priority queue
+            if (!priorityQueue.getDone() || !priorityQueue.isEmpty()) {
+                while (!priorityQueue.getDone() || !priorityQueue.isEmpty()) {
+                    Order [] order = priorityQueue.getCustomerOrder();
+                    threadAction(order);
+                }
+            } else {
+                Order [] order = customerQueue.getCustomerOrder();
+                threadAction(order);
             }
-        	log.add(order, Logger.OrderState.PROCESSED);
-        	kitchenQueue.addOrder(order);
         }
 
         // Finish service
