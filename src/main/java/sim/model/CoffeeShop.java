@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import sim.app.ReportWriter;
 import sim.view.Observer;
 
 public class CoffeeShop implements Subject, Observer {
@@ -89,6 +90,7 @@ public class CoffeeShop implements Subject, Observer {
         // Output log, report and notify observers
         if (kitchen.isDone()) {
             Logger.getInstance().writeReport("log.txt");
+            new ReportWriter(kitchen.getCompletedOrders()).write(new File("report.txt"));
             notifyObservers();
         }
     }
