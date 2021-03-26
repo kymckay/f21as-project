@@ -1,16 +1,22 @@
 package sim.view;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -26,10 +32,13 @@ public class ServerGUI extends JPanel implements Observer {
 	
 	private JTextArea serverArea;
 	private JSlider serverSlider;
+	private JLabel label;
 	
 	static final int MIN = -10;
 	static final int MAX = 10;
 	static final int INIT = 0;
+	
+	private Long servingTime;
 
 	public ServerGUI(Server server) {
 		this.server = server;
@@ -37,6 +46,7 @@ public class ServerGUI extends JPanel implements Observer {
 		server.registerObserver(this);
 		setLayout(new GridLayout(2,1));
 		add(setupControls());
+		
 
 		setup();
 	}
@@ -51,16 +61,42 @@ public class ServerGUI extends JPanel implements Observer {
 		add(serverPane);
 	}
 	
-	public JSlider setupControls() {
+	
+	public JPanel setupControls() {
+		JPanel controls = new JPanel();
+		Border margin = new EmptyBorder(10,0,0,0);
+		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
+		
+		// displays serving speed of a server
+		label = new JLabel();
+		label.setFont(new Font(null, Font.BOLD, 13));
+		label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label.setBackground(new Color(238,238,238,255));
+		label.setBorder(margin);
+		servingTime = server.getBaseSpeed()/1000;
+		String text  = "Serving Speed: " + servingTime + "s";
+		label.setText(text);
+		
+		// add slider and slider label to a JPanel 
+		controls.add(label);
+		controls.add(setupSlider());
+		
+		return controls;
+	}
+	
+	// sets up server speed controls (i.e., the slider)
+	public JSlider setupSlider() {
 		serverSlider = new JSlider(JSlider.HORIZONTAL, MIN, MAX, INIT);
 		
+		// slider formatting
 		serverSlider.setMajorTickSpacing(5);
 		serverSlider.setPaintTicks(true);
 		serverSlider.setPaintLabels(true);
 		
-		//Create the label table
+		// create a table with custom slider labels
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 		labelTable.put( MIN, new JLabel("Slow") );
+		labelTable.put( INIT, new JLabel("Normal") );
 		labelTable.put( MAX, new JLabel("Fast") );
 		serverSlider.setLabelTable( labelTable );
 		
@@ -73,9 +109,13 @@ public class ServerGUI extends JPanel implements Observer {
 	}
 
 	public void update() {
-
+		// updates the serving speed display
+		servingTime = server.getSpeed()/1000;
+		String text  = "Serving Speed: " + servingTime + "s";
+		label.setText(text);
 		Order[] order = server.getCurrentOrder();
 
+		// updates the customer queue section
 		if (order == null) {
 			serverArea.setText("");
 		} else {
