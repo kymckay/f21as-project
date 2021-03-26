@@ -59,6 +59,11 @@ public class Server implements Runnable, Subject {
     
     public void setSpeed(Long l) {
     	speed = l;
+    	notifyObservers();
+    }
+    
+    public Long getSpeed() {
+    	return speed;
     }
     
     public Long getBaseSpeed() {
