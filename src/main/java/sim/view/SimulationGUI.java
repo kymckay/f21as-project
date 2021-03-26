@@ -18,6 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import sim.app.Order;
+import sim.controller.SpeedController;
 import sim.model.CoffeeShop;
 import sim.model.Server;
 
@@ -91,7 +92,10 @@ public class SimulationGUI extends JFrame implements Observer {
 
 		// Populate server section with a view for each server in the shop
 		for (Server s : coffeeShop.getServers()) {
-			serverStaff.add(new ServerGUI(s));
+			
+			ServerGUI gui = new ServerGUI(s);
+			SpeedController controls = new SpeedController(s, gui);
+			serverStaff.add(gui);
 		}
 
 		return serverStaff;
