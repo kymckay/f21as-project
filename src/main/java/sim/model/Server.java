@@ -39,11 +39,10 @@ public class Server implements Runnable, Subject {
             }
         	log.add(order, Logger.OrderState.PROCESSED);
         	kitchenQueue.addOrder(order);
+        	// clear the order once finished 
+        	currentOrder = null;
+        	notifyObservers();
         }
-
-        // Finish service
-        currentOrder = null;
-        notifyObservers();
 
         kitchenQueue.setDone();
     }
