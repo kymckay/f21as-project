@@ -1,4 +1,4 @@
-package sim.view;
+package sim.views;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextArea;

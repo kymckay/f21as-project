@@ -1,4 +1,4 @@
-package sim.view;
+package sim.views;
 
 import java.awt.GridLayout;
 import java.util.LinkedList;

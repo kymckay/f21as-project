@@ -1,4 +1,4 @@
-package sim.view;
+package sim.views;
 
 import java.awt.Color;
 import java.awt.Component;

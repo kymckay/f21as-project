@@ -1,4 +1,4 @@
-package sim.view;
+package sim.views;
 
 import java.awt.BorderLayout;
 
@@ -18,7 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import sim.app.Order;
-import sim.controller.SpeedController;
+import sim.controllers.SpeedController;
 import sim.interfaces.Observer;
 import sim.model.CoffeeShop;
 import sim.model.Server;

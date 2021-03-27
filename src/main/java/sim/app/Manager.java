@@ -1,7 +1,7 @@
 package sim.app;
 
-import sim.view.SimulationGUI;
 import sim.model.CoffeeShop;
+import sim.views.SimulationGUI;
 
 public class Manager {
     public static void main(String[] args) {
