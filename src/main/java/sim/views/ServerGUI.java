@@ -1,10 +1,11 @@
 package sim.views;
 
+import static javax.swing.SwingConstants.HORIZONTAL;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
@@ -14,10 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import sim.app.Order;
@@ -87,7 +86,7 @@ public class ServerGUI extends JPanel implements Observer {
 
 	// sets up server speed controls (i.e., the slider)
 	public JSlider setupSlider() {
-		serverSlider = new JSlider(JSlider.HORIZONTAL, MIN, MAX, INIT);
+		serverSlider = new JSlider(HORIZONTAL, MIN, MAX, INIT);
 
 		// slider formatting
 		serverSlider.setMajorTickSpacing(5);
@@ -104,7 +103,7 @@ public class ServerGUI extends JPanel implements Observer {
 		return serverSlider;
 	}
 
-	// add listener to update button
+	// Add listener when slider set
 	public void addSetListener(ChangeListener ce) {
 		serverSlider.addChangeListener(ce);
 	}
@@ -130,5 +129,9 @@ public class ServerGUI extends JPanel implements Observer {
 
 			serverArea.setText(currentOrder.toString());
 		}
+	}
+
+	public Server getModel() {
+		return server;
 	}
 }

@@ -1,7 +1,5 @@
 package sim.controllers;
 
-import java.util.Timer;
-
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

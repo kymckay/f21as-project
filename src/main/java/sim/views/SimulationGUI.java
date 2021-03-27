@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -18,7 +19,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import sim.app.Order;
-import sim.controllers.SpeedController;
 import sim.interfaces.Observer;
 import sim.model.CoffeeShop;
 import sim.model.Server;
@@ -30,6 +30,9 @@ public class SimulationGUI extends JFrame implements Observer {
 	private JTextArea queue1;
 	private JTextArea queue2;
 	private JTextArea priorityQueue;
+
+	// List of sub-views controllers need access to
+	private List<ServerGUI> staffViews = new LinkedList<>();
 
 	public SimulationGUI(CoffeeShop coffeeShop) {
 		this.coffeeShop = coffeeShop;
@@ -46,7 +49,6 @@ public class SimulationGUI extends JFrame implements Observer {
 		setup();
 		pack();
 		setVisible(true);
-
 	}
 
 	// sets the overall GUI layout
@@ -93,10 +95,9 @@ public class SimulationGUI extends JFrame implements Observer {
 
 		// Populate server section with a view for each server in the shop
 		for (Server s : coffeeShop.getServers()) {
-
-			ServerGUI gui = new ServerGUI(s);
-			SpeedController controls = new SpeedController(s, gui);
-			serverStaff.add(gui);
+			ServerGUI view = new ServerGUI(s);
+			serverStaff.add(view);
+			staffViews.add(view);
 		}
 
 		return serverStaff;
@@ -136,5 +137,9 @@ public class SimulationGUI extends JFrame implements Observer {
  		}
 
 		queue1.setText(queueLog.toString());
+	}
+
+	public List<ServerGUI> getStaffViews() {
+		return staffViews;
 	}
 }
