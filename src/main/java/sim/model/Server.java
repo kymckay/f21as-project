@@ -3,7 +3,8 @@ package sim.model;
 import java.util.LinkedList;
 
 import sim.app.Order;
-import sim.view.Observer;
+import sim.interfaces.Observer;
+import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue;
@@ -39,7 +40,7 @@ public class Server implements Runnable, Subject {
             }
         	log.add(order, Logger.OrderState.PROCESSED);
         	kitchenQueue.addOrder(order);
-        	// clear the order once finished 
+        	// clear the order once finished
         	currentOrder = null;
         	notifyObservers();
         }
@@ -55,16 +56,16 @@ public class Server implements Runnable, Subject {
     public Order[] getCurrentOrder() {
     	return currentOrder;
     }
-    
+
     public void setSpeed(Long l) {
     	speed = l;
     	notifyObservers();
     }
-    
+
     public Long getSpeed() {
     	return speed;
     }
-    
+
     public Long getBaseSpeed() {
     	return BASE;
     }

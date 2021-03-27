@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
 import sim.app.Order;
+import sim.interfaces.Observer;
 import sim.model.SharedQueue;
 
 public class KitchenQueueGUI extends JPanel implements Observer{

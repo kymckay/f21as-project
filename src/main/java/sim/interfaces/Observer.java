@@ -1,4 +1,4 @@
-package sim.view;
+package sim.interfaces;
 
 //Reference: PatternsExampleCode
 public interface Observer {

@@ -1,6 +1,4 @@
-package sim.model;
-
-import sim.view.Observer;
+package sim.interfaces;
 
 // Reference: PatternsExampleCode
 public interface Subject {

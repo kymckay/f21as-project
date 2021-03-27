@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import sim.app.Order;
 import sim.controller.SpeedController;
+import sim.interfaces.Observer;
 import sim.model.CoffeeShop;
 import sim.model.Server;
 
@@ -88,11 +89,11 @@ public class SimulationGUI extends JFrame implements Observer {
 	private JPanel setupServer() {
 		JPanel serverStaff = new JPanel(new GridLayout(1, 0));
 		//serverStaff.add(new JLabel("Change the serving speed for each server: "));
-		
+
 
 		// Populate server section with a view for each server in the shop
 		for (Server s : coffeeShop.getServers()) {
-			
+
 			ServerGUI gui = new ServerGUI(s);
 			SpeedController controls = new SpeedController(s, gui);
 			serverStaff.add(gui);
