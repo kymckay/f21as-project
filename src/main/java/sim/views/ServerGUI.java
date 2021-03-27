@@ -38,8 +38,6 @@ public class ServerGUI extends JPanel implements Observer {
 	static final int MAX = 10;
 	static final int INIT = 0;
 
-	private Long servingTime;
-
 	public ServerGUI(Server server) {
 		this.server = server;
 		this.number = ++count;
@@ -73,9 +71,9 @@ public class ServerGUI extends JPanel implements Observer {
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		label.setBackground(new Color(238,238,238,255));
 		label.setBorder(margin);
-		servingTime = server.getBaseSpeed()/1000;
-		String text  = "Serving Speed: " + servingTime + "s";
-		label.setText(text);
+
+		// Default speed label value on init
+		label.setText(String.format("Serving Speed: %ds", Server.BASE_SPEED / 1000));
 
 		// add slider and slider label to a JPanel
 		controls.add(label);
@@ -94,7 +92,7 @@ public class ServerGUI extends JPanel implements Observer {
 		serverSlider.setPaintLabels(true);
 
 		// create a table with custom slider labels
-		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
 		labelTable.put( MIN, new JLabel("Slow") );
 		labelTable.put( INIT, new JLabel("Normal") );
 		labelTable.put( MAX, new JLabel("Fast") );
@@ -108,11 +106,14 @@ public class ServerGUI extends JPanel implements Observer {
 		serverSlider.addChangeListener(ce);
 	}
 
+	public int getSpeed() {
+		return serverSlider.getValue();
+	}
+
 	public void update() {
-		// updates the serving speed display
-		servingTime = server.getSpeed()/1000;
-		String text  = "Serving Speed: " + servingTime + "s";
-		label.setText(text);
+		// Update speed label
+		label.setText(String.format("Serving Speed: %ds", server.getSpeed() / 1000));
+
 		Order[] order = server.getCurrentOrder();
 
 		// updates the customer queue section

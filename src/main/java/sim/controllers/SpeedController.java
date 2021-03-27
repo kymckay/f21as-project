@@ -1,6 +1,7 @@
 package sim.controllers;
 
-import javax.swing.JSlider;
+import static sim.model.Server.BASE_SPEED;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -8,18 +9,15 @@ import sim.model.Server;
 import sim.views.ServerGUI;
 
 public class SpeedController {
+	private Server model;
+	private ServerGUI view;
 
-	private Server server;
-	private ServerGUI gui;
-	private Long baseSpeed;
-	private Long newSpeed;
+	public SpeedController(Server model, ServerGUI view) {
+		this.model = model;
+		this.view = view;
 
-	public SpeedController(Server server, ServerGUI gui) {
-		this.server = server;
-		this.gui = gui;
-		baseSpeed = server.getBaseSpeed();
 		// register SliderListener with the gui
-		gui.addSetListener(new SliderListener());
+		view.addSetListener(new SliderListener());
 	}
 
 	// inner SliderListener class responds when user selects a new simulation speed
@@ -27,20 +25,18 @@ public class SpeedController {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			JSlider source = (JSlider)e.getSource();
-			if (!source.getValueIsAdjusting()) {
-				int speed = (int)source.getValue(); // gets speed selected on the slider
-				if (speed < 0) { // speed has been decreased
-					newSpeed = baseSpeed * (speed * -1);
-					server.setSpeed(newSpeed);
-				}
-				else if (speed > 0) { // speed has been increased
-					newSpeed = baseSpeed / (speed);
-					server.setSpeed(newSpeed);
-				}
-				else { // speed selected to normal
-					server.setSpeed(baseSpeed);
-				}
+			// gets speed selected on the slider
+			int speed = view.getSpeed();
+
+			if (speed < 0) {
+				// speed has been decreased
+				model.setSpeed(BASE_SPEED * (speed * -1));
+			} else if (speed > 0) {
+				// speed has been increased
+				model.setSpeed(BASE_SPEED / (speed));
+			} else {
+				// speed set to normal
+				model.setSpeed(BASE_SPEED);
 			}
 		}
 	}
