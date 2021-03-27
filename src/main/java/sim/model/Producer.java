@@ -75,6 +75,9 @@ public class Producer implements Runnable {
                 lineNum++;
             }
 
+            // Add final customer's order
+            out.addOrder(basket.toArray(Order[]::new));
+
             // Once end of file is reached mark the queue as completed
             out.setDone();
         } catch (FileNotFoundException e) {
