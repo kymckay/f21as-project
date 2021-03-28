@@ -32,9 +32,6 @@ public class SharedQueue implements Subject {
 		Order[] customerOrder = queue.getFirst();
 
 		switch (queueType) {
-		case CUSTOMER:
-			log.add(customerOrder, Logger.OrderState.EXIT);
-			break;
 		case KITCHEN:
 			log.add(customerOrder, Logger.OrderState.EXITKITCHEN);
 			break;
