@@ -10,11 +10,13 @@ public class Order {
     private LocalDateTime time;
     private String customerId;
     private OrderItem item;
+    private Boolean priority;
 
-    public Order(LocalDateTime t, String customerId, OrderItem item, String) {
+    public Order(LocalDateTime t, String customerId, OrderItem item, Boolean priority) {
         time = t;
         this.customerId = customerId;
         this.item = item;
+        this.priority = priority;
     }
 
     public LocalDateTime getTime() {
@@ -67,5 +69,9 @@ public class Order {
 
         // Want to return percentage off total
         return new BigDecimal("1").subtract(percentage);
+    }
+
+    public Boolean isPriority() {
+        return priority;
     }
 }
