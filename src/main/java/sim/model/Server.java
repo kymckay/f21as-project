@@ -3,13 +3,21 @@ package sim.model;
 import java.util.LinkedList;
 
 import sim.app.Order;
-import sim.view.Observer;
+import sim.interfaces.Observer;
+import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue, priorityQueue;
     private Order[] currentOrder;
     private LinkedList<Observer> observers;
     private Logger log;
+    private long speed;
+
+    // Default service speed relevant to other classes
+    public static final long BASE_SPEED = 10000l;
+
+    // Set once server is finished serving
+    private boolean done;
 
     public Server(SharedQueue customerQueue, SharedQueue kitchenQueue, SharedQueue priorityQueue) {
         this.customerQueue = customerQueue;
@@ -18,41 +26,47 @@ public class Server implements Runnable, Subject {
 
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
-    }
-
-    public void threadAction(Order [] o, QueueType q) {
-        setCurrentOrder(o);
-        notifyObservers();
-        try {
-            // Time to process order depends on number of items
-            Thread.sleep(10000l * o.length);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        log.add(o, Logger.OrderState.PROCESSED, q);
-        kitchenQueue.addOrder(o);
+        speed = BASE_SPEED;
     }
 
     @Override
     public void run() {
 
-        // Process queue from priorityQueue over customerQueue if there are still orders in it. 
+        // Process queue from priorityQueue over customerQueue if there are still orders in it.
         // Service continues as long as customers are still due to arrive or customers
-        // // are in the queue
+        // are in the queue
         while (!customerQueue.getDone() || !customerQueue.isEmpty()
                 || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
-            
-            // If orders still exist in the priority queue
+
+            // Prioritise the priority queue
             SharedQueue target = !priorityQueue.isEmpty() ? priorityQueue : customerQueue;
-            threadAction(target.getCustomerOrder(), target.getQueueType());
+
+            Order[] order = target.getCustomerOrder();
+
+            // Update model state with current order
+            setCurrentOrder(order);
+            notifyObservers();
+
+            try {
+                // Time to process order depends on number of items
+                Thread.sleep(speed * order.length);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            // Pass order on to kitchen queue
+            log.add(order, Logger.OrderState.PROCESSED, target.getQueueType());
+            kitchenQueue.addOrder(order);
+
+            // Update model state to reflect order processed
+            currentOrder = null;
+            notifyObservers();
         }
 
         // Finish service
+        done = true;
         currentOrder = null;
         notifyObservers();
-
-        kitchenQueue.setDone();
-        log.writeReport("log.txt");
     }
 
     // adds details of the order being processed by the Server
@@ -62,6 +76,15 @@ public class Server implements Runnable, Subject {
 
     public Order[] getCurrentOrder() {
     	return currentOrder;
+    }
+
+    public void setSpeed(long l) {
+    	speed = l;
+    	notifyObservers();
+    }
+
+    public long getSpeed() {
+    	return speed;
     }
 
     // Subject methods
@@ -81,4 +104,8 @@ public class Server implements Runnable, Subject {
 			o.update();
 		}
 	}
+
+    public boolean isDone() {
+        return done;
+    }
 }
