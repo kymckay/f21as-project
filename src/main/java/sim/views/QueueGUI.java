@@ -28,7 +28,7 @@ public class QueueGUI extends JPanel implements Observer {
 	public void setup() {
 		display = new JTextArea();
 		display.setEditable(false);
-		display.setText("Customers in the queue: 0");
+		display.setText("Orders in the queue: 0");
 		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
 		JScrollPane queuePane = new JScrollPane(display);
 		queuePane.setBorder(border);
@@ -40,8 +40,7 @@ public class QueueGUI extends JPanel implements Observer {
 		List<Order[]> currentQueue = queue.getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
- 		queueLog.append("Customers in the queue: ");
- 		queueLog.append(currentQueue.size() + "\n");
+ 		queueLog.append(String.format("Orders in the queue: %d%n", currentQueue.size()));
 
  		for (Order[] o : currentQueue) {
  			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
