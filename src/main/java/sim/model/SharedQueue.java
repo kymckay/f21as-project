@@ -32,11 +32,14 @@ public class SharedQueue implements Subject {
 		Order[] customerOrder = queue.getFirst();
 
 		switch (queueType) {
+		case CUSTOMER:
+			log.add(customerOrder, Logger.OrderState.EXITKITCHEN, QueueType.CUSTOMER);
+			break;
 		case KITCHEN:
-			log.add(customerOrder, Logger.OrderState.EXITKITCHEN);
+			log.add(customerOrder, Logger.OrderState.EXITKITCHEN, QueueType.KITCHEN);
 			break;
 		default:
-			log.add(customerOrder, Logger.OrderState.EXIT);
+			log.add(customerOrder, Logger.OrderState.EXIT, QueueType.PRIORITY);
 			break;
 		}
 
@@ -55,11 +58,14 @@ public class SharedQueue implements Subject {
 	public synchronized void addOrder(Order[] o) {
 		queue.addLast(o);
 		switch (queueType) { //adds an entry in the log every time the method is called
+		case CUSTOMER:
+			log.add(o, Logger.OrderState.ENTERKITCHEN, QueueType.CUSTOMER);
+			break;
 		case KITCHEN:
-			log.add(o, Logger.OrderState.ENTERKITCHEN);
+			log.add(o, Logger.OrderState.ENTERKITCHEN, QueueType.KITCHEN);
 			break;
 		default:
-			log.add(o, Logger.OrderState.ENTER);
+			log.add(o, Logger.OrderState.ENTER, QueueType.PRIORITY);
 		}
 
 		empty = false;
