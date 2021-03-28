@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 import sim.app.Order;
 import sim.app.OrderItem;
@@ -24,15 +23,13 @@ import sim.app.OrderItem;
 public class Producer implements Runnable {
     File in; // orders come from here
     SharedQueue out; // orders go here
-    SharedQueue priorityOut;
 
     String frontOfLine; // Customer ID currently at the front of the line
     LinkedList<Order> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
-    public Producer(File in, SharedQueue out, SharedQueue priorityOut) {
+    public Producer(File in, SharedQueue out) {
         this.in = in;
         this.out = out;
-        this.priorityOut = priorityOut;
     }
 
     /**
@@ -60,13 +57,7 @@ public class Producer implements Runnable {
                         sleep(basket.size() * 2000l);
 
                         // Customer's items are all added as a grouping into the queue ("checkout")
-                        // add to different shared queue based on priority
-                        if (!item.isPriority()) {
-                            out.addOrder(basket.toArray(Order[]::new));
-                        } else {
-                            priorityOut.addOrder(basket.toArray(Order[]::new));
-                        }
-                        
+                        out.addOrder(basket.toArray(Order[]::new));
                         basket.clear();
                     }
 
@@ -114,16 +105,15 @@ public class Producer implements Runnable {
         if (cols.length == 6) {
             LocalDateTime timestamp = LocalDateTime.parse(cols[0], DateTimeFormatter.ISO_DATE_TIME);
             String custId = cols[1];
-            Boolean priority = Boolean.valueOf(cols[2]);
-            String itemId = cols[3];
-            BigDecimal priceFull = new BigDecimal(cols[4]);
-            BigDecimal pricePaid = new BigDecimal(cols[5]);
-            String itemDetails = cols[6];
+            String itemId = cols[2];
+            BigDecimal priceFull = new BigDecimal(cols[3]);
+            BigDecimal pricePaid = new BigDecimal(cols[4]);
+            String itemDetails = cols[5];
 
             // OrderItem subclasses store the item permutations ordered
             OrderItem newItem = new OrderItem(itemId, itemDetails, priceFull, pricePaid);
 
-            return new Order(timestamp, custId, newItem, priority);
+            return new Order(timestamp, custId, newItem);
         } else {
             throw new IllegalArgumentException("Line contains wrong number of values");
         }
