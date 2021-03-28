@@ -55,14 +55,14 @@ public class ServerGUI extends JPanel implements Observer {
 		serverArea.setEditable(false);
 		Border border1 = BorderFactory.createTitledBorder("Server " + number);
 		JScrollPane serverPane = new JScrollPane(serverArea);
-		serverPane.setBorder(border1);
+		setBorder(border1);
 		add(serverPane);
 	}
 
 
 	public JPanel setupControls() {
 		JPanel controls = new JPanel();
-		Border margin = new EmptyBorder(10,0,0,0);
+		Border margin = new EmptyBorder(5,0,0,0);
 		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
 
 		// displays serving speed of a server
