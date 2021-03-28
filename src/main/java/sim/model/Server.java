@@ -35,6 +35,7 @@ public class Server implements Runnable, Subject {
         // Process queue from priorityQueue over customerQueue if there are still orders in it.
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
+
         while (!customerQueue.getDone() || !customerQueue.isEmpty()
                 || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
 
@@ -44,7 +45,8 @@ public class Server implements Runnable, Subject {
             Order[] order = target.getCustomerOrder();
 
             // Update model state with current order
-            setCurrentOrder(order);
+            currentOrder = order;
+
             notifyObservers();
 
             try {
@@ -69,11 +71,6 @@ public class Server implements Runnable, Subject {
         notifyObservers();
     }
 
-    // adds details of the order being processed by the Server
-    public void setCurrentOrder(Order[] o) {
-    	currentOrder = o;
-    }
-
     public Order[] getCurrentOrder() {
     	return currentOrder;
     }
@@ -90,16 +87,22 @@ public class Server implements Runnable, Subject {
     // Subject methods
     // add observers to a list
 	public void registerObserver(Observer o) {
-		observers.add(o);
+		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
+		LinkedList<Observer> current = (LinkedList)observers.clone(); 
+		current.add(o);
+		observers = current;
 	}
 
 	// removes observers from a list
 	public void removeObserver(Observer o) {
-		observers.remove(o);
+		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
+		LinkedList<Observer> current = (LinkedList)observers.clone(); 
+		current.remove(o);
+		observers = current;
 	}
 
 	// notifies all observers in the observers list
-	public void notifyObservers() {
+	public void notifyObservers() {	
 		for (Observer o : observers) {
 			o.update();
 		}
