@@ -7,38 +7,25 @@ import java.awt.GridLayout;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import sim.interfaces.Observer;
 import sim.model.CoffeeShop;
-import sim.model.Customer;
 import sim.model.Server;
 
 public class SimulationGUI extends JFrame implements Observer {
 
 	private CoffeeShop coffeeShop;
 
-	private JTextArea queue1;
-	private JTextArea queue2;
-	private JTextArea priorityQueue;
-
 	// List of sub-views controllers need access to
 	private List<ServerGUI> staffViews = new LinkedList<>();
 
 	public SimulationGUI(CoffeeShop coffeeShop) {
 		this.coffeeShop = coffeeShop;
-
-		coffeeShop.getCustomers().registerObserver(this);
-		coffeeShop.getOrders().registerObserver(this);
 
 		setTitle("Coffee Shop Simulation");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -67,20 +54,9 @@ public class SimulationGUI extends JFrame implements Observer {
 	// sets up the queue with customers waiting to be served
 	private JPanel queueSection() {
 		JPanel queueSection = new JPanel(new GridLayout(1, 2));
-		queue1 = new JTextArea();
-		queue1.setEditable(false);
-		Border qBorder1 = BorderFactory.createTitledBorder("Queue");
-		JScrollPane queue1Pane = new JScrollPane(queue1);
-		queue1Pane.setBorder(qBorder1);
 
-		priorityQueue = new JTextArea();
-		priorityQueue.setEditable(false);
-		Border qBorder2 = BorderFactory.createTitledBorder("Priority Queue");
-		JScrollPane queue3Pane = new JScrollPane(priorityQueue);
-		queue3Pane.setBorder(qBorder2);
-
-		queueSection.add(queue1Pane);
-		queueSection.add(queue3Pane);
+		queueSection.add(new QueueGUI(coffeeShop.getCustomers(), "Regular Queue"));
+		queueSection.add(new QueueGUI(coffeeShop.getPriorityCustomers(), "Priority Queue"));
 		return queueSection;
 	}
 
@@ -90,8 +66,6 @@ public class SimulationGUI extends JFrame implements Observer {
 	// probably should set a limit to the nr of threads that can be initiated
 	private JPanel setupServer() {
 		JPanel serverStaff = new JPanel(new GridLayout(1, 0));
-		//serverStaff.add(new JLabel("Change the serving speed for each server: "));
-
 
 		// Populate server section with a view for each server in the shop
 		for (Server s : coffeeShop.getServers()) {
@@ -103,7 +77,6 @@ public class SimulationGUI extends JFrame implements Observer {
 		return serverStaff;
 	}
 
-	// TODO: not working atm, crashes the application when run
 	private JPanel setupKitchen() {
 		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
 		kitchenSection.add(new KitchenGUI(coffeeShop.getKitchen()));
@@ -112,7 +85,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// sets up kitchen queue
 	private JPanel setupQueue2() {
-		return new KitchenQueueGUI(coffeeShop.getOrders());
+		return new QueueGUI(coffeeShop.getOrders(), "Kitchen Queue");
 	}
 
 	// this will contain all the interactive elements (e.g. buttons etc)
@@ -122,22 +95,9 @@ public class SimulationGUI extends JFrame implements Observer {
 		return controls;
 	}
 
-	// Observer method
+	// Observes when shop is finished simulation
 	public void update() {
-		LinkedList<Customer> currentQueue = coffeeShop.getCustomers().getQueue();
-
-		StringBuilder queueLog = new StringBuilder();
- 		queueLog.append("Customers in the queue: ");
- 		queueLog.append(currentQueue.size() + "\n");
-
- 		for (Customer c : currentQueue) {
- 			queueLog.append(String.format("%-15s", c.getName()));
- 			queueLog.append(c.getOrder().length);
- 			queueLog.append(" Item(s) \n");
- 		}
-
-		queue1.setText(queueLog.toString());
-		priorityQueue.setText(queueLog.toString());
+		// TODO
 	}
 
 	public List<ServerGUI> getStaffViews() {
