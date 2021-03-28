@@ -20,7 +20,7 @@ public class Server implements Runnable, Subject {
         log = Logger.getInstance();
     }
 
-    public void threadAction(Order [] o) {
+    public void threadAction(Order [] o, QueueType q) {
         setCurrentOrder(o);
         notifyObservers();
         try {
@@ -29,7 +29,7 @@ public class Server implements Runnable, Subject {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        log.add(o, Logger.OrderState.PROCESSED);
+        log.add(o, Logger.OrderState.PROCESSED, q);
         kitchenQueue.addOrder(o);
     }
 
@@ -45,10 +45,10 @@ public class Server implements Runnable, Subject {
             // If orders still exist in the priority queue
             if (!priorityQueue.isEmpty()) {
                 Order [] order = priorityQueue.getCustomerOrder();
-                threadAction(order);
+                threadAction(order, priorityQueue.getQueueType());
             } else {
                 Order [] order = customerQueue.getCustomerOrder();
-                threadAction(order);
+                threadAction(order, customerQueue.getQueueType());
             }
         }
 
