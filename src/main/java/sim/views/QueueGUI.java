@@ -1,7 +1,7 @@
 package sim.views;
 
 import java.awt.GridLayout;
-import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -13,31 +13,31 @@ import sim.app.Order;
 import sim.interfaces.Observer;
 import sim.model.SharedQueue;
 
-public class KitchenQueueGUI extends JPanel implements Observer{
+public class QueueGUI extends JPanel implements Observer {
 
-	SharedQueue kitchenQueue;
-	JTextArea queue;
+	SharedQueue queue;
+	JTextArea display;
 
-	public KitchenQueueGUI(SharedQueue kitchenQueue) {
-		this.kitchenQueue = kitchenQueue;
-		kitchenQueue.registerObserver(this);
+	public QueueGUI(SharedQueue queue) {
+		this.queue = queue;
+		queue.registerObserver(this);
 		setLayout(new GridLayout(1,1)); // ensures JPanel takes up all available space in the GUI
 		setup();
 	}
 
 	public void setup() {
-		queue = new JTextArea();
-		queue.setEditable(false);
-		queue.setText("Customers in the queue: 0");
+		display = new JTextArea();
+		display.setEditable(false);
+		display.setText("Customers in the queue: 0");
 		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
-		JScrollPane queuePane = new JScrollPane(queue);
+		JScrollPane queuePane = new JScrollPane(display);
 		queuePane.setBorder(border);
 		add(queuePane);
 	}
 
 	@Override
 	public void update() {
-		LinkedList<Order[]> currentQueue = kitchenQueue.getQueue();
+		List<Order[]> currentQueue = queue.getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append("Customers in the queue: ");
@@ -48,7 +48,7 @@ public class KitchenQueueGUI extends JPanel implements Observer{
  			queueLog.append(o.length);
  			queueLog.append(" Item(s) \n");
  		}
-		queue.setText(queueLog.toString());
+		display.setText(queueLog.toString());
 	}
 
 }

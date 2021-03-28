@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -103,7 +102,6 @@ public class SimulationGUI extends JFrame implements Observer {
 		return serverStaff;
 	}
 
-	// TODO: not working atm, crashes the application when run
 	private JPanel setupKitchen() {
 		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
 		kitchenSection.add(new KitchenGUI(coffeeShop.getKitchen()));
@@ -112,7 +110,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// sets up kitchen queue
 	private JPanel setupQueue2() {
-		return new KitchenQueueGUI(coffeeShop.getOrders());
+		return new QueueGUI(coffeeShop.getOrders());
 	}
 
 	// this will contain all the interactive elements (e.g. buttons etc)
@@ -124,7 +122,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// Observer method
 	public void update() {
-		LinkedList<Order[]> currentQueue = coffeeShop.getCustomers().getQueue();
+		List<Order[]> currentQueue = coffeeShop.getCustomers().getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append("Customers in the queue: ");

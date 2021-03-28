@@ -1,6 +1,7 @@
 package sim.model;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import sim.app.Order;
 import sim.interfaces.Observer;
@@ -83,7 +84,7 @@ public class SharedQueue implements Subject {
 	}
 
 
-	public synchronized LinkedList<Order[]> getQueue() {
+	public synchronized List<Order[]> getQueue() {
  		return queue;
 	}
 
