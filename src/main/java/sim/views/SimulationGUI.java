@@ -137,6 +137,7 @@ public class SimulationGUI extends JFrame implements Observer {
  		}
 
 		queue1.setText(queueLog.toString());
+		priorityQueue.setText(queueLog.toString());
 	}
 
 	public List<ServerGUI> getStaffViews() {

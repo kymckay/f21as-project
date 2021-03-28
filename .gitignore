@@ -25,3 +25,6 @@ hs_err_pid*
 
 report.txt
 log.txt
+
+# Mac Custom Folder Attribute #
+*.DS_store

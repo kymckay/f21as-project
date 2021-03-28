@@ -42,7 +42,7 @@ public class Kitchen implements Runnable, Subject {
 
             // Log order as completed
             completed.add(currentOrder);
-        	log.add(currentOrder, Logger.OrderState.SERVED);
+        	log.add(currentOrder, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
         }
 
         // Finish service
