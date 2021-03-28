@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import sim.app.ReportWriter;
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
-public class CoffeeShop implements Subject {
+public class CoffeeShop implements Subject, Observer {
     // Queue of orders populated by producer for staff to serve
     // Staff then populate the kitchen queue
     private SharedQueue customers = new SharedQueue(QueueType.CUSTOMER);
@@ -25,6 +26,7 @@ public class CoffeeShop implements Subject {
     public CoffeeShop(int numStaff) {
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(new File("data/orders.csv"), customers));
+        producer.start();
 
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < numStaff; i++) {
@@ -32,14 +34,18 @@ public class CoffeeShop implements Subject {
             Server staff = new Server(customers, orders);
             servers.add(staff);
 
+            // Observe staff to later check when service has stopped
+            staff.registerObserver(this);
+
             // Start service
             Thread staffT = new Thread(staff);
             staffT.start();
         }
 
-        Thread kitchenT = new Thread(kitchen);
+        // Observe kitchen to later check when service has stopped
+        kitchen.registerObserver(this);
 
-        producer.start();
+        Thread kitchenT = new Thread(kitchen);
         kitchenT.start();
     }
 
@@ -72,5 +78,21 @@ public class CoffeeShop implements Subject {
     @Override
     public void notifyObservers() {
         for (Observer o : observers) o.update();
+    }
+
+    @Override
+    public void update() {
+        // When all servers are done, mark the kitchen queue as done
+        if (servers.stream().allMatch(Server::isDone)) {
+            orders.setDone();
+        }
+
+        // When kitchen is done coffee shop can close
+        // Output log, report and notify observers
+        if (kitchen.isDone()) {
+            Logger.getInstance().writeReport("log.txt");
+            new ReportWriter(kitchen.getCompletedOrders()).write(new File("report.txt"));
+            notifyObservers();
+        }
     }
 }

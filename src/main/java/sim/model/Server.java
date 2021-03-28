@@ -16,6 +16,9 @@ public class Server implements Runnable, Subject {
     // Default service speed relevant to other classes
     public static final long BASE_SPEED = 10000l;
 
+    // Set once server is finished serving
+    private boolean done;
+
     public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
@@ -47,7 +50,10 @@ public class Server implements Runnable, Subject {
         	notifyObservers();
         }
 
-        kitchenQueue.setDone();
+        // Finish service
+        done = true;
+        currentOrder = null;
+        notifyObservers();
     }
 
     // adds details of the order being processed by the Server
@@ -85,4 +91,8 @@ public class Server implements Runnable, Subject {
 			o.update();
 		}
 	}
+
+    public boolean isDone() {
+        return done;
+    }
 }
