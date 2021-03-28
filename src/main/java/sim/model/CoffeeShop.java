@@ -12,8 +12,8 @@ public class CoffeeShop implements Subject, Observer {
     // Queue of orders populated by producer for staff to serve
     // Staff then populate the kitchen queue
     private SharedQueue customers = new SharedQueue(QueueType.CUSTOMER);
+    private SharedQueue priorityCustomers = new SharedQueue(QueueType.PRIORITY);
     private SharedQueue orders = new SharedQueue(QueueType.KITCHEN);
-    private SharedQueue priorityOrders = new SharedQueue(QueueType.PRIORITY);
 
     // List of registered observers for observer/subject pattern
     private LinkedList<Observer> observers = new LinkedList<>();
@@ -27,7 +27,7 @@ public class CoffeeShop implements Subject, Observer {
     public CoffeeShop(int numStaff) {
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(new File("data/orders.csv"), customers));
-        Thread priorityProducer = new Thread(new Producer(new File("data/orders.csv"), priorityOrders));
+        Thread priorityProducer = new Thread(new Producer(new File("data/orders.csv"), priorityCustomers));
 
         producer.start();
         priorityProducer.start();
@@ -35,7 +35,7 @@ public class CoffeeShop implements Subject, Observer {
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < numStaff; i++) {
             // Track the staff members
-            Server staff = new Server(customers, orders, priorityOrders);
+            Server staff = new Server(customers, orders, priorityCustomers);
             servers.add(staff);
 
             // Observe staff to later check when service has stopped
@@ -55,6 +55,10 @@ public class CoffeeShop implements Subject, Observer {
 
     public SharedQueue getCustomers() {
         return customers;
+    }
+
+    public SharedQueue getPriorityCustomers() {
+        return priorityCustomers;
     }
 
     public SharedQueue getOrders() {
