@@ -9,6 +9,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import sim.coffee.Menu;
+import sim.coffee.MenuTableModel;
+
 /**
  * Unit test for MenuTableModel.
  */

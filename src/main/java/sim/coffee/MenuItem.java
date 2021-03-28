@@ -2,7 +2,7 @@ package sim.coffee;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-abstract class MenuItem {
+public abstract class MenuItem {
 
 	//instance variables
 	private String id;

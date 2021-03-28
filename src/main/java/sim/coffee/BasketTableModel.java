@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import javax.swing.table.AbstractTableModel;
 
+import sim.app.Order;
+import sim.app.OrderBasket;
+
 public class BasketTableModel extends AbstractTableModel {
 
     // This is just to placate the linter. We never seralise this class so it's

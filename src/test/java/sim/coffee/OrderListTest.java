@@ -10,6 +10,10 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
+import sim.app.Order;
+import sim.app.OrderItem;
+import sim.app.OrderList;
+
 public class OrderListTest {
     OrderList testList;
 
