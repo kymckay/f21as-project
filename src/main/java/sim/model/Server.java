@@ -82,7 +82,6 @@ public class Server implements Runnable, Subject {
 	public void removeObserver(Observer o) {
 		LinkedList<Observer> current = new LinkedList<>();
 		current = (LinkedList)observers.clone(); // avoids concurrent modification exception if notifyObserver() is called while observers are being added
-		current.add(o);
 		current.remove(o);
 		observers = current;
 	}
