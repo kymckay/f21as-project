@@ -60,7 +60,13 @@ public class Producer implements Runnable {
                         sleep(basket.size() * 2000l);
 
                         // Customer's items are all added as a grouping into the queue ("checkout")
-                        out.addOrder(basket.toArray(Order[]::new));
+                        // add to different shared queue based on priority
+                        if (!item.isPriority()) {
+                            out.addOrder(basket.toArray(Order[]::new));
+                        } else {
+                            priorityOut.addOrder(basket.toArray(Order[]::new));
+                        }
+                        
                         basket.clear();
                     }
 
