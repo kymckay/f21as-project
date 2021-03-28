@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import sim.app.Order;
-
 /**
  * This class simulates the outside world, producing customers as they arrive
  * and join the queue for staff to serve (in the form of Order groupings)
@@ -17,15 +15,17 @@ import sim.app.Order;
  * Order groupings with the same customer are all one "order" and added to the queue together.
  */
 public class Producer implements Runnable {
-    File in; // orders come from here
-    SharedQueue out; // orders go here
+    private File file; // customers come from here
+    private SharedQueue out; // customers go here
+    private Menu menu; // orders refer to menu
 
-    String frontOfLine; // Customer ID currently at the front of the line
-    LinkedList<Order> basket = new LinkedList<>(); // Contains orders for customer at front of line
+    private String frontOfLine; // Customer currently at the front of the line
+    private LinkedList<MenuItem> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
-    public Producer(File in, SharedQueue out) {
-        this.in = in;
+    public Producer(File file, SharedQueue out, Menu menu) {
+        this.file = file;
         this.out = out;
+        this.menu = menu;
     }
 
     /**
@@ -36,25 +36,27 @@ public class Producer implements Runnable {
         // Buffered reader provides an efficient way to read files line by line
         int lineNum = 1;
         try (
-            BufferedReader input = new BufferedReader(new FileReader(in));
+            BufferedReader input = new BufferedReader(new FileReader(file));
         ) {
-            String line;
+            // Skip over first line (csv column headings)
+            String line = input.readLine();
+
             // Returns null when EOF reached
             while ((line = input.readLine()) != null) {
+                lineNum++;
+
                 // A single customer's items go into their basket until they checkout
                 // before the next customer
-                Order item = processLine(line);
+                String name = processLine(line);
 
                 // Next customer reached, checkout basket and empty
-                if (!item.getCustomerID().equals(frontOfLine)) {
+                if (!name.equals(frontOfLine)) {
                     // Don't checkout if there was no previous customer
                     if (frontOfLine != null) {
                         // Simulate customer takes 2s per item to order
                         sleep(basket.size() * 2000l);
 
-                        // Customer's items are all added as a grouping into the queue ("checkout")
-                        out.addOrder(basket.toArray(Order[]::new));
-                        basket.clear();
+                        checkout();
                     }
 
                     // Some random time may pass before the next customer arrives
@@ -63,25 +65,21 @@ public class Producer implements Runnable {
                     }
 
                     // New customer is now front of line
-                    frontOfLine = item.getCustomerID();
+                    frontOfLine = name;
                 }
-
-                basket.add(item);
-
-                lineNum++;
             }
 
             // Add final customer's order
-            out.addOrder(basket.toArray(Order[]::new));
+            checkout();
 
             // Once end of file is reached mark the queue as completed
             out.setDone();
         } catch (FileNotFoundException e) {
-            System.out.println(in.getName() + " does not exist.");
+            System.out.println(file.getName() + " does not exist.");
         } catch (IOException e) {
-            System.out.println(in.getName() + " could not be read.");
+            System.out.println(file.getName() + " could not be read.");
         } catch(IllegalArgumentException e) {
-            System.out.println("Order parsing error on line " + lineNum + ": " + e.getMessage());
+            System.out.println("Customer parsing error on line " + lineNum + ": " + e.getMessage());
         }
     }
 
@@ -94,20 +92,28 @@ public class Producer implements Runnable {
         }
     }
 
-    private Order processLine(String line) {
+    // Produce a new customer from the front of the line and their basket
+    private void checkout() {
+        out.add(new Customer(frontOfLine, basket.toArray(MenuItem[]::new)));
+        basket.clear();
+    }
+
+    private String processLine(String line) {
         // Remove whitespace while splitting using regex delimiter
         // Java's split operator discards empty strings by default, -1 keeps them (empty
         // csv columns are valid)
         String[] cols = line.split("\\s*,\\s*", -1);
 
         // All rows in csv file have same columns
-        if (cols.length == 6) {
-            String custId = cols[1];
-            String itemId = cols[2];
+        if (cols.length == 2) {
+            String name = cols[0];
+            String itemId = cols[1];
 
-            return new Order(custId, itemId);
+            basket.add(menu.getItem(itemId));
+
+            return name;
         } else {
-            throw new IllegalArgumentException("Line contains wrong number of values");
+            throw new IllegalArgumentException("Expected 2 columns");
         }
     }
 }

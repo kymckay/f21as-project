@@ -1,29 +1,21 @@
-package sim.coffee;
+package sim.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public abstract class MenuItem {
+public class MenuItem {
 
 	//instance variables
 	private String id;
 	private BigDecimal price;
-	private String description;
+	private String name;
 
 	// Nothing is ordered by default
 	private int orderCount = 0;
 
-	//constructor
-	MenuItem (String categoryID, String id, BigDecimal price, String description) throws IllegalIDException {
-    	boolean idMatches 		= id.matches("^[BFM]\\d{3}"); // ID must match the following regex pattern
-    	boolean categoryMatches = id.startsWith(categoryID); // ID must start with the correct category ID, defined in each subclass
-
-    	if (!(idMatches && categoryMatches)) {
-			throw new IllegalIDException(id);
-		}
-
+	MenuItem (String id, BigDecimal price, String name) {
 		this.id = id;
 		this.price = price;
-		this.description = description;
+		this.name = name;
 	}
 
 	public String getID() {
@@ -41,8 +33,8 @@ public abstract class MenuItem {
 		return price.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
-	public String getDescription() {
-		return description;
+	public String getName() {
+		return name;
 	}
 
 	public int getOrderCount() {

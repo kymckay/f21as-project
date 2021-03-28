@@ -9,8 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
+import sim.model.Customer;
 import sim.model.SharedQueue;
 
 public class KitchenQueueGUI extends JPanel implements Observer{
@@ -37,15 +37,15 @@ public class KitchenQueueGUI extends JPanel implements Observer{
 
 	@Override
 	public void update() {
-		LinkedList<Order[]> currentQueue = kitchenQueue.getQueue();
+		LinkedList<Customer> currentQueue = kitchenQueue.getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append("Customers in the queue: ");
  		queueLog.append(currentQueue.size() + "\n");
 
- 		for (Order[] o : currentQueue) {
- 			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
- 			queueLog.append(o.length);
+ 		for (Customer c : currentQueue) {
+ 			queueLog.append(String.format("%-15s", c.getName()));
+ 			queueLog.append(c.getOrder().length);
  			queueLog.append(" Item(s) \n");
  		}
 		queue.setText(queueLog.toString());

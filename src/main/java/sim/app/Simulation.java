@@ -2,12 +2,14 @@ package sim.app;
 
 import sim.controllers.SpeedController;
 import sim.model.CoffeeShop;
+import sim.model.Menu;
 import sim.views.ServerGUI;
 import sim.views.SimulationGUI;
 
 public class Simulation {
     public static void main(String[] args) {
-        CoffeeShop model = new CoffeeShop(3);
+        Menu menu = new Menu("data/menu.csv");
+        CoffeeShop model = new CoffeeShop(menu, 3);
 
         SimulationGUI view = new SimulationGUI(model);
 

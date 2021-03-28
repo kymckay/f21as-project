@@ -2,13 +2,12 @@ package sim.model;
 
 import java.util.LinkedList;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue, priorityQueue;
-    private Order[] currentOrder;
+    private Customer currentCustomer;
     private LinkedList<Observer> observers;
     private Logger log;
     private long speed;
@@ -42,37 +41,35 @@ public class Server implements Runnable, Subject {
             // Prioritise the priority queue
             SharedQueue target = !priorityQueue.isEmpty() ? priorityQueue : customerQueue;
 
-            Order[] order = target.getCustomerOrder();
+            currentCustomer = target.getCustomer();
 
-            // Update model state with current order
-            currentOrder = order;
-
+            // Update model state with current customer
             notifyObservers();
 
             try {
                 // Time to process order depends on number of items
-                Thread.sleep(speed * order.length);
+                Thread.sleep(speed * currentCustomer.getOrder().length);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
             // Pass order on to kitchen queue
-            log.add(order, Logger.OrderState.PROCESSED, target.getQueueType());
-            kitchenQueue.addOrder(order);
+            log.add(currentCustomer, Logger.OrderState.PROCESSED, target.getQueueType());
+            kitchenQueue.add(currentCustomer);
 
-            // Update model state to reflect order processed
-            currentOrder = null;
+            // Update model state to reflect customer served
+            currentCustomer = null;
             notifyObservers();
         }
 
         // Finish service
         done = true;
-        currentOrder = null;
+        currentCustomer = null;
         notifyObservers();
     }
 
-    public Order[] getCurrentOrder() {
-    	return currentOrder;
+    public Customer getCurrentCustomer() {
+    	return currentCustomer;
     }
 
     public void setSpeed(long l) {
@@ -88,7 +85,7 @@ public class Server implements Runnable, Subject {
     // add observers to a list
 	public void registerObserver(Observer o) {
 		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
-		LinkedList<Observer> current = (LinkedList)observers.clone(); 
+		LinkedList<Observer> current = (LinkedList)observers.clone();
 		current.add(o);
 		observers = current;
 	}
@@ -96,13 +93,13 @@ public class Server implements Runnable, Subject {
 	// removes observers from a list
 	public void removeObserver(Observer o) {
 		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
-		LinkedList<Observer> current = (LinkedList)observers.clone(); 
+		LinkedList<Observer> current = (LinkedList)observers.clone();
 		current.remove(o);
 		observers = current;
 	}
 
 	// notifies all observers in the observers list
-	public void notifyObservers() {	
+	public void notifyObservers() {
 		for (Observer o : observers) {
 			o.update();
 		}

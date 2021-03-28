@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import sim.app.Order;
-
 public class Logger {
 
 	//enums for the add() method
@@ -26,7 +24,7 @@ public class Logger {
 	}
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public synchronized void add(Order[] o, OrderState state, QueueType q) {
+	public synchronized void add(Customer c, OrderState state, QueueType q) {
 		LocalDateTime time = LocalDateTime.now();
 		log.append(String.format("%-35s", time));
 
@@ -75,14 +73,12 @@ public class Logger {
 			break;
 		}
 
-		log.append(String.format("%-25s", "Customer ID: " + o[0].getCustomerID()));
-		log.append(String.format("%-7s", "Order ID: "));
-		for (Order order : o) {
-			log.append(order.getItemId() + " ");
+		log.append(String.format("%-25s", "Customer: " + c.getName()));
+		for (MenuItem item : c.getOrder()) {
+			log.append(item.getName() + " ");
 		}
 		log.append("\n");
 	}
-
 
 	//returns instance of the Log class
 	public static Logger getInstance() {

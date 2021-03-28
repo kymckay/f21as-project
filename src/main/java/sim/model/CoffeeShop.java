@@ -24,10 +24,18 @@ public class CoffeeShop implements Subject, Observer {
     // Kitchen is observable
     private Kitchen kitchen = new Kitchen(orders);
 
-    public CoffeeShop(int numStaff) {
+    public CoffeeShop(Menu menu, int numStaff) {
         // Producer inserts input file of orders into shared queue for staff
-        Thread producer = new Thread(new Producer(new File("data/orders.csv"), customers));
-        Thread priorityProducer = new Thread(new Producer(new File("data/orders.csv"), priorityOrders));
+        Thread producer = new Thread(new Producer(
+            new File("data/orders.csv"),
+            customers,
+            menu
+        ));
+        Thread priorityProducer = new Thread(new Producer(
+            new File("data/orders.csv"),
+            priorityOrders,
+            menu
+        ));
 
         producer.start();
         priorityProducer.start();
@@ -95,7 +103,7 @@ public class CoffeeShop implements Subject, Observer {
         // Output log, report and notify observers
         if (kitchen.isDone()) {
             Logger.getInstance().writeReport("log.txt");
-            new ReportWriter(kitchen.getCompletedOrders()).write(new File("report.txt"));
+            new ReportWriter(kitchen.getServedCustomers()).write(new File("report.txt"));
             notifyObservers();
         }
     }

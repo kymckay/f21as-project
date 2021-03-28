@@ -18,9 +18,9 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
 import sim.model.CoffeeShop;
+import sim.model.Customer;
 import sim.model.Server;
 
 public class SimulationGUI extends JFrame implements Observer {
@@ -124,15 +124,15 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// Observer method
 	public void update() {
-		LinkedList<Order[]> currentQueue = coffeeShop.getCustomers().getQueue();
+		LinkedList<Customer> currentQueue = coffeeShop.getCustomers().getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append("Customers in the queue: ");
  		queueLog.append(currentQueue.size() + "\n");
 
- 		for (Order[] o : currentQueue) {
- 			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
- 			queueLog.append(o.length);
+ 		for (Customer c : currentQueue) {
+ 			queueLog.append(String.format("%-15s", c.getName()));
+ 			queueLog.append(c.getOrder().length);
  			queueLog.append(" Item(s) \n");
  		}
 
