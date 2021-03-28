@@ -43,11 +43,9 @@ public class Server implements Runnable, Subject {
                 || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
             
             // If orders still exist in the priority queue
-            if (!priorityQueue.getDone() || !priorityQueue.isEmpty()) {
-                while (!priorityQueue.getDone() || !priorityQueue.isEmpty()) {
-                    Order [] order = priorityQueue.getCustomerOrder();
-                    threadAction(order);
-                }
+            if (!priorityQueue.isEmpty()) {
+                Order [] order = priorityQueue.getCustomerOrder();
+                threadAction(order);
             } else {
                 Order [] order = customerQueue.getCustomerOrder();
                 threadAction(order);
