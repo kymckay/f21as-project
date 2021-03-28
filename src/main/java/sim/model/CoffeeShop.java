@@ -25,7 +25,7 @@ public class CoffeeShop implements Subject {
     public CoffeeShop(int numStaff) {
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(new File("data/orders.csv"), customers));
-        Thread priorityProducer = new Thread(new Producer(new File("data/orders.csv"), customers));
+        Thread priorityProducer = new Thread(new Producer(new File("data/orders.csv"), priorityOrders));
 
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < numStaff; i++) {
