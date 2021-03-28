@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 import sim.app.Order;
 import sim.app.OrderItem;
@@ -28,9 +29,10 @@ public class Producer implements Runnable {
     String frontOfLine; // Customer ID currently at the front of the line
     LinkedList<Order> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
-    public Producer(File in, SharedQueue out) {
+    public Producer(File in, SharedQueue out, SharedQueue priorityOut) {
         this.in = in;
         this.out = out;
+        this.priorityOut = priorityOut;
     }
 
     /**
