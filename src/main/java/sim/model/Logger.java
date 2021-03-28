@@ -26,31 +26,52 @@ public class Logger {
 	}
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public synchronized void add(Order[] o, OrderState state) {
+	public synchronized void add(Order[] o, OrderState state, QueueType q) {
 		LocalDateTime time = LocalDateTime.now();
 		log.append(String.format("%-35s", time));
 
 		switch (state) {
 		case ENTER:
-			log.append(String.format("%-15s", "Enter queue"));
+			switch (q) {
+				case CUSTOMER:
+					log.append(String.format("%-24s", "Enter Normal queue"));
+					break;
+				default:
+					log.append(String.format("%-24s", "Enter Priority queue"));
+					break;
+			}
 			break;
 		case EXIT:
-			log.append(String.format("%-15s", "Exit queue"));
+			switch (q) {
+				case CUSTOMER:
+					log.append(String.format("%-24s", "Exit Normal queue"));
+					break;
+				default:
+					log.append(String.format("%-24s", "Exit Priority queue"));
+					break;
+			}
 			break;
 		case PROCESSED:
-			log.append(String.format("%-15s", "Processed"));
+			switch (q) {
+				case CUSTOMER:
+					log.append(String.format("%-24s", "Processed"));
+					break;
+				default:
+					log.append(String.format("%-24s", "Processed Priority"));
+					break;
+			}
 			break;
 
 		case ENTERKITCHEN:
-			log.append(String.format("%-15s", "Enter kitchen"));
+			log.append(String.format("%-24s", "Enter kitchen"));
 			break;
 
 		case EXITKITCHEN:
-			log.append(String.format("%-15s", "Exit kitchen"));
+			log.append(String.format("%-24s", "Exit kitchen"));
 			break;
 
 		case SERVED:
-			log.append(String.format("%-15s", "Served"));
+			log.append(String.format("%-24s", "Served"));
 			break;
 		}
 
