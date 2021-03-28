@@ -55,9 +55,6 @@ public class SharedQueue implements Subject {
 	public synchronized void addOrder(Order[] o) {
 		queue.addLast(o);
 		switch (queueType) { //adds an entry in the log every time the method is called
-		case CUSTOMER:
-			log.add(o, Logger.OrderState.ENTER);
-			break;
 		case KITCHEN:
 			log.add(o, Logger.OrderState.ENTERKITCHEN);
 			break;
@@ -104,5 +101,9 @@ public class SharedQueue implements Subject {
 		for (Observer o : observers) {
 			o.update();
 		}
+	}
+
+	public QueueType getQueueType() {
+		return queueType;
 	}
 }
