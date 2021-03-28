@@ -31,7 +31,7 @@ public class Kitchen implements Runnable, Subject {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-        	log.add(order, Logger.OrderState.SERVED);
+        	log.add(order, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
         }
         currentOrder = null;
         notifyObservers();
