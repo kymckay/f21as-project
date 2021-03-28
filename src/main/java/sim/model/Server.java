@@ -87,7 +87,9 @@ public class Server implements Runnable, Subject {
 
 	// notifies all observers in the observers list
 	public void notifyObservers() {
-		for (Observer o : observers) {
+		// ensures the observers LinkedList isn't modified during the iteration
+		LinkedList<Observer> current = observers;
+		for (Observer o : current) {
 			o.update();
 		}
 	}
