@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 import sim.app.Order;
@@ -106,7 +105,6 @@ public class Producer implements Runnable {
 
         // All rows in csv file have same columns
         if (cols.length == 6) {
-            LocalDateTime timestamp = LocalDateTime.parse(cols[0], DateTimeFormatter.ISO_DATE_TIME);
             String custId = cols[1];
             String itemId = cols[2];
             BigDecimal priceFull = new BigDecimal(cols[3]);
@@ -116,7 +114,7 @@ public class Producer implements Runnable {
             // OrderItem subclasses store the item permutations ordered
             OrderItem newItem = new OrderItem(itemId, itemDetails, priceFull, pricePaid);
 
-            return new Order(timestamp, custId, newItem);
+            return new Order(custId, newItem);
         } else {
             throw new IllegalArgumentException("Line contains wrong number of values");
         }

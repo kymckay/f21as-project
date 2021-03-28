@@ -2,28 +2,15 @@ package sim.app;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Order {
 
-    private LocalDateTime time;
     private String customerId;
     private OrderItem item;
 
-    public Order(LocalDateTime t, String customerId, OrderItem item) {
-        time = t;
+    public Order(String customerId, OrderItem item) {
         this.customerId = customerId;
         this.item = item;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    // added getDate() to get date without time.
-    public LocalDate getDate() {
-        return time.toLocalDate();
     }
 
     public String getCustomerID() {
