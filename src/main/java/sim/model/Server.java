@@ -7,8 +7,8 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
-    private SharedQueue customerQueue, kitchenQueue;
-    private Order[] currentOrder = null;
+    private SharedQueue customerQueue, kitchenQueue, priorityQueue;
+    private Order[] currentOrder;
     private LinkedList<Observer> observers;
     private Logger log;
     private long speed;
@@ -19,9 +19,10 @@ public class Server implements Runnable, Subject {
     // Set once server is finished serving
     private boolean done;
 
-    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
+    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue, SharedQueue priorityQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
+        this.priorityQueue = priorityQueue;
 
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
@@ -31,23 +32,37 @@ public class Server implements Runnable, Subject {
     @Override
     public void run() {
 
+        // Process queue from priorityQueue over customerQueue if there are still orders in it.
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
-        while (!customerQueue.getDone() || !customerQueue.isEmpty()) {
-            Order [] order = customerQueue.getCustomerOrder();
+
+        while (!customerQueue.getDone() || !customerQueue.isEmpty()
+                || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
+
+            // Prioritise the priority queue
+            SharedQueue target = !priorityQueue.isEmpty() ? priorityQueue : customerQueue;
+
+            Order[] order = target.getCustomerOrder();
+
+            // Update model state with current order
             currentOrder = order;
+
             notifyObservers();
-        	try {
+
+            try {
                 // Time to process order depends on number of items
                 Thread.sleep(speed * order.length);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-        	log.add(order, Logger.OrderState.PROCESSED);
-        	kitchenQueue.addOrder(order);
-        	// clear the order once finished
-        	currentOrder = null;
-        	notifyObservers();
+
+            // Pass order on to kitchen queue
+            log.add(order, Logger.OrderState.PROCESSED, target.getQueueType());
+            kitchenQueue.addOrder(order);
+
+            // Update model state to reflect order processed
+            currentOrder = null;
+            notifyObservers();
         }
 
         // Finish service

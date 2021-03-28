@@ -34,10 +34,13 @@ public class SharedQueue implements Subject {
 
 		switch (queueType) {
 		case CUSTOMER:
-			log.add(customerOrder, Logger.OrderState.EXIT);
+			log.add(customerOrder, Logger.OrderState.EXITKITCHEN, QueueType.CUSTOMER);
 			break;
 		case KITCHEN:
-			log.add(customerOrder, Logger.OrderState.EXITKITCHEN);
+			log.add(customerOrder, Logger.OrderState.EXITKITCHEN, QueueType.KITCHEN);
+			break;
+		default:
+			log.add(customerOrder, Logger.OrderState.EXIT, QueueType.PRIORITY);
 			break;
 		}
 
@@ -57,11 +60,13 @@ public class SharedQueue implements Subject {
 		queue.addLast(o);
 		switch (queueType) { //adds an entry in the log every time the method is called
 		case CUSTOMER:
-			log.add(o, Logger.OrderState.ENTER);
+			log.add(o, Logger.OrderState.ENTERKITCHEN, QueueType.CUSTOMER);
 			break;
 		case KITCHEN:
-			log.add(o, Logger.OrderState.ENTERKITCHEN);
+			log.add(o, Logger.OrderState.ENTERKITCHEN, QueueType.KITCHEN);
 			break;
+		default:
+			log.add(o, Logger.OrderState.ENTER, QueueType.PRIORITY);
 		}
 
 		empty = false;
@@ -91,13 +96,11 @@ public class SharedQueue implements Subject {
 	// adds observers to a list
 	public void registerObserver(Observer o) {
 		observers.add(o);
-
 	}
 
 	// removes observers from a list
 	public void removeObserver(Observer o) {
 		observers.remove(o);
-
 	}
 
 	// notify all observers in the observers list
@@ -105,6 +108,9 @@ public class SharedQueue implements Subject {
 		for (Observer o : observers) {
 			o.update();
 		}
+	}
 
+	public QueueType getQueueType() {
+		return queueType;
 	}
 }
