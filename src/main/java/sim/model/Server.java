@@ -43,11 +43,8 @@ public class Server implements Runnable, Subject {
                 || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
             
             // If orders still exist in the priority queue
-            if (!priorityQueue.isEmpty()) {
-                threadAction(priorityQueue.getCustomerOrder(), priorityQueue.getQueueType());
-            } else {
-                threadAction(customerQueue.getCustomerOrder(), customerQueue.getQueueType());
-            }
+            SharedQueue target = !priorityQueue.isEmpty() ? priorityQueue : customerQueue;
+            threadAction(target.getCustomerOrder(), target.getQueueType());
         }
 
         // Finish service
