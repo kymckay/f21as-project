@@ -18,21 +18,29 @@ public class QueueGUI extends JPanel implements Observer {
 	SharedQueue queue;
 	JTextArea display;
 
-	public QueueGUI(SharedQueue queue) {
+	public QueueGUI(SharedQueue queue, String title) {
 		this.queue = queue;
 		queue.registerObserver(this);
 		setLayout(new GridLayout(1,1)); // ensures JPanel takes up all available space in the GUI
-		setup();
+		setup(title);
 	}
 
-	public void setup() {
+	public void setup(String title) {
+		// Text area provides convenient wrapping
 		display = new JTextArea();
 		display.setEditable(false);
-		display.setText("Orders in the queue: 0");
-		Border border = BorderFactory.createTitledBorder("Kitchen Queue");
+
+		// Scroll pane remove limit on content height
 		JScrollPane queuePane = new JScrollPane(display);
+
+		// Identify the queue for the user
+		Border border = BorderFactory.createTitledBorder(title);
 		queuePane.setBorder(border);
+
 		add(queuePane);
+
+		// Fill initial state
+		update();
 	}
 
 	@Override
