@@ -106,15 +106,16 @@ public class Producer implements Runnable {
         if (cols.length == 6) {
             LocalDateTime timestamp = LocalDateTime.parse(cols[0], DateTimeFormatter.ISO_DATE_TIME);
             String custId = cols[1];
-            String itemId = cols[2];
-            BigDecimal priceFull = new BigDecimal(cols[3]);
-            BigDecimal pricePaid = new BigDecimal(cols[4]);
-            String itemDetails = cols[5];
+            Boolean priority = Boolean.valueOf(cols[2]);
+            String itemId = cols[3];
+            BigDecimal priceFull = new BigDecimal(cols[4]);
+            BigDecimal pricePaid = new BigDecimal(cols[5]);
+            String itemDetails = cols[6];
 
             // OrderItem subclasses store the item permutations ordered
             OrderItem newItem = new OrderItem(itemId, itemDetails, priceFull, pricePaid);
 
-            return new Order(timestamp, custId, newItem);
+            return new Order(timestamp, custId, newItem, priority);
         } else {
             throw new IllegalArgumentException("Line contains wrong number of values");
         }
