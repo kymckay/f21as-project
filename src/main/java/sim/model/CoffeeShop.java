@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import sim.app.ReportWriter;
-import sim.view.Observer;
+import sim.interfaces.Observer;
+import sim.interfaces.Subject;
 
 public class CoffeeShop implements Subject, Observer {
     // Queue of orders populated by producer for staff to serve

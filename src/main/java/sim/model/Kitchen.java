@@ -4,7 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import sim.app.Order;
-import sim.view.Observer;
+import sim.interfaces.Observer;
+import sim.interfaces.Subject;
 
 public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;

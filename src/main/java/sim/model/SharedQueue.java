@@ -3,7 +3,8 @@ package sim.model;
 import java.util.LinkedList;
 
 import sim.app.Order;
-import sim.view.Observer;
+import sim.interfaces.Observer;
+import sim.interfaces.Subject;
 
 public class SharedQueue implements Subject {
 

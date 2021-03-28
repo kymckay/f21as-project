@@ -3,13 +3,18 @@ package sim.model;
 import java.util.LinkedList;
 
 import sim.app.Order;
-import sim.view.Observer;
+import sim.interfaces.Observer;
+import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue;
-    private Order[] currentOrder;
+    private Order[] currentOrder = null;
     private LinkedList<Observer> observers;
     private Logger log;
+    private long speed;
+
+    // Default service speed relevant to other classes
+    public static final long BASE_SPEED = 10000l;
 
     // Set once server is finished serving
     private boolean done;
@@ -20,6 +25,7 @@ public class Server implements Runnable, Subject {
 
         observers = new LinkedList<Observer>();
         log = Logger.getInstance();
+        speed = BASE_SPEED;
     }
 
     @Override
@@ -33,12 +39,15 @@ public class Server implements Runnable, Subject {
             notifyObservers();
         	try {
                 // Time to process order depends on number of items
-                Thread.sleep(10000l * order.length);
+                Thread.sleep(speed * order.length);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         	log.add(order, Logger.OrderState.PROCESSED);
         	kitchenQueue.addOrder(order);
+        	// clear the order once finished
+        	currentOrder = null;
+        	notifyObservers();
         }
 
         // Finish service
@@ -54,6 +63,15 @@ public class Server implements Runnable, Subject {
 
     public Order[] getCurrentOrder() {
     	return currentOrder;
+    }
+
+    public void setSpeed(long l) {
+    	speed = l;
+    	notifyObservers();
+    }
+
+    public long getSpeed() {
+    	return speed;
     }
 
     // Subject methods
