@@ -5,12 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import sim.app.Order;
-import sim.app.OrderItem;
 
 /**
  * This class simulates the outside world, producing customers as they arrive
@@ -107,14 +104,8 @@ public class Producer implements Runnable {
         if (cols.length == 6) {
             String custId = cols[1];
             String itemId = cols[2];
-            BigDecimal priceFull = new BigDecimal(cols[3]);
-            BigDecimal pricePaid = new BigDecimal(cols[4]);
-            String itemDetails = cols[5];
 
-            // OrderItem subclasses store the item permutations ordered
-            OrderItem newItem = new OrderItem(itemId, itemDetails, priceFull, pricePaid);
-
-            return new Order(custId, newItem);
+            return new Order(custId, itemId);
         } else {
             throw new IllegalArgumentException("Line contains wrong number of values");
         }
