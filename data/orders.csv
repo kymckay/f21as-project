@@ -1,47 +1,31 @@
-LP001, M109
-JK001, B102
-JK001, F119
-TY001, F106
-TH001, B107
-JK002, B114
-UP001, F128
-EW001, F109
-TR001, F105
-SA001, F120
-IU001, B105
-MU001, F125
-DE001, M108
-JK003, B102
-JK003, B109
-JK004, B108
-DH001, F126
-UP001, B117
-OP001, B118
-BD001, F111
-SG001, F118
-HJ001, F116
-KL001, F121
-GH001, F114
-TH002, F103
-SG002, F123
-JO001, B105
-MU001, B110
-YB001, B107
-ZX001, F116
-WQ001, F111
-JU001, B103
-PO001, M104
-OI001, F115
-IU002, F112
-YB002, F130
-JK005, B110
-HG001, F001
-FD001, F105
-FF001, F120
-UU001, F126
-NM001, B104
-AS001, B109
-DS001, B111
-DE002, F118
-DH002, F121
-BN001, M105
+customer,item id
+Sunny Raver, F001
+Maddie Rusch, F001
+Eleni Fairbank, F001
+Darrick Lute, F001
+Neomi Tammaro, F001
+Samuel Kunz, F001
+Debra Mcbeth, F001
+Mandie Merriman, F001
+Ema Colson, F001
+Jewel Baumgart, F001
+Olga Smalley, F001
+Shaunna Fairbairn, F001
+Ardella Tylor, F001
+Soraya Dallas, F001
+Tamera Mccloud, F001
+Alyse Durant, F001
+Carolina Massingale, F001
+Sarai Thayer, F001
+Earleen Bobo, F001
+Belen Barretta, F001
+Evie Willey, F001
+Madison Jorge, F001
+Ezra Roberts, F001
+Jaimie Weidner, F001
+Alessandra Poulson, F001
+Hee Kwiecien, F001
+Joana Tindel, F001
+Marry Chess, F001
+Darleen Almanzar, F001
+Shila Aronowitz, F001

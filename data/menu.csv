@@ -1,53 +1,10 @@
-F102, Red Velvet Cake,3.2, Vegetarian
-F103, Almond Cookie,2.35, Vegetarian
-F104, Belgian Waffle,4.6, Vegetarian
-F105, Brownie,3.5, DairyFree|Vegetarian
-F106, Banana Split,3.5, Vegetarian
-F107, Blueberry Muffin,2.5, Vegan|Vegetarian|DairyFree
-F108, Cheesecake,3.2, Vegan|Vegetarian|DairyFree
-F109, Cinnamon Roll,3.1, Vegetarian
-F110, Coffee Cake,3.5, Vegetarian
-F111, Jam Doughnut,2, Vegetarian
-F112, French Toast,3.9, Vegetarian
-F113, Frozen Yogurt,2.1, Vegetarian|GlutenFree
-F114, Fruit Salad,3.5, Vegan|Vegetarian|DairyFree|GlutenFree
-F116, Ice Cream Cake,3.5, Vegetarian
-F117, Lemon Meringue Pie,3.8, Vegetarian
-F118, Panna Cotta,2.1, Vegan|Vegetarian|DairyFree|GlutenFree
-F119, Chocolate Pastry,3, Vegetarian
-F120, Strawberry Shortcake,2.1, Vegetarian
-F121, Sorbet,2.2, Vegan|Vegetarian|DairyFree|GlutenFree
-M102, Thermos,15, Coffee|Tea! White|Red|Green
-M103, Cold Cup,7.5, Tea! Red|Green
-M104, French Press,24.99, Coffee! White|Red|Green
-M105, Reusable Cup,4.99, Coffee|Tea! White
-M106, Stainless Steel Mug,9.5, Coffee|Tea! White|Red
-M107, Shopping Bag,2.99, Coffee|Tea! White|Red|Green
-M108, Reusable Straw,1.99, Tea! Green
-M109, Organic Cotton Shopping Bag,5.99, Coffee|Tea! White|Red
-F122, Tuna Melt Panini,3.2, DairyFree
-F123, Ham & Cheese Panini,2.35, DairyFree
-F124, BLT Sandwich,4.6, Vegetarian
-F125, Tomato & Mozzarella Panini,3.5, Vegetarian
-F126, Egg & Mayo Sandwich,4.2, Vegetarian
-F127, Five Cheese Tostie,4.52, Vegetarian
-F128, Chicken Wrap,4.83, DairyFree
-F129, Veggie Wrap,5.15, Vegan|Vegetarian|DairyFree
-F130, Falafel Salad,5.46, Vegan|Vegetarian|DairyFree|GlutenFree
-B102, Latte,3.1, true! S|M|L! Regular|Soy|Oat
-B103, Macchiato,3, true! S|M|L! Regular|Soy|Oat
-B104, Mocha,3, true! S|M|L! Regular|Soy|Oat
-B105, Cappuccino,2.8, true! S|M|L! Regular|Soy|Oat
-B106, Americano,3.89, true! S|M|L! None
-B107, Expresso,2, true! M|L! None
-B108, Cold Brew,3.5, false! S|M|L! Regular|Soy|Oat
-B109, Iced Tea,2.5, false! S|M|L! None
-B110, Iced Coffee,2.5, false! S|M! Regular|Soy|Oat
-B111, Water,2.0, false! L! None
-B112, Milkshake,4, false! S|M|L! Regular
-B113, Banana Smoothie,4.2, false! M! None
-B114, Strawbery Smoothie,4.3, false! S|M|L! None
-B115, Frappuccino,3.8, true! S|M|L! Regular|Soy
-B116, Hot Chocolate,3.5, true! S|M|L! Regular|Oat
-B117, Orange Juice ,2.8, false! M! None
-B118, Apple Juice,2.8, false! M! None
+id,price,name,modifiers
+F001,3.75,sandwich,filling
+F002,3.00,croissant,
+F003,3.00,scone,spread
+B001,2.50,americano,size|milk
+B002,3.00,latte,size|milk
+B003,3.00,cappuccino,size|milk
+B003,3.00,macchiato,size|milk
+B003,2.50,hot chocolate,size|milk
+B003,3.50,mocha,size|milk
