@@ -35,7 +35,7 @@ public class Server implements Runnable, Subject {
         // are in the queue
         while (!customerQueue.getDone() || !customerQueue.isEmpty()) {
             Order [] order = customerQueue.getCustomerOrder();
-            setCurrentOrder(order);
+            currentOrder = order;
             notifyObservers();
         	try {
                 // Time to process order depends on number of items
@@ -54,11 +54,6 @@ public class Server implements Runnable, Subject {
         done = true;
         currentOrder = null;
         notifyObservers();
-    }
-
-    // adds details of the order being processed by the Server
-    public void setCurrentOrder(Order[] o) {
-    	currentOrder = o;
     }
 
     public Order[] getCurrentOrder() {
