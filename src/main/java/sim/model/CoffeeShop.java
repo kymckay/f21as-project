@@ -84,6 +84,10 @@ public class CoffeeShop implements Subject, Observer {
         return kitchen;
     }
 
+    public int getNumStaff() {
+        return this.numStaff;
+    }
+
     public void setNumStaff(int numStaff) {
         this.numStaff = numStaff;
     }
