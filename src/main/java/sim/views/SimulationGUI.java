@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import javax.swing.border.EmptyBorder;
@@ -26,6 +27,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	public SimulationGUI(CoffeeShop coffeeShop) {
 		this.coffeeShop = coffeeShop;
+		coffeeShop.registerObserver(this);
 
 		setTitle("Coffee Shop Simulation");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -97,7 +99,8 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// Observes when shop is finished simulation
 	public void update() {
-		// TODO
+		JOptionPane.showMessageDialog(this, "The simulation has now ended. \nEnd of day report and log saved to \"report.txt\" and \"log.txt\".");
+		this.dispose();
 	}
 
 	public List<ServerGUI> getStaffViews() {
