@@ -24,9 +24,9 @@ public class CoffeeShop implements Subject, Observer {
     // Kitchen is observable
     private Kitchen kitchen = new Kitchen(orders);
 
-    private int numStaff;
+    private static final int NUM_STAFF = 3;
 
-    public CoffeeShop(Menu menu, int num) {
+    public CoffeeShop(Menu menu, int NUM_STAFF) {
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(
             new File("data/orders.csv"),
@@ -42,9 +42,8 @@ public class CoffeeShop implements Subject, Observer {
         producer.start();
         priorityProducer.start();
 
-        setNumStaff(num);
         // Staff members consumes the queue of customer orders
-        for (int i = 0; i < this.numStaff; i++) {
+        for (int i = 0; i < NUM_STAFF; i++) {
             // Track the staff members
             Server staff = new Server(customers, orders, priorityCustomers);
             servers.add(staff);
@@ -82,14 +81,6 @@ public class CoffeeShop implements Subject, Observer {
 
     public Kitchen getKitchen() {
         return kitchen;
-    }
-
-    public int getNumStaff() {
-        return this.numStaff;
-    }
-
-    public void setNumStaff(int numStaff) {
-        this.numStaff = numStaff;
     }
 
     @Override
