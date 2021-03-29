@@ -42,12 +42,13 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// sets the overall GUI layout
 	private void setup() {
-		JPanel main = new JPanel(new GridLayout(4,1));
+		JPanel main = new JPanel(new GridLayout(5,1));
 
 		main.add(queueSection());
 		main.add(setupServer());
 		main.add(setupQueue2());
 		main.add(setupKitchen());
+		main.add(setupControlls());
 
 		main.setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(main, BorderLayout.CENTER);
@@ -92,8 +93,8 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// this will contain all the interactive elements (e.g. buttons etc)
 	private JPanel setupControlls() {
-		JPanel controls = new JPanel();
-		controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
+		JPanel controls = new JPanel(new GridLayout(1,1));
+		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
 		return controls;
 	}
 
