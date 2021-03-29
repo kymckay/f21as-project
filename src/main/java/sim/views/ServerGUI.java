@@ -54,6 +54,7 @@ public class ServerGUI extends JPanel implements Observer {
 
 		serverArea = new JTextArea();
 		serverArea.setEditable(false);
+		serverArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		Border border1 = BorderFactory.createTitledBorder("Server " + number);
 		JScrollPane serverPane = new JScrollPane(serverArea);
 		setBorder(border1);
@@ -123,10 +124,10 @@ public class ServerGUI extends JPanel implements Observer {
 		} else {
 			StringBuilder currentOrder = new StringBuilder();
 			currentOrder.append("Customer being served: \n");
-			currentOrder.append(String.format("%10s", customer.getName()) + "\n");
+			currentOrder.append("   " + customer.getName() + "\n");
 			currentOrder.append("Ordered items: \n");
 			for (MenuItem item : customer.getOrder()) {
-				currentOrder.append(String.format("%10s", item.getID()) + "\n");
+				currentOrder.append("   " + item.getID() + "\n");
 			}
 
 			serverArea.setText(currentOrder.toString());
