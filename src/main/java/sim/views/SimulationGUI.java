@@ -27,6 +27,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	public SimulationGUI(CoffeeShop coffeeShop) {
 		this.coffeeShop = coffeeShop;
+		coffeeShop.registerObserver(this);
 
 		setTitle("Coffee Shop Simulation");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
