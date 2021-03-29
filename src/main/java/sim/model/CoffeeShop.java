@@ -90,8 +90,7 @@ public class CoffeeShop implements Subject, Observer {
     }
 
     public void setNumStaff(int num) {
-        numStaff = num;
-        notifyObservers();
+        this.numStaff = num;
     }
 
     @Override
