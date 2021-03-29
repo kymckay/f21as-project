@@ -99,7 +99,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// Observes when shop is finished simulation
 	public void update() {
-		JOptionPane.showMessageDialog(this, "The simulation has now ended. \nEnd of day report and log saved to file.");
+		JOptionPane.showMessageDialog(this, "The simulation has now ended. \nEnd of day report and log saved to \"report.txt\" and \"log.txt\".");
 		this.dispose();
 	}
 
