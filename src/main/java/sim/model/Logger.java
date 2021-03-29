@@ -80,8 +80,10 @@ public class Logger {
 		log.append("\n");
 	}
 
-	//returns instance of the Log class
-	public static Logger getInstance() {
+	// Laze-loads the singleton instance of the class
+	// Synchronized whole method to avoid double-checked locking
+	// (shown in lectures, but discouraged in modern Java practice)
+	public static synchronized Logger getInstance() {
 		if (instance == null)
 			instance = new Logger();
 		return instance;
