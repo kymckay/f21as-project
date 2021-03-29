@@ -3,13 +3,12 @@ package sim.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class SharedQueue implements Subject {
 
-	private LinkedList<Order[]> queue = new LinkedList<>();
+	private LinkedList<Customer> queue = new LinkedList<>();
 	private LinkedList<Observer> observers = new LinkedList<>();
 	private boolean empty = true;
 	private boolean done = false;
@@ -22,7 +21,7 @@ public class SharedQueue implements Subject {
 	}
 
 	// returns an array of order at the top of the queue
-	public synchronized Order[] getCustomerOrder() {
+	public synchronized Customer getCustomer() {
 		while (empty) {
 			try {
 				wait();
@@ -31,17 +30,17 @@ public class SharedQueue implements Subject {
 		 	}
 		}
 
-		Order[] customerOrder = queue.getFirst();
+		Customer customer = queue.getFirst();
 
 		switch (queueType) {
 		case CUSTOMER:
-			log.add(customerOrder, Logger.OrderState.EXITKITCHEN, QueueType.CUSTOMER);
+			log.add(customer, Logger.OrderState.EXITKITCHEN, QueueType.CUSTOMER);
 			break;
 		case KITCHEN:
-			log.add(customerOrder, Logger.OrderState.EXITKITCHEN, QueueType.KITCHEN);
+			log.add(customer, Logger.OrderState.EXITKITCHEN, QueueType.KITCHEN);
 			break;
 		default:
-			log.add(customerOrder, Logger.OrderState.EXIT, QueueType.PRIORITY);
+			log.add(customer, Logger.OrderState.EXIT, QueueType.PRIORITY);
 			break;
 		}
 
@@ -53,21 +52,21 @@ public class SharedQueue implements Subject {
 			notifyAll();
 		}
 
-		return customerOrder;
+		return customer;
 	}
 
-	// adds an array of orders to the queue
-	public synchronized void addOrder(Order[] o) {
-		queue.addLast(o);
+	// Add a customer to the back of the queue
+	public synchronized void add(Customer c) {
+		queue.addLast(c);
 		switch (queueType) { //adds an entry in the log every time the method is called
 		case CUSTOMER:
-			log.add(o, Logger.OrderState.ENTERKITCHEN, QueueType.CUSTOMER);
+			log.add(c, Logger.OrderState.ENTERKITCHEN, QueueType.CUSTOMER);
 			break;
 		case KITCHEN:
-			log.add(o, Logger.OrderState.ENTERKITCHEN, QueueType.KITCHEN);
+			log.add(c, Logger.OrderState.ENTERKITCHEN, QueueType.KITCHEN);
 			break;
 		default:
-			log.add(o, Logger.OrderState.ENTER, QueueType.PRIORITY);
+			log.add(c, Logger.OrderState.ENTER, QueueType.PRIORITY);
 		}
 
 		empty = false;
@@ -84,10 +83,9 @@ public class SharedQueue implements Subject {
 	}
 
 
-	public synchronized List<Order[]> getQueue() {
+	public synchronized List<Customer> getQueue() {
  		return queue;
 	}
-
 
 	public boolean isEmpty() {
 		return empty;

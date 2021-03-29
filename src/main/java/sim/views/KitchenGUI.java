@@ -4,9 +4,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
+import sim.model.Customer;
 import sim.model.Kitchen;
+import sim.model.MenuItem;
 
 public class KitchenGUI extends JTextArea implements Observer {
 	private Kitchen kitchen;
@@ -27,18 +28,18 @@ public class KitchenGUI extends JTextArea implements Observer {
 
 	@Override
 	public void update() {
-		Order[] order = kitchen.getCurrentOrder();
+		Customer customer = kitchen.getCurrentCustomer();
 
-		if (order == null) {
+		if (customer == null) {
 			setText("");
 		} else {
 			StringBuilder currentOrder = new StringBuilder();
 			currentOrder.replace(0, currentOrder.length(), "");
 			currentOrder.append("Customer being served: \n");
-			currentOrder.append(String.format("%10s", order[0].getCustomerID()) + "\n");
+			currentOrder.append(String.format("%10s", customer.getName()) + "\n");
     		currentOrder.append("Ordered items: \n");
-    		for (Order o : order) {
-    			currentOrder.append(String.format("%10s", o.getItemId()) + "\n");
+    		for (MenuItem o : customer.getOrder()) {
+    			currentOrder.append(String.format("%10s", o.getID()) + "\n");
     		}
     		setText(currentOrder.toString());
 		}

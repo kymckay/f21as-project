@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import sim.model.Customer;
+import sim.model.MenuItem;
+
 /**
  * Class responsible for creating and writing the end of day report from a list
  * of orders
@@ -15,17 +18,17 @@ public class ReportWriter {
     StringBuilder report;
 
     /**
-     * Consstruct a new report for the given list of orders
-     * @param orders list of orders to convert into a report
+     * Consstruct a new report for the given list of customers
+     * @param customers list of served customers to convert into a report
      */
-    public ReportWriter(List<Order[]> orders) {
+    public ReportWriter(List<Customer> customers) {
         report = new StringBuilder();
 
         // Report should include today's date for future reference
         report.append(String.format("End of Day Report: %s%n", LocalDate.now()));
 
         // Summary statistics include the day's income
-        report.append(String.format("The income obtained from today's orders is £%s%n", getIncome(orders)));
+        report.append(String.format("The income obtained from today's orders is £%s%n", getIncome(customers)));
     }
 
     /**
@@ -40,12 +43,12 @@ public class ReportWriter {
         }
     }
 
-    private BigDecimal getIncome(List<Order[]> orders) {
+    private BigDecimal getIncome(List<Customer> customers) {
         BigDecimal total = BigDecimal.ZERO;
 
-        for (Order[] items : orders) {
-            for (Order o : items) {
-                total = total.add(o.getPricePaid());
+        for (Customer c : customers) {
+            for (MenuItem item : c.getOrder()) {
+                total = total.add(item.getPrice());
             }
         }
 

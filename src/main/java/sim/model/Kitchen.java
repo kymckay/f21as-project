@@ -3,19 +3,18 @@ package sim.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
-    private Order[] currentOrder;
+    private Customer currentCustomer;
 
     private LinkedList<Observer> observers = new LinkedList<>();
     private Logger log = Logger.getInstance();
 
-    // Completed orders will be stored for output report later
-    private LinkedList<Order[]> completed = new LinkedList<>();
+    // Served customers will be stored for output report later
+    private LinkedList<Customer> completed = new LinkedList<>();
 
     // Set once server is finished serving
     private boolean done;
@@ -30,32 +29,32 @@ public class Kitchen implements Runnable, Subject {
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
         while (!kitchenQueue.getDone() || !kitchenQueue.isEmpty()) {
-            currentOrder = kitchenQueue.getCustomerOrder();
+            currentCustomer = kitchenQueue.getCustomer();
             notifyObservers();
 
         	try {
                 // Time to process order depends on number of items
-                Thread.sleep(5000l * currentOrder.length);
+                Thread.sleep(5000l * currentCustomer.getOrder().length);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
             // Log order as completed
-            completed.add(currentOrder);
-        	log.add(currentOrder, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
+            completed.add(currentCustomer);
+        	log.add(currentCustomer, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
         }
 
         // Finish service
         done = true;
-        currentOrder = null;
+        currentCustomer = null;
         notifyObservers();
     }
 
-    public Order[] getCurrentOrder() {
-    	return currentOrder;
+    public Customer getCurrentCustomer() {
+    	return currentCustomer;
     }
 
-    public List<Order[]> getCompletedOrders() {
+    public List<Customer> getServedCustomers() {
         return completed;
     }
 

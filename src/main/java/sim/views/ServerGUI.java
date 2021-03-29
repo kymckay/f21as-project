@@ -19,8 +19,9 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
+import sim.model.Customer;
+import sim.model.MenuItem;
 import sim.model.Server;
 
 public class ServerGUI extends JPanel implements Observer {
@@ -114,18 +115,18 @@ public class ServerGUI extends JPanel implements Observer {
 		// Update speed label
 		label.setText(String.format("Serving Speed: %ds", server.getSpeed() / 1000));
 
-		Order[] order = server.getCurrentOrder();
+		Customer customer = server.getCurrentCustomer();
 
 		// updates the customer queue section
-		if (order == null) {
+		if (customer == null) {
 			serverArea.setText("");
 		} else {
 			StringBuilder currentOrder = new StringBuilder();
 			currentOrder.append("Customer being served: \n");
-			currentOrder.append(String.format("%10s", order[0].getCustomerID()) + "\n");
+			currentOrder.append(String.format("%10s", customer.getName()) + "\n");
 			currentOrder.append("Ordered items: \n");
-			for (Order o : order) {
-				currentOrder.append(String.format("%10s", o.getItemId()) + "\n");
+			for (MenuItem item : customer.getOrder()) {
+				currentOrder.append(String.format("%10s", item.getID()) + "\n");
 			}
 
 			serverArea.setText(currentOrder.toString());

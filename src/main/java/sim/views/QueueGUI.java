@@ -9,8 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
-import sim.app.Order;
 import sim.interfaces.Observer;
+import sim.model.Customer;
 import sim.model.SharedQueue;
 
 public class QueueGUI extends JPanel implements Observer {
@@ -45,14 +45,14 @@ public class QueueGUI extends JPanel implements Observer {
 
 	@Override
 	public void update() {
-		List<Order[]> currentQueue = queue.getQueue();
+		List<Customer> currentQueue = queue.getQueue();
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append(String.format("Orders in the queue: %d%n", currentQueue.size()));
 
- 		for (Order[] o : currentQueue) {
- 			queueLog.append(String.format("%-15s", o[0].getCustomerID()));
- 			queueLog.append(o.length);
+ 		for (Customer c : currentQueue) {
+ 			queueLog.append(String.format("%-15s", c.getName()));
+ 			queueLog.append(c.getOrder().length);
  			queueLog.append(" Item(s) \n");
  		}
 		display.setText(queueLog.toString());
