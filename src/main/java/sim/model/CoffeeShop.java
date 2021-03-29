@@ -26,7 +26,7 @@ public class CoffeeShop implements Subject, Observer {
 
     private static final int NUM_STAFF = 3;
 
-    public CoffeeShop(Menu menu, int NUM_STAFF) {
+    public CoffeeShop(Menu menu) {
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(
             new File("data/orders.csv"),
@@ -41,7 +41,7 @@ public class CoffeeShop implements Subject, Observer {
 
         producer.start();
         priorityProducer.start();
-
+        
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < NUM_STAFF; i++) {
             // Track the staff members
