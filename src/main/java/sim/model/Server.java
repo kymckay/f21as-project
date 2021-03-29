@@ -1,16 +1,19 @@
 package sim.model;
 
 import java.util.LinkedList;
+import java.util.Optional;
 
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
     private SharedQueue customerQueue, kitchenQueue, priorityQueue;
-    private Customer currentCustomer;
     private LinkedList<Observer> observers;
     private Logger log;
     private long speed;
+
+    // Server is not always serving a customer
+    private Optional<Customer> currentCustomer;
 
     // Default service speed relevant to other classes
     public static final long BASE_SPEED = 10000l;
@@ -23,52 +26,56 @@ public class Server implements Runnable, Subject {
         this.kitchenQueue = kitchenQueue;
         this.priorityQueue = priorityQueue;
 
-        observers = new LinkedList<Observer>();
+        observers = new LinkedList<>();
         log = Logger.getInstance();
         speed = BASE_SPEED;
+
+        // No customer to start with
+        currentCustomer = Optional.empty();
     }
 
     @Override
     public void run() {
-
-        // Process queue from priorityQueue over customerQueue if there are still orders in it.
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
-
-        while (!customerQueue.getDone() || !customerQueue.isEmpty()
-                || !priorityQueue.getDone() || !priorityQueue.isEmpty()) {
-
+        while (
+            !customerQueue.getDone() || !priorityQueue.getDone()
+            || !customerQueue.isEmpty() || !priorityQueue.isEmpty()
+        ) {
             // Prioritise the priority queue
             SharedQueue target = !priorityQueue.isEmpty() ? priorityQueue : customerQueue;
 
             currentCustomer = target.getCustomer();
 
-            // Update model state with current customer
-            notifyObservers();
+            if (currentCustomer.isPresent()) {
+                Customer toServe = currentCustomer.get();
 
-            try {
-                // Time to process order depends on number of items
-                Thread.sleep(speed * currentCustomer.getOrder().length);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                // Update model state with new customer
+                notifyObservers();
+
+                try {
+                    // Time to process order depends on number of items
+                    Thread.sleep(speed * toServe.getOrder().length);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                // Pass order on to kitchen queue
+                log.add(toServe, Logger.OrderState.PROCESSED, target.getQueueType());
+                kitchenQueue.add(toServe);
+
+                // Update model state to reflect customer served
+                currentCustomer = Optional.empty();
+                notifyObservers();
             }
-
-            // Pass order on to kitchen queue
-            log.add(currentCustomer, Logger.OrderState.PROCESSED, target.getQueueType());
-            kitchenQueue.add(currentCustomer);
-
-            // Update model state to reflect customer served
-            currentCustomer = null;
-            notifyObservers();
         }
 
         // Finish service
         done = true;
-        currentCustomer = null;
         notifyObservers();
     }
 
-    public Customer getCurrentCustomer() {
+    public Optional<Customer> getCurrentCustomer() {
     	return currentCustomer;
     }
 

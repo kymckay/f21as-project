@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.Hashtable;
+import java.util.Optional;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -115,21 +116,24 @@ public class ServerGUI extends JPanel implements Observer {
 		// Update speed label
 		label.setText(String.format("Serving Speed: %ds", server.getSpeed() / 1000));
 
-		Customer customer = server.getCurrentCustomer();
+		Optional<Customer> customer = server.getCurrentCustomer();
 
 		// updates the customer queue section
-		if (customer == null) {
-			serverArea.setText("");
-		} else {
+		if (customer.isPresent()) {
+			Customer serving = customer.get();
+
 			StringBuilder currentOrder = new StringBuilder();
+
 			currentOrder.append("Customer being served: \n");
-			currentOrder.append(String.format("%10s", customer.getName()) + "\n");
+			currentOrder.append(String.format("%10s", serving.getName()) + "\n");
 			currentOrder.append("Ordered items: \n");
-			for (MenuItem item : customer.getOrder()) {
+			for (MenuItem item : serving.getOrder()) {
 				currentOrder.append(String.format("%10s", item.getID()) + "\n");
 			}
 
 			serverArea.setText(currentOrder.toString());
+		} else {
+			serverArea.setText("");
 		}
 	}
 
