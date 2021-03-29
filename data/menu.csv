@@ -5,6 +5,6 @@ F003,3.00,scone,spread
 B001,2.50,americano,size|milk
 B002,3.00,latte,size|milk
 B003,3.00,cappuccino,size|milk
-B003,3.00,macchiato,size|milk
-B003,2.50,hot chocolate,size|milk
-B003,3.50,mocha,size|milk
+B004,3.00,macchiato,size|milk
+B005,2.50,hot chocolate,size|milk
+B006,3.50,mocha,size|milk
