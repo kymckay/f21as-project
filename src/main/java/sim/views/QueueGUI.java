@@ -1,5 +1,6 @@
 package sim.views;
 
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class QueueGUI extends JPanel implements Observer {
 		// Text area provides convenient wrapping
 		display = new JTextArea();
 		display.setEditable(false);
+		// fixed width font ensure String.format alignment functions correctly 
+		display.setFont(new Font("Monospaced", Font.PLAIN, 13));
 
 		// Scroll pane remove limit on content height
 		JScrollPane queuePane = new JScrollPane(display);
@@ -51,7 +54,7 @@ public class QueueGUI extends JPanel implements Observer {
  		queueLog.append(String.format("Orders in the queue: %d%n", currentQueue.size()));
 
  		for (Customer c : currentQueue) {
- 			queueLog.append(String.format("%-15s", c.getName()));
+ 			queueLog.append(String.format("%-21s", c.getName()));
  			queueLog.append(c.getOrder().length);
  			queueLog.append(" Item(s) \n");
  		}

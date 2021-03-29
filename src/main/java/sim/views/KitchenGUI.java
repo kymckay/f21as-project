@@ -1,5 +1,7 @@
 package sim.views;
 
+import java.awt.Font;
+
 import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
@@ -22,6 +24,7 @@ public class KitchenGUI extends JTextArea implements Observer {
 	public void setup() {
 		setEditable(false);
 		setText("No orders being prepared.");
+		setFont(new Font("Monospaced", Font.PLAIN, 13));
 		Border border = BorderFactory.createTitledBorder("Kitchen");
 		setBorder(border);
 	}
@@ -36,10 +39,10 @@ public class KitchenGUI extends JTextArea implements Observer {
 			StringBuilder currentOrder = new StringBuilder();
 			currentOrder.replace(0, currentOrder.length(), "");
 			currentOrder.append("Customer being served: \n");
-			currentOrder.append(String.format("%10s", customer.getName()) + "\n");
+			currentOrder.append("   " + customer.getName() + "\n");
     		currentOrder.append("Ordered items: \n");
     		for (MenuItem o : customer.getOrder()) {
-    			currentOrder.append(String.format("%10s", o.getID()) + "\n");
+    			currentOrder.append("   " + o.getID() + "\n");
     		}
     		setText(currentOrder.toString());
 		}
