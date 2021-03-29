@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Component;
+import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,6 +24,9 @@ import sim.model.Server;
 public class SimulationGUI extends JFrame implements Observer {
 
 	private CoffeeShop coffeeShop;
+
+	private JButton addServer;
+	private JButton removeServer;
 
 	// List of sub-views controllers need access to
 	private List<ServerGUI> staffViews = new LinkedList<>();
@@ -93,9 +99,22 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// this will contain all the interactive elements (e.g. buttons etc)
 	private JPanel setupControlls() {
-		JPanel controls = new JPanel(new GridLayout(1,1));
+		JPanel controls = new JPanel();
 		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
+		controls.setAlignmentX(Component.CENTER_ALIGNMENT);
+		addServer = new JButton("Add Server");
+		removeServer = new JButton("Remove Server");
+		controls.add(addServer);
+		controls.add(removeServer);
 		return controls;
+	}
+
+	public void addAddServerListener(ActionListener e) {
+		addServer.addActionListener(e);
+	}
+
+	public void addRemoveServerListener(ActionListener e) {
+		removeServer.addActionListener(e);
 	}
 
 	// Observes when shop is finished simulation
