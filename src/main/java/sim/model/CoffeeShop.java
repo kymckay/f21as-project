@@ -24,7 +24,7 @@ public class CoffeeShop implements Subject, Observer {
     // Kitchen is observable
     private Kitchen kitchen = new Kitchen(orders);
 
-    private static final int NUM_STAFF = 3;
+    public static final int NUM_STAFF = 3;
 
     public CoffeeShop(Menu menu) {
         // Producer inserts input file of orders into shared queue for staff
