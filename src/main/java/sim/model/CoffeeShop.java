@@ -25,6 +25,7 @@ public class CoffeeShop implements Subject, Observer {
     private Kitchen kitchen = new Kitchen(orders);
 
     public static final int NUM_STAFF = 3;
+    private int numStaff;
 
     public CoffeeShop(Menu menu) {
         // Producer inserts input file of orders into shared queue for staff
@@ -42,8 +43,9 @@ public class CoffeeShop implements Subject, Observer {
         producer.start();
         priorityProducer.start();
         
+        numStaff = NUM_STAFF;
         // Staff members consumes the queue of customer orders
-        for (int i = 0; i < NUM_STAFF; i++) {
+        for (int i = 0; i < numStaff; i++) {
             // Track the staff members
             Server staff = new Server(customers, orders, priorityCustomers);
             servers.add(staff);
@@ -81,6 +83,15 @@ public class CoffeeShop implements Subject, Observer {
 
     public Kitchen getKitchen() {
         return kitchen;
+    }
+
+    public int getNumStaff() {
+        return numStaff;
+    }
+
+    public void setNumStaff(int num) {
+        numStaff = num;
+        notifyObservers();
     }
 
     @Override
