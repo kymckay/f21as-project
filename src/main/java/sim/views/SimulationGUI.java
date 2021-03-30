@@ -94,7 +94,7 @@ public class SimulationGUI extends JFrame implements Observer {
 			serverStaff.add(new ServerGUI(last));
 		} else {
 			staffViews.removeLast();
-			serverStaff.remove(last);
+			// TODO: implement remove serverStaff
 		}
 	}
 
