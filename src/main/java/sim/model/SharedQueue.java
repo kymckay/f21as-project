@@ -9,7 +9,7 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class SharedQueue implements Subject {
-	// Queue can consist of multiple lanes (prioritised by index)
+	// Queue can consist of multiple lanes (prioritised by lower index)
 	// Prioritisation must be done in this shared class to avoid consumers waiting
 	// on one queue when another has customers (if multiple instances were used)
 	private ArrayList<LinkedList<Customer>> lanes;
@@ -50,8 +50,8 @@ public class SharedQueue implements Subject {
 			return Optional.empty();
 		}
 
-		// Empty flag should garantee there's always a customer in one of the lanes, but
-		// we don't want to assume
+		// Checking empty flag should garantee there's always a customer in one of the
+		// lanes, but we don't want to assume
 		Optional<Customer> customer = Optional.empty();
 
 		// Earlier index lanes are prioritised
