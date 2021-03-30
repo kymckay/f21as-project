@@ -24,7 +24,7 @@ public class ServerController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int initialNum = model.getNumStaff();
-            model.setNumStaff(initialNum++);
+            model.setNumStaff(initialNum + 1);
             model.updateServer();
             view.updateServer("add");
         }
@@ -35,7 +35,7 @@ public class ServerController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int initialNum = model.getNumStaff();
-            model.setNumStaff(initialNum--);
+            model.setNumStaff(initialNum - 1);
             model.updateServer();
             view.updateServer("Remove");
         }
