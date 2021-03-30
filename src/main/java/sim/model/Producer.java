@@ -44,28 +44,35 @@ public class Producer implements Runnable {
             // Returns null when EOF reached
             while ((line = input.readLine()) != null) {
                 lineNum++;
-
-                // A single customer's items go into their basket until they checkout
-                // before the next customer
-                String name = processLine(line);
-
+                
+                // Process line if not null
+                String[]info  = processLine(line);
+                String name   = info[0];
+                String itemId = info[1];
+                
                 // Next customer reached, checkout basket and empty
                 if (!name.equals(frontOfLine)) {
-                    // Don't checkout if there was no previous customer
-                    if (frontOfLine != null) {
-                        // Simulate customer takes 2s per item to order
-                        sleep(basket.size() * 2000l);
-
-                        checkout();
-                    }
+                   
+                    
+                    // Simulate customer takes 2s per item to order	
+                    sleep(basket.size() * 2000l);
+                    checkout();
+                    
+                    // Add a customer's single item to basket
+                    basket.add(menu.getItem(itemId));
+                    
+                    // The customer is now front of line
+                    frontOfLine = name;
 
                     // Some random time may pass before the next customer arrives
                     if (Math.random() < 0.5) {
                         sleep((long) Math.floor(Math.random() * 5000l));
                     }
 
-                    // New customer is now front of line
-                    frontOfLine = name;
+                } else {
+           
+                	// if a customer has ordered multiple items, add all to basket before checkout
+                	basket.add(menu.getItem(itemId));
                 }
             }
 
@@ -98,7 +105,7 @@ public class Producer implements Runnable {
         basket.clear();
     }
 
-    private String processLine(String line) {
+    private String[] processLine(String line) {
         // Remove whitespace while splitting using regex delimiter
         // Java's split operator discards empty strings by default, -1 keeps them (empty
         // csv columns are valid)
@@ -106,12 +113,8 @@ public class Producer implements Runnable {
 
         // All rows in csv file have same columns
         if (cols.length == 2) {
-            String name = cols[0];
-            String itemId = cols[1];
-
-            basket.add(menu.getItem(itemId));
-
-            return name;
+            return cols;
+            
         } else {
             throw new IllegalArgumentException("Expected 2 columns");
         }
