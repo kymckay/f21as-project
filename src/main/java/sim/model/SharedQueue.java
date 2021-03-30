@@ -8,17 +8,22 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class SharedQueue implements Subject {
-
+    // The underlying shared object
 	private LinkedList<Customer> queue = new LinkedList<>();
+
+    // Queue logs entry/exit events
+    private Logger log = Logger.getInstance();
+    private QueueType queueType;
+
+    // Observers register themselves here for notifications
 	private LinkedList<Observer> observers = new LinkedList<>();
-	private boolean empty = true;
-	private boolean done = false;
-	private Logger log = Logger.getInstance();
-	private QueueType queueType;
+
+    // Flags for producer/consumers to check object state
+    private boolean empty = true;
+    private boolean done = false;
 
 	public SharedQueue (QueueType queueType) {
 		this.queueType = queueType;
-
 	}
 
 	// Returns a customer from the top of the queue (once/if there is one)
@@ -38,58 +43,73 @@ public class SharedQueue implements Subject {
 			return Optional.empty();
 		}
 
-		Customer customer = queue.getFirst();
+		Customer customer = queue.removeFirst();
 
 		switch (queueType) {
-		case CUSTOMER:
-			log.add(customer, Logger.OrderState.EXITKITCHEN, QueueType.CUSTOMER);
-			break;
-		case KITCHEN:
-			log.add(customer, Logger.OrderState.EXITKITCHEN, QueueType.KITCHEN);
-			break;
-		default:
-			log.add(customer, Logger.OrderState.EXIT, QueueType.PRIORITY);
-			break;
+            case CUSTOMER:
+                log.add(customer, Logger.OrderState.EXITKITCHEN, QueueType.CUSTOMER);
+                break;
+            case KITCHEN:
+                log.add(customer, Logger.OrderState.EXITKITCHEN, QueueType.KITCHEN);
+                break;
+            default:
+                log.add(customer, Logger.OrderState.EXIT, QueueType.PRIORITY);
+                break;
 		}
 
-		queue.removeFirst();
-		notifyObservers();
-
+        // No need to notify threads as producer never needs to wait
 		if (queue.isEmpty()) {
 			empty = true;
-			notifyAll();
 		}
+
+        notifyObservers();
 
 		return Optional.of(customer);
 	}
 
 	// Add a customer to the back of the queue
 	public synchronized void add(Customer c) {
+        // Enforce setDone call after last customer is added
+        if (done) throw new IllegalStateException("Cannot add to a completed queue");
+
+        // Producer never needs to wait since we're dealing with a queue
 		queue.addLast(c);
-		switch (queueType) { //adds an entry in the log every time the method is called
-		case CUSTOMER:
-			log.add(c, Logger.OrderState.ENTERKITCHEN, QueueType.CUSTOMER);
-			break;
-		case KITCHEN:
-			log.add(c, Logger.OrderState.ENTERKITCHEN, QueueType.KITCHEN);
-			break;
-		default:
-			log.add(c, Logger.OrderState.ENTER, QueueType.PRIORITY);
+        empty = false;
+
+        // Log every addition to the queue
+		switch (queueType) {
+            case CUSTOMER:
+                log.add(c, Logger.OrderState.ENTERKITCHEN, QueueType.CUSTOMER);
+                break;
+            case KITCHEN:
+                log.add(c, Logger.OrderState.ENTERKITCHEN, QueueType.KITCHEN);
+                break;
+            default:
+                log.add(c, Logger.OrderState.ENTER, QueueType.PRIORITY);
 		}
 
-		empty = false;
+        // Inform all consumers and observers that the queue is no longer empty
 		notifyAll();
 		notifyObservers();
 	}
 
-	public boolean getDone() {
+	public boolean isDone() {
 		return done;
 	}
 
-	public void setDone() {
+    /**
+     * Marks the queue as no longer being populated.
+     *
+     * The method is synchronized as there's no guarantee it would execute before
+     * any awoken consumers (who could then re-enter the waiting state indefinitely
+     * if the queue is already empty before this runs)
+     */
+	public synchronized void setDone() {
 		done = true;
-	}
 
+        // Re-awake any waiting consumers now the queue is done
+        notifyAll();
+	}
 
 	public synchronized List<Customer> getQueue() {
  		return queue;

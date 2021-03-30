@@ -39,7 +39,7 @@ public class Server implements Runnable, Subject {
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
         while (
-            !customerQueue.getDone() || !priorityQueue.getDone()
+            !customerQueue.isDone() || !priorityQueue.isDone()
             || !customerQueue.isEmpty() || !priorityQueue.isEmpty()
         ) {
             // Prioritise the priority queue
