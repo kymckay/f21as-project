@@ -10,25 +10,33 @@ public class Logger {
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	private static Logger instance;
-	private StringBuilder log;
+	private StringBuilder sBuilder;
 
 	private Logger() {
-		log = new StringBuilder();
+		sBuilder = new StringBuilder();
 	}
 
 	/**
-	 * Logs a new simulation event in the log
-	 * @param formatString event message where %s will be replaced with the customer name
-	 * @param customer customer object the event relates to
+	 * Logs a new string in the log (adds time and newline)
+	 * @param string
 	 */
-	public synchronized void add(String formatString, Customer customer) {
-		log.append(String.format("%s %s%n",
+	public synchronized void add(String string) {
+		sBuilder.append(String.format("%s %s%n",
 			LocalDateTime.now().format(formatter),
-			String.format(formatString, customer.getName())
+			string
 		));
 	}
 
-	// Laze-loads the singleton instance of the class
+	/**
+	 * Logs a new simulation event in the log (adds time and newline)
+	 * @param event event message where %s will be replaced with the customer name
+	 * @param customer customer object the event relates to
+	 */
+	public synchronized void add(String event, Customer customer) {
+		add(String.format(event, customer.getName()));
+	}
+
+	// Lazy-loads the singleton instance of the class
 	// Synchronized whole method to avoid double-checked locking
 	// (shown in lectures, but discouraged in modern Java practice)
 	public static synchronized Logger getInstance() {
@@ -40,7 +48,7 @@ public class Logger {
 	//writes log to file
 	public void writeReport(String filename) {
         try (FileWriter orderWriter = new FileWriter(filename)) {
-			orderWriter.write(log.toString());
+			orderWriter.write(sBuilder.toString());
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
