@@ -91,10 +91,6 @@ public class Logger {
 		return instance;
 	}
 
-	public StringBuilder getLog() {
-		return log;
-	}
-
 	//writes log to file
 	public void writeReport(String filename) {
         try (FileWriter orderWriter = new FileWriter(filename)) {
