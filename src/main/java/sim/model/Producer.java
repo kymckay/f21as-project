@@ -44,36 +44,31 @@ public class Producer implements Runnable {
             // Returns null when EOF reached
             while ((line = input.readLine()) != null) {
                 lineNum++;
-                
-                // Process line if not null
+
                 String[]info  = processLine(line);
                 String name   = info[0];
                 String itemId = info[1];
-                
-                // Next customer reached, checkout basket and empty
+
+                // Next customer reached, checkout basket before continuing
                 if (!name.equals(frontOfLine)) {
-                   
-                    
-                    // Simulate customer takes 2s per item to order	
-                    sleep(basket.size() * 2000l);
-                    checkout();
-                    
-                    // Add a customer's single item to basket
-                    basket.add(menu.getItem(itemId));
-                    
+                    // Don't checkout on very first iteration
+                   if (frontOfLine != null) {
+                       // Simulate customer takes 2s per item to order
+                       sleep(basket.size() * 2000l);
+                       checkout();
+                   }
+
                     // The customer is now front of line
                     frontOfLine = name;
 
-                    // Some random time may pass before the next customer arrives
+                    // Some random time may pass before the customer arrives
                     if (Math.random() < 0.5) {
                         sleep((long) Math.floor(Math.random() * 5000l));
                     }
-
-                } else {
-           
-                	// if a customer has ordered multiple items, add all to basket before checkout
-                	basket.add(menu.getItem(itemId));
                 }
+
+                // Add current order line to basket
+                basket.add(menu.getItem(itemId));
             }
 
             // Add final customer's order
@@ -114,7 +109,7 @@ public class Producer implements Runnable {
         // All rows in csv file have same columns
         if (cols.length == 2) {
             return cols;
-            
+
         } else {
             throw new IllegalArgumentException("Expected 2 columns");
         }
