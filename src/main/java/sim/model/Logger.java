@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Logger {
 	// Don't want millisecond precious for a log file
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	private static Logger instance;
 	private StringBuilder log;
