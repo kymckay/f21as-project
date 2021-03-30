@@ -41,6 +41,7 @@ public class Kitchen implements Runnable, Subject {
                 Customer toServe = currentCustomer.get();
 
                 notifyObservers();
+				log.add("The kitchen starts preparing an order for %s", toServe);
 
                 try {
                     // Time to process order depends on number of items
