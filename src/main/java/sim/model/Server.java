@@ -7,7 +7,13 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
-    private SharedQueue customerQueue, kitchenQueue, priorityQueue;
+	// Static variable tracks number of servers that exist
+	private static int count = 0;
+	private int number = 0; // Each new server gets a unique number ID
+
+    private SharedQueue customerQueue;
+	private SharedQueue kitchenQueue;
+	private SharedQueue priorityQueue;
     private LinkedList<Observer> observers;
     private Logger log;
     private long speed;
@@ -25,6 +31,9 @@ public class Server implements Runnable, Subject {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
         this.priorityQueue = priorityQueue;
+
+		// Increment server number
+		this.number = ++count;
 
         observers = new LinkedList<>();
         log = Logger.getInstance();
@@ -61,7 +70,13 @@ public class Server implements Runnable, Subject {
                 }
 
                 // Pass order on to kitchen queue
-                log.add("A server sends an order to the kitchen for %s", toServe);
+				log.add(
+					String.format(
+						"Server %d sends an order to the kitchen for %s",
+						number,
+						toServe.getName()
+					)
+				);
                 kitchenQueue.add(toServe);
 
                 // Update model state to reflect customer served
@@ -115,4 +130,8 @@ public class Server implements Runnable, Subject {
     public boolean isDone() {
         return done;
     }
+
+	public int getNumber() {
+		return number;
+	}
 }

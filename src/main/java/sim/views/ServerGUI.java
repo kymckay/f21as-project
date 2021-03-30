@@ -26,11 +26,7 @@ import sim.model.MenuItem;
 import sim.model.Server;
 
 public class ServerGUI extends JPanel implements Observer {
-	// Static variable tracks number of servers that exist
-	private static int count = 0;
-
 	private Server server;
-	private int number;
 
 	private JTextArea serverArea;
 	private JSlider serverSlider;
@@ -42,7 +38,6 @@ public class ServerGUI extends JPanel implements Observer {
 
 	public ServerGUI(Server server) {
 		this.server = server;
-		this.number = ++count;
 		server.registerObserver(this);
 		setLayout(new GridLayout(2,1));
 		add(setupControls());
@@ -56,7 +51,7 @@ public class ServerGUI extends JPanel implements Observer {
 		serverArea = new JTextArea();
 		serverArea.setEditable(false);
 		serverArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-		Border border1 = BorderFactory.createTitledBorder("Server " + number);
+		Border border1 = BorderFactory.createTitledBorder("Server " + server.getNumber());
 		JScrollPane serverPane = new JScrollPane(serverArea);
 		setBorder(border1);
 		add(serverPane);
