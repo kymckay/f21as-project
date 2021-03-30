@@ -3,8 +3,11 @@ package sim.model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Logger {
+	// Don't want millisecond precious for a log file, space at end to distinguish column
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss ");
 
 	//enums for the add() method
 	public enum OrderState {
@@ -25,8 +28,7 @@ public class Logger {
 
 	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
 	public synchronized void add(Customer c, OrderState state, QueueType q) {
-		LocalDateTime time = LocalDateTime.now();
-		log.append(String.format("%-35s", time));
+		log.append(LocalDateTime.now().format(formatter));
 
 		switch (state) {
 		case ENTER:
