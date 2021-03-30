@@ -44,6 +44,16 @@ public class CoffeeShop implements Subject, Observer {
         priorityProducer.start();
         
         numStaff = NUM_STAFF;
+        updateServer();
+
+        // Observe kitchen to later check when service has stopped
+        kitchen.registerObserver(this);
+
+        Thread kitchenT = new Thread(kitchen);
+        kitchenT.start();
+    }
+
+    public void updateServer() {
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < numStaff; i++) {
             // Track the staff members
@@ -57,12 +67,6 @@ public class CoffeeShop implements Subject, Observer {
             Thread staffT = new Thread(staff);
             staffT.start();
         }
-
-        // Observe kitchen to later check when service has stopped
-        kitchen.registerObserver(this);
-
-        Thread kitchenT = new Thread(kitchen);
-        kitchenT.start();
     }
 
     public SharedQueue getCustomers() {
@@ -77,7 +81,7 @@ public class CoffeeShop implements Subject, Observer {
         return orders;
     }
 
-    public List<Server> getServers() {
+    public LinkedList<Server> getServers() {
         return servers;
     }
 
