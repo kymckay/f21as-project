@@ -102,27 +102,27 @@ public class Server implements Runnable, Subject {
     	return speed;
     }
 
-    // Subject methods
-    // add observers to a list
+	@Override
 	public void registerObserver(Observer o) {
-		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
-		LinkedList<Observer> current = (LinkedList)observers.clone();
-		current.add(o);
-		observers = current;
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.add(o);
+		}
 	}
 
-	// removes observers from a list
+	@Override
 	public void removeObserver(Observer o) {
-		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
-		LinkedList<Observer> current = (LinkedList)observers.clone();
-		current.remove(o);
-		observers = current;
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.remove(o);
+		}
 	}
 
-	// notifies all observers in the observers list
+	@Override
 	public void notifyObservers() {
-		for (Observer o : observers) {
-			o.update();
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			for (Observer o : observers) o.update();
 		}
 	}
 

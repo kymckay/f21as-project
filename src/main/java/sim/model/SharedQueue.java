@@ -109,29 +109,52 @@ public class SharedQueue implements Subject {
         notifyAll();
 	}
 
+	/**
+	 * Returns a copy of a queue lane. Useful for observers. The copy is to avoid
+	 * concurrent modification errors if the caller wants to iterate over the
+	 * object.
+	 *
+	 * Method must be synchronized since the copy constructor iterates the
+	 * collection to build the new one (i.e. is not atomic)
+	 *
+	 * @param lane index of lane to get
+	 * @return a copy of the queue lane (list of customers)
+	 */
 	public synchronized List<Customer> getLane(int lane) {
- 		return lanes.get(lane);
+ 		return new LinkedList<>(lanes.get(lane));
 	}
 
 	public boolean isEmpty() {
 		return empty;
 	}
 
-	// implement Observer pattern
-	// adds observers to a list
+	@Override
 	public void registerObserver(Observer o) {
-		observers.add(o);
+		// Synchronized to avoid concurrent modifications while notifying
+		// Use of observers as lock object since this doesn't need to block the main
+		// queue methods
+		synchronized(observers) {
+			observers.add(o);
+		}
 	}
 
-	// removes observers from a list
+	@Override
 	public void removeObserver(Observer o) {
-		observers.remove(o);
+		// Synchronized to avoid concurrent modifications while notifying
+		// Use of observers as lock object since this doesn't need to block the main
+		// queue methods
+		synchronized(observers) {
+			observers.remove(o);
+		}
 	}
 
-	// notify all observers in the observers list
+	@Override
 	public void notifyObservers() {
-		for (Observer o : observers) {
-			o.update();
+		// Synchronized to avoid concurrent modifications while notifying
+		// Use of observers as lock object since this doesn't need to block the main
+		// queue methods
+		synchronized(observers) {
+			for (Observer o : observers) o.update();
 		}
 	}
 }
