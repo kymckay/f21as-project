@@ -52,7 +52,6 @@ public class Producer implements Runnable {
                 String[]info  = splitLine(line);
                 String name   = info[0];
                 String itemId = info[1];
-				priority = Boolean.parseBoolean(info[2]);
 
                 // Next customer reached, checkout basket before continuing
                 if (!name.equals(frontOfLine)) {
@@ -65,6 +64,7 @@ public class Producer implements Runnable {
 
                     // The customer is now front of line
                     frontOfLine = name;
+					priority = Boolean.parseBoolean(info[2]);
                 }
 
                 // Add current order line to basket
@@ -101,9 +101,9 @@ public class Producer implements Runnable {
 
 		// Add the customer to the service queue and log the event
         out.add(newArrival, priority ? 0 : 1);
-		log.add(String.format("%s joins the %s",
+		log.add(String.format("%s joins the %s queue",
 			newArrival.getName(),
-			priority ? "priority queue" : "queue"
+			priority ? "priority" : "regular"
 		));
     }
 
