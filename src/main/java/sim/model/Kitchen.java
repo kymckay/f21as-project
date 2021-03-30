@@ -41,6 +41,7 @@ public class Kitchen implements Runnable, Subject {
                 Customer toServe = currentCustomer.get();
 
                 notifyObservers();
+				log.add("The kitchen starts preparing an order for %s", toServe);
 
                 try {
                     // Time to process order depends on number of items
@@ -51,7 +52,7 @@ public class Kitchen implements Runnable, Subject {
 
                 // Log order as completed
                 completed.add(toServe);
-                log.add(toServe, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
+                log.add("The kitchen serves %s", toServe);
 
                 // Update model state to reflect customer served
                 currentCustomer = Optional.empty();

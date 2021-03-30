@@ -3,84 +3,40 @@ package sim.model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Logger {
-
-	//enums for the add() method
-	public enum OrderState {
-		ENTER,
-		EXIT,
-		PROCESSED,
-		ENTERKITCHEN,
-		EXITKITCHEN,
-		SERVED;
-	}
+	// Don't want millisecond precious for a log file
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 	private static Logger instance;
-	private StringBuilder log;
+	private StringBuilder sBuilder;
 
 	private Logger() {
-		log = new StringBuilder();
+		sBuilder = new StringBuilder();
 	}
 
-	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public synchronized void add(Customer c, OrderState state, QueueType q) {
-		LocalDateTime time = LocalDateTime.now();
-		log.append(String.format("%-35s", time));
-
-		switch (state) {
-		case ENTER:
-			switch (q) {
-				case CUSTOMER:
-					log.append(String.format("%-24s", "Enter Normal queue"));
-					break;
-				default:
-					log.append(String.format("%-24s", "Enter Priority queue"));
-					break;
-			}
-			break;
-		case EXIT:
-			switch (q) {
-				case CUSTOMER:
-					log.append(String.format("%-24s", "Exit Normal queue"));
-					break;
-				default:
-					log.append(String.format("%-24s", "Exit Priority queue"));
-					break;
-			}
-			break;
-		case PROCESSED:
-			switch (q) {
-				case CUSTOMER:
-					log.append(String.format("%-24s", "Processed"));
-					break;
-				default:
-					log.append(String.format("%-24s", "Processed Priority"));
-					break;
-			}
-			break;
-
-		case ENTERKITCHEN:
-			log.append(String.format("%-24s", "Enter kitchen"));
-			break;
-
-		case EXITKITCHEN:
-			log.append(String.format("%-24s", "Exit kitchen"));
-			break;
-
-		case SERVED:
-			log.append(String.format("%-24s", "Served"));
-			break;
-		}
-
-		log.append(String.format("%-25s", "Customer: " + c.getName()));
-		for (MenuItem item : c.getOrder()) {
-			log.append(item.getName() + " ");
-		}
-		log.append("\n");
+	/**
+	 * Logs a new string in the log (adds time and newline)
+	 * @param string
+	 */
+	public synchronized void add(String string) {
+		sBuilder.append(String.format("%s %s%n",
+			LocalDateTime.now().format(formatter),
+			string
+		));
 	}
 
-	// Laze-loads the singleton instance of the class
+	/**
+	 * Logs a new simulation event in the log (adds time and newline)
+	 * @param event event message where %s will be replaced with the customer name
+	 * @param customer customer object the event relates to
+	 */
+	public synchronized void add(String event, Customer customer) {
+		add(String.format(event, customer.getName()));
+	}
+
+	// Lazy-loads the singleton instance of the class
 	// Synchronized whole method to avoid double-checked locking
 	// (shown in lectures, but discouraged in modern Java practice)
 	public static synchronized Logger getInstance() {
@@ -89,14 +45,10 @@ public class Logger {
 		return instance;
 	}
 
-	public StringBuilder getLog() {
-		return log;
-	}
-
 	//writes log to file
 	public void writeReport(String filename) {
         try (FileWriter orderWriter = new FileWriter(filename)) {
-			orderWriter.write(log.toString());
+			orderWriter.write(sBuilder.toString());
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

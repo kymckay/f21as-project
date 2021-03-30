@@ -11,9 +11,9 @@ import sim.interfaces.Subject;
 public class CoffeeShop implements Subject, Observer {
     // Queue of orders populated by producer for staff to serve
     // Staff then populate the kitchen queue
-    private SharedQueue customers = new SharedQueue(QueueType.CUSTOMER);
-    private SharedQueue priorityCustomers = new SharedQueue(QueueType.PRIORITY);
-    private SharedQueue orders = new SharedQueue(QueueType.KITCHEN);
+    private SharedQueue customers = new SharedQueue();
+    private SharedQueue priorityCustomers = new SharedQueue();
+    private SharedQueue orders = new SharedQueue();
 
     // List of registered observers for observer/subject pattern
     private LinkedList<Observer> observers = new LinkedList<>();
@@ -25,6 +25,8 @@ public class CoffeeShop implements Subject, Observer {
     private Kitchen kitchen = new Kitchen(orders);
 
     public CoffeeShop(Menu menu, int numStaff) {
+		Logger.getInstance().add("Simulation initiated");
+
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(
             new File("data/orders.csv"),
@@ -106,6 +108,7 @@ public class CoffeeShop implements Subject, Observer {
         // When kitchen is done coffee shop can close
         // Output log, report and notify observers
         if (kitchen.isDone()) {
+			Logger.getInstance().add("Simulation completed");
             Logger.getInstance().writeReport("log.txt");
             new ReportWriter(kitchen.getServedCustomers()).write(new File("report.txt"));
             notifyObservers();
