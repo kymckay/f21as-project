@@ -61,6 +61,13 @@ public class Server implements Runnable, Subject {
 
                 // Update model state with new customer
                 notifyObservers();
+				log.add(
+					String.format(
+						"Server %d starts serving %s",
+						number,
+						toServe.getName()
+					)
+				);
 
                 try {
                     // Time to process order depends on number of items
@@ -70,6 +77,7 @@ public class Server implements Runnable, Subject {
                 }
 
                 // Pass order on to kitchen queue
+                kitchenQueue.add(toServe);
 				log.add(
 					String.format(
 						"Server %d sends an order to the kitchen for %s",
@@ -77,7 +85,6 @@ public class Server implements Runnable, Subject {
 						toServe.getName()
 					)
 				);
-                kitchenQueue.add(toServe);
 
                 // Update model state to reflect customer served
                 currentCustomer = Optional.empty();
