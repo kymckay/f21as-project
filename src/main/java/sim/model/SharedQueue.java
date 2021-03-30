@@ -109,8 +109,8 @@ public class SharedQueue implements Subject {
         notifyAll();
 	}
 
-	public synchronized List<Customer> getQueue() {
- 		return lanes.get(0); // TODO update view to show multi lanes
+	public synchronized List<Customer> getLane(int lane) {
+ 		return lanes.get(lane);
 	}
 
 	public boolean isEmpty() {

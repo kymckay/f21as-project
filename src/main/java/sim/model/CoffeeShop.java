@@ -60,10 +60,6 @@ public class CoffeeShop implements Subject, Observer {
         return customers;
     }
 
-    public SharedQueue getPriorityCustomers() {
-        return customers; // TODO remove
-    }
-
     public SharedQueue getOrders() {
         return orders;
     }

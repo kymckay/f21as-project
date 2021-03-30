@@ -57,8 +57,8 @@ public class SimulationGUI extends JFrame implements Observer {
 	private JPanel queueSection() {
 		JPanel queueSection = new JPanel(new GridLayout(1, 2));
 
-		queueSection.add(new QueueGUI(coffeeShop.getCustomers(), "Regular Queue"));
-		queueSection.add(new QueueGUI(coffeeShop.getPriorityCustomers(), "Priority Queue"));
+		queueSection.add(new QueueLaneGUI(coffeeShop.getCustomers(), 0, "Priority Queue"));
+		queueSection.add(new QueueLaneGUI(coffeeShop.getCustomers(), 1, "Regular Queue"));
 		return queueSection;
 	}
 
@@ -87,7 +87,7 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	// sets up kitchen queue
 	private JPanel setupQueue2() {
-		return new QueueGUI(coffeeShop.getOrders(), "Kitchen Queue");
+		return new QueueLaneGUI(coffeeShop.getOrders(), 0, "Kitchen Queue");
 	}
 
 	// this will contain all the interactive elements (e.g. buttons etc)
