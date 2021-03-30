@@ -6,18 +6,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Logger {
-	// Don't want millisecond precious for a log file, space at end to distinguish column
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss ");
-
-	//enums for the add() method
-	public enum OrderState {
-		ENTER,
-		EXIT,
-		PROCESSED,
-		ENTERKITCHEN,
-		EXITKITCHEN,
-		SERVED;
-	}
+	// Don't want millisecond precious for a log file
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
 
 	private static Logger instance;
 	private StringBuilder log;
@@ -26,60 +16,16 @@ public class Logger {
 		log = new StringBuilder();
 	}
 
-	//adds an entry in the log when an order is added to queue (enter), removed from queue (exit) or processed (processed)
-	public synchronized void add(Customer c, OrderState state, QueueType q) {
-		log.append(LocalDateTime.now().format(formatter));
-
-		switch (state) {
-		case ENTER:
-			switch (q) {
-				case CUSTOMER:
-					log.append(String.format("%-24s", "Enter Normal queue"));
-					break;
-				default:
-					log.append(String.format("%-24s", "Enter Priority queue"));
-					break;
-			}
-			break;
-		case EXIT:
-			switch (q) {
-				case CUSTOMER:
-					log.append(String.format("%-24s", "Exit Normal queue"));
-					break;
-				default:
-					log.append(String.format("%-24s", "Exit Priority queue"));
-					break;
-			}
-			break;
-		case PROCESSED:
-			switch (q) {
-				case CUSTOMER:
-					log.append(String.format("%-24s", "Processed"));
-					break;
-				default:
-					log.append(String.format("%-24s", "Processed Priority"));
-					break;
-			}
-			break;
-
-		case ENTERKITCHEN:
-			log.append(String.format("%-24s", "Enter kitchen"));
-			break;
-
-		case EXITKITCHEN:
-			log.append(String.format("%-24s", "Exit kitchen"));
-			break;
-
-		case SERVED:
-			log.append(String.format("%-24s", "Served"));
-			break;
-		}
-
-		log.append(String.format("%-25s", "Customer: " + c.getName()));
-		for (MenuItem item : c.getOrder()) {
-			log.append(item.getName() + " ");
-		}
-		log.append("\n");
+	/**
+	 * Logs a new simulation event in the log
+	 * @param formatString event message where %s will be replaced with the customer name
+	 * @param customer customer object the event relates to
+	 */
+	public synchronized void add(String formatString, Customer customer) {
+		log.append(String.format("%s %s%n",
+			LocalDateTime.now().format(formatter),
+			String.format(formatString, customer.getName())
+		));
 	}
 
 	// Laze-loads the singleton instance of the class

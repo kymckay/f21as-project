@@ -51,7 +51,7 @@ public class Kitchen implements Runnable, Subject {
 
                 // Log order as completed
                 completed.add(toServe);
-                log.add(toServe, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
+                log.add("The kitchen serves %s", toServe);
 
                 // Update model state to reflect customer served
                 currentCustomer = Optional.empty();

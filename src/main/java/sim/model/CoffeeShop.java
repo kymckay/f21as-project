@@ -11,9 +11,9 @@ import sim.interfaces.Subject;
 public class CoffeeShop implements Subject, Observer {
     // Queue of orders populated by producer for staff to serve
     // Staff then populate the kitchen queue
-    private SharedQueue customers = new SharedQueue(QueueType.CUSTOMER);
-    private SharedQueue priorityCustomers = new SharedQueue(QueueType.PRIORITY);
-    private SharedQueue orders = new SharedQueue(QueueType.KITCHEN);
+    private SharedQueue customers = new SharedQueue();
+    private SharedQueue priorityCustomers = new SharedQueue();
+    private SharedQueue orders = new SharedQueue();
 
     // List of registered observers for observer/subject pattern
     private LinkedList<Observer> observers = new LinkedList<>();

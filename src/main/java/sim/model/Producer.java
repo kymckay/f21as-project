@@ -19,6 +19,9 @@ public class Producer implements Runnable {
     private SharedQueue out; // customers go here
     private Menu menu; // orders refer to menu
 
+	// Need to log incoming customers
+	private Logger log = Logger.getInstance();
+
     private String frontOfLine; // Customer currently at the front of the line
     private LinkedList<MenuItem> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
@@ -94,10 +97,14 @@ public class Producer implements Runnable {
         }
     }
 
-    // Produce a new customer from the front of the line and their basket
     private void checkout() {
-        out.add(new Customer(frontOfLine, basket.toArray(MenuItem[]::new)));
-        basket.clear();
+		// Produce a new customer from the front of the line and their basket
+		Customer newArrival = new Customer(frontOfLine, basket.toArray(MenuItem[]::new));
+		basket.clear();
+
+		// Add the customer to the service queue and log the event
+        out.add(newArrival);
+		log.add("%s joins the queue", newArrival);
     }
 
     private String[] processLine(String line) {

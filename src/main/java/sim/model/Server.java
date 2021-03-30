@@ -61,7 +61,7 @@ public class Server implements Runnable, Subject {
                 }
 
                 // Pass order on to kitchen queue
-                log.add(toServe, Logger.OrderState.PROCESSED, target.getQueueType());
+                log.add("A server sends an order to the kitchen for %s", toServe);
                 kitchenQueue.add(toServe);
 
                 // Update model state to reflect customer served
