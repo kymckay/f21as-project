@@ -2,13 +2,16 @@ package sim.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Kitchen implements Runnable, Subject {
 	private SharedQueue kitchenQueue;
-    private Customer currentCustomer;
+
+    // Kitchen is not always serving a customer
+    private Optional<Customer> currentCustomer;
 
     private LinkedList<Observer> observers = new LinkedList<>();
     private Logger log = Logger.getInstance();
@@ -21,6 +24,9 @@ public class Kitchen implements Runnable, Subject {
 
 	public Kitchen(SharedQueue kitchenQueue) {
 		this.kitchenQueue = kitchenQueue;
+
+        // No customer to start with
+        currentCustomer = Optional.empty();
 	}
 
 	@Override
@@ -30,27 +36,35 @@ public class Kitchen implements Runnable, Subject {
         // are in the queue
         while (!kitchenQueue.getDone() || !kitchenQueue.isEmpty()) {
             currentCustomer = kitchenQueue.getCustomer();
-            notifyObservers();
 
-        	try {
-                // Time to process order depends on number of items
-                Thread.sleep(5000l * currentCustomer.getOrder().length);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+            if (currentCustomer.isPresent()) {
+                Customer toServe = currentCustomer.get();
+
+                notifyObservers();
+
+                try {
+                    // Time to process order depends on number of items
+                    Thread.sleep(5000l * toServe.getOrder().length);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                // Log order as completed
+                completed.add(toServe);
+                log.add(toServe, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
+
+                // Update model state to reflect customer served
+                currentCustomer = Optional.empty();
+                notifyObservers();
             }
-
-            // Log order as completed
-            completed.add(currentCustomer);
-        	log.add(currentCustomer, Logger.OrderState.SERVED, kitchenQueue.getQueueType());
         }
 
         // Finish service
         done = true;
-        currentCustomer = null;
         notifyObservers();
     }
 
-    public Customer getCurrentCustomer() {
+    public Optional<Customer> getCurrentCustomer() {
     	return currentCustomer;
     }
 

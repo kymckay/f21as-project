@@ -1,6 +1,7 @@
 package sim.views;
 
 import java.awt.Font;
+import java.util.Optional;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
@@ -31,20 +32,23 @@ public class KitchenGUI extends JTextArea implements Observer {
 
 	@Override
 	public void update() {
-		Customer customer = kitchen.getCurrentCustomer();
+		Optional<Customer> customer = kitchen.getCurrentCustomer();
 
-		if (customer == null) {
-			setText("");
-		} else {
+		if (customer.isPresent()) {
+			Customer serving = customer.get();
+
 			StringBuilder currentOrder = new StringBuilder();
+
 			currentOrder.replace(0, currentOrder.length(), "");
 			currentOrder.append("Customer being served: \n");
-			currentOrder.append("   " + customer.getName() + "\n");
-    		currentOrder.append("Ordered items: \n");
-    		for (MenuItem o : customer.getOrder()) {
-    			currentOrder.append("   " + o.getID() + "\n");
-    		}
-    		setText(currentOrder.toString());
+			currentOrder.append("   " + serving.getName() + "\n");
+			currentOrder.append("Ordered items: \n");
+			for (MenuItem o : serving.getOrder()) {
+				currentOrder.append("   " + o.getID() + "\n");
+			}
+			setText(currentOrder.toString());
+		} else {
+			setText("");
 		}
 	}
 }

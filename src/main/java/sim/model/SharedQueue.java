@@ -2,6 +2,7 @@ package sim.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
@@ -20,14 +21,21 @@ public class SharedQueue implements Subject {
 
 	}
 
-	// returns an array of order at the top of the queue
-	public synchronized Customer getCustomer() {
-		while (empty) {
+	// Returns a customer from the top of the queue (once/if there is one)
+	public synchronized Optional<Customer> getCustomer() {
+		// Wait as long as more orders are to come and the queue is empty
+		while (empty && !done) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 		 	}
+		}
+
+		// If multiple threads want to use the queue it might be done by the time the
+		// later threads get here
+		if (empty) {
+			return Optional.empty();
 		}
 
 		Customer customer = queue.getFirst();
@@ -52,7 +60,7 @@ public class SharedQueue implements Subject {
 			notifyAll();
 		}
 
-		return customer;
+		return Optional.of(customer);
 	}
 
 	// Add a customer to the back of the queue
