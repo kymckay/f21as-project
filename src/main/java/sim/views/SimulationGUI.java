@@ -8,7 +8,6 @@ import java.awt.Component;
 import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.*;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -95,7 +94,7 @@ public class SimulationGUI extends JFrame implements Observer {
 			serverStaff.add(new ServerGUI(last));
 		} else {
 			staffViews.removeLast();
-			// TODO: remove serverStaff
+			serverStaff.remove(last);
 		}
 	}
 
