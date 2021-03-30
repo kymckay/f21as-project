@@ -34,7 +34,7 @@ public class Kitchen implements Runnable, Subject {
 
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
-        while (!kitchenQueue.getDone() || !kitchenQueue.isEmpty()) {
+        while (!kitchenQueue.isDone() || !kitchenQueue.isEmpty()) {
             currentCustomer = kitchenQueue.getCustomer();
 
             if (currentCustomer.isPresent()) {

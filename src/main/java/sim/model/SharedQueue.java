@@ -93,7 +93,7 @@ public class SharedQueue implements Subject {
 		notifyObservers();
 	}
 
-	public boolean getDone() {
+	public boolean isDone() {
 		return done;
 	}
 
