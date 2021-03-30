@@ -58,18 +58,13 @@ public class Producer implements Runnable {
                 if (!name.equals(frontOfLine)) {
                     // Don't checkout on very first iteration
                    if (frontOfLine != null) {
-                       // Simulate customer takes 2s to order
+                       // Simulate time between customers arriving
                        sleep(2000l);
                        checkout();
                    }
 
                     // The customer is now front of line
                     frontOfLine = name;
-
-                    // Some random time may pass before the new customer arrives
-                    if (Math.random() < 0.5) {
-                        sleep((long) Math.floor(Math.random() * 5000l));
-                    }
                 }
 
                 // Add current order line to basket

@@ -32,8 +32,8 @@ public class ServerGUI extends JPanel implements Observer {
 	private JSlider serverSlider;
 	private JLabel label;
 
-	static final int MIN = -10;
-	static final int MAX = 10;
+	static final int MIN = -5;
+	static final int MAX = 5;
 	static final int INIT = 0;
 
 	public ServerGUI(Server server) {
