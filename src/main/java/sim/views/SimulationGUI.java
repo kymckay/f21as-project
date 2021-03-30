@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.*;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,9 +28,10 @@ public class SimulationGUI extends JFrame implements Observer {
 
 	private JButton addServer;
 	private JButton removeServer;
+	private JPanel serverStaff;
 
 	// List of sub-views controllers need access to
-	private List<ServerGUI> staffViews = new LinkedList<>();
+	private LinkedList<ServerGUI> staffViews = new LinkedList<>();
 
 	public SimulationGUI(CoffeeShop coffeeShop) {
 		this.coffeeShop = coffeeShop;
@@ -74,7 +76,7 @@ public class SimulationGUI extends JFrame implements Observer {
 	// TODO: will need to adjust GUI width if more than 3 servers are added
 	// probably should set a limit to the nr of threads that can be initiated
 	private JPanel setupServer() {
-		JPanel serverStaff = new JPanel(new GridLayout(1, 0));
+		serverStaff = new JPanel(new GridLayout(1, 0));
 
 		// Populate server section with a view for each server in the shop
 		for (Server s : coffeeShop.getServers()) {
@@ -84,6 +86,17 @@ public class SimulationGUI extends JFrame implements Observer {
 		}
 
 		return serverStaff;
+	}
+
+	public void updateServer(String cond) {
+		Server last = coffeeShop.getServers().getLast();
+		if (cond == "add") {
+			staffViews.add(new ServerGUI(last));
+			serverStaff.add(new ServerGUI(last));
+		} else {
+			staffViews.removeLast();
+			// TODO: remove serverStaff
+		}
 	}
 
 	private JPanel setupKitchen() {
