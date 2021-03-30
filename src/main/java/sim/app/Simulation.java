@@ -18,6 +18,5 @@ public class Simulation {
         for (ServerGUI gui : view.getStaffViews()) {
             new SpeedController(gui.getModel(), gui);
         }
-        new ServerController(model, view);
     }
 }
