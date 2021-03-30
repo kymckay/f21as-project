@@ -103,7 +103,7 @@ public class Producer implements Runnable {
 		basket.clear();
 
 		// Add the customer to the service queue and log the event
-        out.add(newArrival);
+        out.add(newArrival, 0); // TODO introduce priority customers to data and behaviour
 		log.add("%s joins the queue", newArrival);
     }
 

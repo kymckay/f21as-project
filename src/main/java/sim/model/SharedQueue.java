@@ -1,5 +1,6 @@
 package sim.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -8,15 +9,29 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class SharedQueue implements Subject {
-    // The underlying shared object
-	private LinkedList<Customer> queue = new LinkedList<>();
+	// Queue can consist of multiple lanes (prioritised by index)
+	// Prioritisation must be done in this shared class to avoid consumers waiting
+	// on one queue when another has customers (if multiple instances were used)
+	private ArrayList<LinkedList<Customer>> lanes;
 
     // Observers register themselves here for notifications
 	private LinkedList<Observer> observers = new LinkedList<>();
 
-    // Flags for producer/consumers to check object state
+    // Flags for producer/consumers to check queue state
     private boolean empty = true;
     private boolean done = false;
+
+	public SharedQueue(int numLanes) {
+		if (numLanes <= 0) {
+			throw new IllegalArgumentException("Number of queue lanes must be a positive integer");
+		}
+
+		lanes = new ArrayList<>(numLanes);
+
+		for (int i = 0; i < numLanes; i++) {
+			lanes.add(new LinkedList<>());
+		}
+	}
 
 	// Returns a customer from the top of the queue (once/if there is one)
 	public synchronized Optional<Customer> getCustomer() {
@@ -35,25 +50,40 @@ public class SharedQueue implements Subject {
 			return Optional.empty();
 		}
 
-		Customer customer = queue.removeFirst();
+		// Empty flag should garantee there's always a customer in one of the lanes, but
+		// we don't want to assume
+		Optional<Customer> customer = Optional.empty();
+
+		// Earlier index lanes are prioritised
+		for (LinkedList<Customer> list : lanes) {
+			if (!list.isEmpty()) {
+				customer = Optional.of(list.removeFirst());
+				break;
+			}
+		}
 
         // No need to notify threads as producer never needs to wait
-		if (queue.isEmpty()) {
+		if (lanes.stream().allMatch(List::isEmpty)) {
 			empty = true;
 		}
 
         notifyObservers();
 
-		return Optional.of(customer);
+		return customer;
 	}
 
 	// Add a customer to the back of the queue
-	public synchronized void add(Customer c) {
+	public synchronized void add(Customer c, int lane) {
         // Enforce setDone call after last customer is added
         if (done) throw new IllegalStateException("Cannot add to a completed queue");
 
+		// Lane must exist
+		if ((lane < 0) || (lane >= lanes.size())) {
+			throw new IllegalArgumentException("Cannot add to non-existent queue lane " + lane);
+		}
+
         // Producer never needs to wait since we're dealing with a queue
-		queue.addLast(c);
+		lanes.get(lane).addLast(c);
         empty = false;
 
         // Inform all consumers and observers that the queue is no longer empty
@@ -80,7 +110,7 @@ public class SharedQueue implements Subject {
 	}
 
 	public synchronized List<Customer> getQueue() {
- 		return queue;
+ 		return lanes.get(0); // TODO update view to show multi lanes
 	}
 
 	public boolean isEmpty() {
