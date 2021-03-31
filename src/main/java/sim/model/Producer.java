@@ -65,13 +65,18 @@ public class Producer implements Runnable {
                     // The customer is now front of line
                     frontOfLine = name;
 					priority = Boolean.parseBoolean(info[2]);
+
+					// Some random time may pass before the new customer arrives
+					if (Math.random() < 0.5) {
+						sleep((long) Math.floor(Math.random() * 5000l));
+					}
                 }
 
                 // Add current order line to basket
                 basket.add(menu.getItem(itemId));
             }
 
-            // Add final customer's order (queue they join is irrelevant)
+            // Add final customer's order
             checkout();
 
             // Once end of file is reached mark the queue as completed

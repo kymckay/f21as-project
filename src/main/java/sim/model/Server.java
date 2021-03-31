@@ -21,7 +21,7 @@ public class Server implements Runnable, Subject {
     private Optional<Customer> currentCustomer;
 
     // Default service speed per order item
-    public static final long BASE_SPEED = 20000l;
+    public static final long BASE_SPEED = 10000l;
 
     // Set once server is finished serving
     private boolean done;
