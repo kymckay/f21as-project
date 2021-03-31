@@ -11,9 +11,8 @@ import sim.interfaces.Subject;
 public class CoffeeShop implements Subject, Observer {
     // Queue of orders populated by producer for staff to serve
     // Staff then populate the kitchen queue
-    private SharedQueue customers = new SharedQueue();
-    private SharedQueue priorityCustomers = new SharedQueue();
-    private SharedQueue orders = new SharedQueue();
+    private SharedQueue customers = new SharedQueue(2);
+    private SharedQueue orders = new SharedQueue(1);
 
     // List of registered observers for observer/subject pattern
     private LinkedList<Observer> observers = new LinkedList<>();
@@ -33,19 +32,13 @@ public class CoffeeShop implements Subject, Observer {
             customers,
             menu
         ));
-        Thread priorityProducer = new Thread(new Producer(
-            new File("data/orders.csv"),
-            priorityCustomers,
-            menu
-        ));
 
         producer.start();
-        priorityProducer.start();
 
         // Staff members consumes the queue of customer orders
         for (int i = 0; i < numStaff; i++) {
             // Track the staff members
-            Server staff = new Server(customers, orders, priorityCustomers);
+            Server staff = new Server(customers, orders);
             servers.add(staff);
 
             // Observe staff to later check when service has stopped
@@ -67,10 +60,6 @@ public class CoffeeShop implements Subject, Observer {
         return customers;
     }
 
-    public SharedQueue getPriorityCustomers() {
-        return priorityCustomers;
-    }
-
     public SharedQueue getOrders() {
         return orders;
     }
@@ -85,17 +74,26 @@ public class CoffeeShop implements Subject, Observer {
 
     @Override
     public void registerObserver(Observer o) {
-        observers.add(o);
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.add(o);
+		}
     }
 
     @Override
     public void removeObserver(Observer o) {
-        observers.remove(o);
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.remove(o);
+		}
     }
 
     @Override
     public void notifyObservers() {
-        for (Observer o : observers) o.update();
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			for (Observer o : observers) o.update();
+		}
     }
 
     @Override

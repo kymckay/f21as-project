@@ -13,7 +13,6 @@ public class Server implements Runnable, Subject {
 
     private SharedQueue customerQueue;
 	private SharedQueue kitchenQueue;
-	private SharedQueue priorityQueue;
     private LinkedList<Observer> observers;
     private Logger log;
     private long speed;
@@ -21,16 +20,15 @@ public class Server implements Runnable, Subject {
     // Server is not always serving a customer
     private Optional<Customer> currentCustomer;
 
-    // Default service speed relevant to other classes
+    // Default service speed per order item
     public static final long BASE_SPEED = 10000l;
 
     // Set once server is finished serving
     private boolean done;
 
-    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue, SharedQueue priorityQueue) {
+    public Server(SharedQueue customerQueue, SharedQueue kitchenQueue) {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
-        this.priorityQueue = priorityQueue;
 
 		// Increment server number
 		this.number = ++count;
@@ -47,14 +45,8 @@ public class Server implements Runnable, Subject {
     public void run() {
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
-        while (
-            !customerQueue.isDone() || !priorityQueue.isDone()
-            || !customerQueue.isEmpty() || !priorityQueue.isEmpty()
-        ) {
-            // Prioritise the priority queue
-            SharedQueue target = !priorityQueue.isEmpty() ? priorityQueue : customerQueue;
-
-            currentCustomer = target.getCustomer();
+        while (!customerQueue.isDone() || !customerQueue.isEmpty()) {
+            currentCustomer = customerQueue.getCustomer();
 
             if (currentCustomer.isPresent()) {
                 Customer toServe = currentCustomer.get();
@@ -76,8 +68,8 @@ public class Server implements Runnable, Subject {
                     Thread.currentThread().interrupt();
                 }
 
-                // Pass order on to kitchen queue
-                kitchenQueue.add(toServe);
+                // Pass order on to kitchen queue (only has one lane)
+                kitchenQueue.add(toServe, 0);
 				log.add(
 					String.format(
 						"Server %d sends an order to the kitchen for %s",
@@ -110,27 +102,27 @@ public class Server implements Runnable, Subject {
     	return speed;
     }
 
-    // Subject methods
-    // add observers to a list
+	@Override
 	public void registerObserver(Observer o) {
-		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
-		LinkedList<Observer> current = (LinkedList)observers.clone();
-		current.add(o);
-		observers = current;
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.add(o);
+		}
 	}
 
-	// removes observers from a list
+	@Override
 	public void removeObserver(Observer o) {
-		// prevents concurrent modification exception if notifyObserver() is called while observers are being added
-		LinkedList<Observer> current = (LinkedList)observers.clone();
-		current.remove(o);
-		observers = current;
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.remove(o);
+		}
 	}
 
-	// notifies all observers in the observers list
+	@Override
 	public void notifyObservers() {
-		for (Observer o : observers) {
-			o.update();
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			for (Observer o : observers) o.update();
 		}
 	}
 

@@ -23,6 +23,7 @@ public class Producer implements Runnable {
 	private Logger log = Logger.getInstance();
 
     private String frontOfLine; // Customer currently at the front of the line
+	private boolean priority; // Is the current customer a priority customer
     private LinkedList<MenuItem> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
     public Producer(File file, SharedQueue out, Menu menu) {
@@ -48,7 +49,7 @@ public class Producer implements Runnable {
             while ((line = input.readLine()) != null) {
                 lineNum++;
 
-                String[]info  = processLine(line);
+                String[]info  = splitLine(line);
                 String name   = info[0];
                 String itemId = info[1];
 
@@ -56,18 +57,19 @@ public class Producer implements Runnable {
                 if (!name.equals(frontOfLine)) {
                     // Don't checkout on very first iteration
                    if (frontOfLine != null) {
-                       // Simulate customer takes 2s per item to order
-                       sleep(basket.size() * 2000l);
+                       // Simulate time between customers arriving
+                       sleep(2000l);
                        checkout();
                    }
 
                     // The customer is now front of line
                     frontOfLine = name;
+					priority = Boolean.parseBoolean(info[2]);
 
-                    // Some random time may pass before the customer arrives
-                    if (Math.random() < 0.5) {
-                        sleep((long) Math.floor(Math.random() * 5000l));
-                    }
+					// Some random time may pass before the new customer arrives
+					if (Math.random() < 0.5) {
+						sleep((long) Math.floor(Math.random() * 5000l));
+					}
                 }
 
                 // Add current order line to basket
@@ -103,22 +105,24 @@ public class Producer implements Runnable {
 		basket.clear();
 
 		// Add the customer to the service queue and log the event
-        out.add(newArrival);
-		log.add("%s joins the queue", newArrival);
+        out.add(newArrival, priority ? 0 : 1);
+		log.add(String.format("%s joins the %s queue",
+			newArrival.getName(),
+			priority ? "priority" : "regular"
+		));
     }
 
-    private String[] processLine(String line) {
+    private String[] splitLine(String line) {
         // Remove whitespace while splitting using regex delimiter
         // Java's split operator discards empty strings by default, -1 keeps them (empty
         // csv columns are valid)
         String[] cols = line.split("\\s*,\\s*", -1);
 
         // All rows in csv file have same columns
-        if (cols.length == 2) {
+        if (cols.length == 3) {
             return cols;
-
         } else {
-            throw new IllegalArgumentException("Expected 2 columns");
+            throw new IllegalArgumentException("Expected 3 columns");
         }
     }
 }

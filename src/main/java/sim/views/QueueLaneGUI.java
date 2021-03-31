@@ -14,13 +14,15 @@ import sim.interfaces.Observer;
 import sim.model.Customer;
 import sim.model.SharedQueue;
 
-public class QueueGUI extends JPanel implements Observer {
+public class QueueLaneGUI extends JPanel implements Observer {
 
 	SharedQueue queue;
 	JTextArea display;
+	int lane;
 
-	public QueueGUI(SharedQueue queue, String title) {
+	public QueueLaneGUI(SharedQueue queue, int lane, String title) {
 		this.queue = queue;
+		this.lane = lane;
 		queue.registerObserver(this);
 		setLayout(new GridLayout(1,1)); // ensures JPanel takes up all available space in the GUI
 		setup(title);
@@ -30,7 +32,7 @@ public class QueueGUI extends JPanel implements Observer {
 		// Text area provides convenient wrapping
 		display = new JTextArea();
 		display.setEditable(false);
-		// fixed width font ensure String.format alignment functions correctly 
+		// fixed width font ensure String.format alignment functions correctly
 		display.setFont(new Font("Monospaced", Font.PLAIN, 13));
 
 		// Scroll pane remove limit on content height
@@ -48,7 +50,7 @@ public class QueueGUI extends JPanel implements Observer {
 
 	@Override
 	public void update() {
-		List<Customer> currentQueue = queue.getQueue();
+		List<Customer> currentQueue = queue.getLane(lane);
 
 		StringBuilder queueLog = new StringBuilder();
  		queueLog.append(String.format("Orders in the queue: %d%n", currentQueue.size()));

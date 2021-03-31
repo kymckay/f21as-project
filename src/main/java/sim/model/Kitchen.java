@@ -75,18 +75,25 @@ public class Kitchen implements Runnable, Subject {
 
     @Override
 	public void registerObserver(Observer o) {
-		observers.add(o);
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.add(o);
+		}
 	}
 
 	@Override
 	public void removeObserver(Observer o) {
-		observers.remove(o);
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			observers.remove(o);
+		}
 	}
 
 	@Override
 	public void notifyObservers() {
-		for (Observer o : observers) {
-			o.update();
+		// Synchronized to avoid concurrent modifications while notifying
+		synchronized(observers) {
+			for (Observer o : observers) o.update();
 		}
 	}
 
