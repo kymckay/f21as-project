@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,10 +63,29 @@ public class ReportWriter {
             report.append("\nNo items were sold today");
         }
 
+        int mostOrder = 0;
+        ArrayList<Customer> mostOrderCust = new ArrayList<>();
+        for (Customer c : customers) {
+            int countOrder = c.getOrder().length;
 
+            if (countOrder > mostOrder) {
+                mostOrder = countOrder;
+                mostOrderCust.clear();
+                mostOrderCust.add(c);
+            } else if (countOrder == mostOrder) {
+                mostOrderCust.add(c);
+            }
+        }
+
+        report.append(String.format("/nThe most ordering customer(s) is/are: "));
+        for (Customer customer : mostOrderCust) {
+            report.append(String.format("\n %s%n", customer.getName()));
+            report.append(String.format(" with %d", mostOrder, "items %s%n",  Arrays.toString(customer.getOrder())));
+        }
+        
 
         // Summary statistics include the day's income
-        report.append(String.format("The income obtained from today's orders is £%s%n", getIncome(customers)));
+        report.append(String.format("\n The income obtained from today's orders is £%s%n", getIncome(customers)));
     }
 
     /**
