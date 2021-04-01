@@ -1,4 +1,4 @@
-package sim.app;
+package sim.model;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -7,15 +7,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import sim.model.Customer;
-import sim.model.MenuItem;
-
 /**
  * Class responsible for creating and writing the end of day report from a list
  * of orders
  */
 public class ReportWriter {
     StringBuilder report;
+    private Menu menu;
 
     /**
      * Consstruct a new report for the given list of customers
@@ -26,6 +24,21 @@ public class ReportWriter {
 
         // Report should include today's date for future reference
         report.append(String.format("End of Day Report: %s%n", LocalDate.now()));
+
+        // Iterator it = menu.getMap().entrySet().iterator();
+        // while (it.hasNext()) {
+        //     report.append(String.format("%-30s %s%n",
+        //         menu.getItem(m).getName(),
+        //         menu.getItem(m).getOrderCount()
+        //     ));
+        // }
+        
+        for (String m : menu.keysSet()) {
+            report.append(String.format("%-30s %s%n",
+                menu.getItem(m).getName(),
+                menu.getItem(m).getOrderCount()
+            ));
+        }
 
         // Summary statistics include the day's income
         report.append(String.format("The income obtained from today's orders is £%s%n", getIncome(customers)));
