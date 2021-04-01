@@ -74,6 +74,8 @@ public class Producer implements Runnable {
 
                 // Add current order line to basket
                 basket.add(menu.getItem(itemId));
+                menu.getItem(itemId).setCount();
+
             }
 
             // Add final customer's order

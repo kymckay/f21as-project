@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import sim.app.ReportWriter;
 import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
@@ -22,9 +21,11 @@ public class CoffeeShop implements Subject, Observer {
 
     // Kitchen is observable
     private Kitchen kitchen = new Kitchen(orders);
+    private Menu menu;
 
     public CoffeeShop(Menu menu, int numStaff) {
 		Logger.getInstance().add("Simulation initiated");
+        this.menu = menu;
 
         // Producer inserts input file of orders into shared queue for staff
         Thread producer = new Thread(new Producer(
@@ -108,7 +109,7 @@ public class CoffeeShop implements Subject, Observer {
         if (kitchen.isDone()) {
 			Logger.getInstance().add("Simulation completed");
             Logger.getInstance().writeReport("log.txt");
-            new ReportWriter(kitchen.getServedCustomers()).write(new File("report.txt"));
+            new ReportWriter(kitchen.getServedCustomers(), menu).write(new File("report.txt"));
             notifyObservers();
         }
     }
