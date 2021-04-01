@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Menu {
 	HashMap<String, MenuItem> menuMap = new HashMap<>();
@@ -65,5 +66,9 @@ public class Menu {
 
 	public MenuItem getItem(String key) {
 		return menuMap.get(key);
+	}
+
+	public Set<String> keysSet() {
+		return menuMap.keySet();
 	}
 }
