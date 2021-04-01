@@ -54,6 +54,15 @@ public class ReportWriter {
             }
         }
 
+        if (getIncome(customers).signum() > 0) {
+            report.append("\nThe most popular menu item(s) today: ");
+            report.append(popular.stream().map(MenuItem::getName).collect(Collectors.joining(", ")));
+            report.append(String.format(" ordered %d times", highestCount));
+        } else {
+            report.append("\nNo items were sold today");
+        }
+
+
 
         // Summary statistics include the day's income
         report.append(String.format("The income obtained from today's orders is £%s%n", getIncome(customers)));
