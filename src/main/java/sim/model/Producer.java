@@ -19,11 +19,11 @@ public class Producer implements Runnable {
     private SharedQueue out; // customers go here
     private Menu menu; // orders refer to menu
 
-	// Need to log incoming customers
-	private Logger log = Logger.getInstance();
+    // Need to log incoming customers
+    private Logger log = Logger.getInstance();
 
     private String frontOfLine; // Customer currently at the front of the line
-	private boolean priority; // Is the current customer a priority customer
+    private boolean priority; // Is the current customer a priority customer
     private LinkedList<MenuItem> basket = new LinkedList<>(); // Contains orders for customer at front of line
 
     public Producer(File file, SharedQueue out, Menu menu) {
@@ -64,12 +64,12 @@ public class Producer implements Runnable {
 
                     // The customer is now front of line
                     frontOfLine = name;
-					priority = Boolean.parseBoolean(info[2]);
+                    priority = Boolean.parseBoolean(info[2]);
 
-					// Some random time may pass before the new customer arrives
-					if (Math.random() < 0.5) {
-						sleep((long) Math.floor(Math.random() * 5000l));
-					}
+                    // Some random time may pass before the new customer arrives
+                    if (Math.random() < 0.5) {
+                        sleep((long) Math.floor(Math.random() * 5000l));
+                    }
                 }
 
                 // Add current order line to basket
@@ -102,16 +102,16 @@ public class Producer implements Runnable {
     }
 
     private void checkout() {
-		// Produce a new customer from the front of the line and their basket
-		Customer newArrival = new Customer(frontOfLine, basket.toArray(MenuItem[]::new));
-		basket.clear();
+        // Produce a new customer from the front of the line and their basket
+        Customer newArrival = new Customer(frontOfLine, basket.toArray(MenuItem[]::new));
+        basket.clear();
 
-		// Add the customer to the service queue and log the event
+        // Add the customer to the service queue and log the event
         out.add(newArrival, priority ? 0 : 1);
-		log.add(String.format("%s joins the %s queue",
-			newArrival.getName(),
-			priority ? "priority" : "regular"
-		));
+        log.add(String.format("%s joins the %s queue",
+            newArrival.getName(),
+            priority ? "priority" : "regular"
+        ));
     }
 
     private String[] splitLine(String line) {

@@ -24,7 +24,7 @@ public class CoffeeShop implements Subject, Observer {
     private Menu menu;
 
     public CoffeeShop(Menu menu, int numStaff) {
-		Logger.getInstance().add("Simulation initiated");
+        Logger.getInstance().add("Simulation initiated");
         this.menu = menu;
 
         // Producer inserts input file of orders into shared queue for staff
@@ -75,26 +75,26 @@ public class CoffeeShop implements Subject, Observer {
 
     @Override
     public void registerObserver(Observer o) {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			observers.add(o);
-		}
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            observers.add(o);
+        }
     }
 
     @Override
     public void removeObserver(Observer o) {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			observers.remove(o);
-		}
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            observers.remove(o);
+        }
     }
 
     @Override
     public void notifyObservers() {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			for (Observer o : observers) o.update();
-		}
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            for (Observer o : observers) o.update();
+        }
     }
 
     @Override
@@ -107,7 +107,7 @@ public class CoffeeShop implements Subject, Observer {
         // When kitchen is done coffee shop can close
         // Output log, report and notify observers
         if (kitchen.isDone()) {
-			Logger.getInstance().add("Simulation completed");
+            Logger.getInstance().add("Simulation completed");
             Logger.getInstance().writeReport("log.txt");
             new ReportWriter(kitchen.getServedCustomers(), menu).write(new File("report.txt"));
             notifyObservers();

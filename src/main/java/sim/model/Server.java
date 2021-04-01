@@ -7,12 +7,12 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Server implements Runnable, Subject {
-	// Static variable tracks number of servers that exist
-	private static int count = 0;
-	private int number = 0; // Each new server gets a unique number ID
+    // Static variable tracks number of servers that exist
+    private static int count = 0;
+    private int number = 0; // Each new server gets a unique number ID
 
     private SharedQueue customerQueue;
-	private SharedQueue kitchenQueue;
+    private SharedQueue kitchenQueue;
     private LinkedList<Observer> observers;
     private Logger log;
     private long speed;
@@ -30,8 +30,8 @@ public class Server implements Runnable, Subject {
         this.customerQueue = customerQueue;
         this.kitchenQueue = kitchenQueue;
 
-		// Increment server number
-		this.number = ++count;
+        // Increment server number
+        this.number = ++count;
 
         observers = new LinkedList<>();
         log = Logger.getInstance();
@@ -53,13 +53,13 @@ public class Server implements Runnable, Subject {
 
                 // Update model state with new customer
                 notifyObservers();
-				log.add(
-					String.format(
-						"Server %d starts serving %s",
-						number,
-						toServe.getName()
-					)
-				);
+                log.add(
+                    String.format(
+                        "Server %d starts serving %s",
+                        number,
+                        toServe.getName()
+                    )
+                );
 
                 try {
                     // Time to process order depends on number of items
@@ -70,13 +70,13 @@ public class Server implements Runnable, Subject {
 
                 // Pass order on to kitchen queue (only has one lane)
                 kitchenQueue.add(toServe, 0);
-				log.add(
-					String.format(
-						"Server %d sends an order to the kitchen for %s",
-						number,
-						toServe.getName()
-					)
-				);
+                log.add(
+                    String.format(
+                        "Server %d sends an order to the kitchen for %s",
+                        number,
+                        toServe.getName()
+                    )
+                );
 
                 // Update model state to reflect customer served
                 currentCustomer = Optional.empty();
@@ -90,47 +90,47 @@ public class Server implements Runnable, Subject {
     }
 
     public Optional<Customer> getCurrentCustomer() {
-    	return currentCustomer;
+        return currentCustomer;
     }
 
     public void setSpeed(long l) {
-    	speed = l;
-    	notifyObservers();
+        speed = l;
+        notifyObservers();
     }
 
     public long getSpeed() {
-    	return speed;
+        return speed;
     }
 
-	@Override
-	public void registerObserver(Observer o) {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			observers.add(o);
-		}
-	}
+    @Override
+    public void registerObserver(Observer o) {
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            observers.add(o);
+        }
+    }
 
-	@Override
-	public void removeObserver(Observer o) {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			observers.remove(o);
-		}
-	}
+    @Override
+    public void removeObserver(Observer o) {
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            observers.remove(o);
+        }
+    }
 
-	@Override
-	public void notifyObservers() {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			for (Observer o : observers) o.update();
-		}
-	}
+    @Override
+    public void notifyObservers() {
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            for (Observer o : observers) o.update();
+        }
+    }
 
     public boolean isDone() {
         return done;
     }
 
-	public int getNumber() {
-		return number;
-	}
+    public int getNumber() {
+        return number;
+    }
 }

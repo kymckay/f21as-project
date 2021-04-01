@@ -9,35 +9,35 @@ import sim.model.Server;
 import sim.views.ServerGUI;
 
 public class SpeedController {
-	private Server model;
-	private ServerGUI view;
+    private Server model;
+    private ServerGUI view;
 
-	public SpeedController(Server model, ServerGUI view) {
-		this.model = model;
-		this.view = view;
+    public SpeedController(Server model, ServerGUI view) {
+        this.model = model;
+        this.view = view;
 
-		// register SliderListener with the gui
-		view.addSetListener(new SliderListener());
-	}
+        // register SliderListener with the gui
+        view.addSetListener(new SliderListener());
+    }
 
-	// inner SliderListener class responds when user selects a new simulation speed
-	public class SliderListener implements ChangeListener {
+    // inner SliderListener class responds when user selects a new simulation speed
+    public class SliderListener implements ChangeListener {
 
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			// gets speed selected on the slider
-			int speed = view.getSpeed();
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            // gets speed selected on the slider
+            int speed = view.getSpeed();
 
-			if (speed < 0) {
-				// speed has been decreased
-				model.setSpeed(BASE_SPEED * (speed * -1));
-			} else if (speed > 0) {
-				// speed has been increased
-				model.setSpeed(BASE_SPEED / (speed));
-			} else {
-				// speed set to normal
-				model.setSpeed(BASE_SPEED);
-			}
-		}
-	}
+            if (speed < 0) {
+                // speed has been decreased
+                model.setSpeed(BASE_SPEED * (speed * -1));
+            } else if (speed > 0) {
+                // speed has been increased
+                model.setSpeed(BASE_SPEED / (speed));
+            } else {
+                // speed set to normal
+                model.setSpeed(BASE_SPEED);
+            }
+        }
+    }
 }

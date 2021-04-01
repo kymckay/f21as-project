@@ -8,7 +8,7 @@ import sim.interfaces.Observer;
 import sim.interfaces.Subject;
 
 public class Kitchen implements Runnable, Subject {
-	private SharedQueue kitchenQueue;
+    private SharedQueue kitchenQueue;
 
     // Kitchen is not always serving a customer
     private Optional<Customer> currentCustomer;
@@ -22,15 +22,15 @@ public class Kitchen implements Runnable, Subject {
     // Set once server is finished serving
     private boolean done;
 
-	public Kitchen(SharedQueue kitchenQueue) {
-		this.kitchenQueue = kitchenQueue;
+    public Kitchen(SharedQueue kitchenQueue) {
+        this.kitchenQueue = kitchenQueue;
 
         // No customer to start with
         currentCustomer = Optional.empty();
-	}
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
         // Service continues as long as customers are still due to arrive or customers
         // are in the queue
@@ -41,7 +41,7 @@ public class Kitchen implements Runnable, Subject {
                 Customer toServe = currentCustomer.get();
 
                 notifyObservers();
-				log.add("The kitchen starts preparing an order for %s", toServe);
+                log.add("The kitchen starts preparing an order for %s", toServe);
 
                 try {
                     // Time to process order depends on number of items
@@ -66,7 +66,7 @@ public class Kitchen implements Runnable, Subject {
     }
 
     public Optional<Customer> getCurrentCustomer() {
-    	return currentCustomer;
+        return currentCustomer;
     }
 
     public List<Customer> getServedCustomers() {
@@ -74,28 +74,28 @@ public class Kitchen implements Runnable, Subject {
     }
 
     @Override
-	public void registerObserver(Observer o) {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			observers.add(o);
-		}
-	}
+    public void registerObserver(Observer o) {
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            observers.add(o);
+        }
+    }
 
-	@Override
-	public void removeObserver(Observer o) {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			observers.remove(o);
-		}
-	}
+    @Override
+    public void removeObserver(Observer o) {
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            observers.remove(o);
+        }
+    }
 
-	@Override
-	public void notifyObservers() {
-		// Synchronized to avoid concurrent modifications while notifying
-		synchronized(observers) {
-			for (Observer o : observers) o.update();
-		}
-	}
+    @Override
+    public void notifyObservers() {
+        // Synchronized to avoid concurrent modifications while notifying
+        synchronized(observers) {
+            for (Observer o : observers) o.update();
+        }
+    }
 
     public boolean isDone() {
         return done;

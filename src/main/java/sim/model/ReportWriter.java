@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
@@ -28,7 +27,7 @@ public class ReportWriter {
 
         // Report should include today's date for future reference
         report.append(String.format("End of Day Report: %s%n", LocalDate.now()));
-        
+
         for (String m : menu.keysSet()) {
             report.append(String.format("%-30s %s%n",
                 menu.getItem(m).getName(),
@@ -85,7 +84,7 @@ public class ReportWriter {
             report.append(String.format(" item(s): ", Arrays.toString(customer.getOrder())));
             report.append(Arrays.stream(customer.getOrder()).map(MenuItem::getName).collect(Collectors.joining(", ")));
         }
-        
+
         // Summary statistics include the day's income
         report.append(String.format("%nThe income obtained from today's orders is £%s%n", getIncome(customers)));
     }
