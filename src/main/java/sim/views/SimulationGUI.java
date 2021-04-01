@@ -20,90 +20,90 @@ import sim.model.Server;
 
 public class SimulationGUI extends JFrame implements Observer {
 
-	private CoffeeShop coffeeShop;
+    private CoffeeShop coffeeShop;
 
-	// List of sub-views controllers need access to
-	private List<ServerGUI> staffViews = new LinkedList<>();
+    // List of sub-views controllers need access to
+    private List<ServerGUI> staffViews = new LinkedList<>();
 
-	public SimulationGUI(CoffeeShop coffeeShop) {
-		this.coffeeShop = coffeeShop;
-		coffeeShop.registerObserver(this);
+    public SimulationGUI(CoffeeShop coffeeShop) {
+        this.coffeeShop = coffeeShop;
+        coffeeShop.registerObserver(this);
 
-		setTitle("Coffee Shop Simulation");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLayout(new BorderLayout());
-		setMinimumSize(new Dimension(600, 800));
-		setLocationRelativeTo(null);
+        setTitle("Coffee Shop Simulation");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setMinimumSize(new Dimension(600, 800));
+        setLocationRelativeTo(null);
 
-		setup();
-		pack();
-		setVisible(true);
-	}
+        setup();
+        pack();
+        setVisible(true);
+    }
 
-	// sets the overall GUI layout
-	private void setup() {
-		JPanel main = new JPanel(new GridLayout(4,1));
+    // sets the overall GUI layout
+    private void setup() {
+        JPanel main = new JPanel(new GridLayout(4,1));
 
-		main.add(queueSection());
-		main.add(setupServer());
-		main.add(setupQueue2());
-		main.add(setupKitchen());
+        main.add(queueSection());
+        main.add(setupServer());
+        main.add(setupQueue2());
+        main.add(setupKitchen());
 
-		main.setBorder(new EmptyBorder(10, 10, 10, 10));
-		add(main, BorderLayout.CENTER);
-	}
+        main.setBorder(new EmptyBorder(10, 10, 10, 10));
+        add(main, BorderLayout.CENTER);
+    }
 
-	// sets up the queue with customers waiting to be served
-	private JPanel queueSection() {
-		JPanel queueSection = new JPanel(new GridLayout(1, 2));
+    // sets up the queue with customers waiting to be served
+    private JPanel queueSection() {
+        JPanel queueSection = new JPanel(new GridLayout(1, 2));
 
-		queueSection.add(new QueueLaneGUI(coffeeShop.getCustomers(), 0, "Priority Queue"));
-		queueSection.add(new QueueLaneGUI(coffeeShop.getCustomers(), 1, "Regular Queue"));
-		return queueSection;
-	}
+        queueSection.add(new QueueLaneGUI(coffeeShop.getCustomers(), 0, "Priority Queue"));
+        queueSection.add(new QueueLaneGUI(coffeeShop.getCustomers(), 1, "Regular Queue"));
+        return queueSection;
+    }
 
 
-	// sets up the server section
-	// TODO: will need to adjust GUI width if more than 3 servers are added
-	// probably should set a limit to the nr of threads that can be initiated
-	private JPanel setupServer() {
-		JPanel serverStaff = new JPanel(new GridLayout(1, 0));
+    // sets up the server section
+    // TODO: will need to adjust GUI width if more than 3 servers are added
+    // probably should set a limit to the nr of threads that can be initiated
+    private JPanel setupServer() {
+        JPanel serverStaff = new JPanel(new GridLayout(1, 0));
 
-		// Populate server section with a view for each server in the shop
-		for (Server s : coffeeShop.getServers()) {
-			ServerGUI view = new ServerGUI(s);
-			serverStaff.add(view);
-			staffViews.add(view);
-		}
+        // Populate server section with a view for each server in the shop
+        for (Server s : coffeeShop.getServers()) {
+            ServerGUI view = new ServerGUI(s);
+            serverStaff.add(view);
+            staffViews.add(view);
+        }
 
-		return serverStaff;
-	}
+        return serverStaff;
+    }
 
-	private JPanel setupKitchen() {
-		JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
-		kitchenSection.add(new KitchenGUI(coffeeShop.getKitchen()));
-		return kitchenSection;
-	}
+    private JPanel setupKitchen() {
+        JPanel kitchenSection = new JPanel(new GridLayout(1, 1));
+        kitchenSection.add(new KitchenGUI(coffeeShop.getKitchen()));
+        return kitchenSection;
+    }
 
-	// sets up kitchen queue
-	private JPanel setupQueue2() {
-		return new QueueLaneGUI(coffeeShop.getOrders(), 0, "Kitchen Queue");
-	}
+    // sets up kitchen queue
+    private JPanel setupQueue2() {
+        return new QueueLaneGUI(coffeeShop.getOrders(), 0, "Kitchen Queue");
+    }
 
-	// this will contain all the interactive elements (e.g. buttons etc)
-	private JPanel setupControlls() {
-		JPanel controls = new JPanel();
-		controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
-		return controls;
-	}
+    // this will contain all the interactive elements (e.g. buttons etc)
+    private JPanel setupControlls() {
+        JPanel controls = new JPanel();
+        controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
+        return controls;
+    }
 
-	// Observes when shop is finished simulation
-	public void update() {
-		JOptionPane.showMessageDialog(this, "The simulation has now ended. \nEnd of day report and log saved to \"report.txt\" and \"log.txt\".");
-		this.dispose();
-	}
+    // Observes when shop is finished simulation
+    public void update() {
+        JOptionPane.showMessageDialog(this, "The simulation has now ended. \nEnd of day report and log saved to \"report.txt\" and \"log.txt\".");
+        this.dispose();
+    }
 
-	public List<ServerGUI> getStaffViews() {
-		return staffViews;
-	}
+    public List<ServerGUI> getStaffViews() {
+        return staffViews;
+    }
 }
