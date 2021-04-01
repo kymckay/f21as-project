@@ -38,6 +38,21 @@ public class ReportWriter {
         int highestCount = 0;
         ArrayList<MenuItem> popular = new ArrayList<>();
 
+        for (String m: menu.keysSet()) {
+            MenuItem item = menu.getItem(m);
+            int count = item.getOrderCount();
+
+            // New highest count, reset the list
+            if (highestCount < count) {
+                highestCount = count;
+                popular.clear();
+            }
+
+            // Find all items with highest count
+            if (highestCount == count) {
+                popular.add(item);
+            }
+        }
 
 
         // Summary statistics include the day's income
