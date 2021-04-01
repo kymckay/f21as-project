@@ -133,6 +133,10 @@ public class ServerGUI extends JPanel implements Observer {
 		} else {
 			serverArea.setText("Waiting for customers...");
 		}
+		
+		if (server.isDone()) {
+			serverArea.setText("Task Complete");
+		}
 	}
 
 	public Server getModel() {
