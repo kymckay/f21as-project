@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
@@ -77,18 +78,16 @@ public class ReportWriter {
             }
         }
 
-        report.append(String.format("\nThe most ordering customer(s) is/are:"));
+        report.append(String.format("%nThe customer(s) of the day is/are:"));
         for (Customer customer : mostOrderCust) {
-            report.append(String.format("\n%s", customer.getName()));
+            report.append(String.format("%n  %s", customer.getName()));
             report.append(String.format(" with %d", mostOrder));
-            report.append(String.format(" items:", Arrays.toString(customer.getOrder())));
-            for (MenuItem m : customer.getOrder()) {
-                report.append(String.format(" %s,", m.getName()));
-            }
+            report.append(String.format(" item(s): ", Arrays.toString(customer.getOrder())));
+            report.append(Arrays.stream(customer.getOrder()).map(MenuItem::getName).collect(Collectors.joining(", ")));
         }
         
         // Summary statistics include the day's income
-        report.append(String.format("\nThe income obtained from today's orders is £%s%n", getIncome(customers)));
+        report.append(String.format("%nThe income obtained from today's orders is £%s%n", getIncome(customers)));
     }
 
     /**
