@@ -5,7 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -31,6 +33,12 @@ public class ReportWriter {
                 menu.getItem(m).getOrderCount()
             ));
         }
+
+        // Loop through all the items in Menu to determine the item(s) with highest count
+        int highestCount = 0;
+        ArrayList<MenuItem> popular = new ArrayList<>();
+
+
 
         // Summary statistics include the day's income
         report.append(String.format("The income obtained from today's orders is £%s%n", getIncome(customers)));
