@@ -7,31 +7,23 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+
 /**
  * Class responsible for creating and writing the end of day report from a list
  * of orders
  */
 public class ReportWriter {
     StringBuilder report;
-    private Menu menu;
 
     /**
      * Consstruct a new report for the given list of customers
      * @param customers list of served customers to convert into a report
      */
-    public ReportWriter(List<Customer> customers) {
+    public ReportWriter(List<Customer> customers, Menu menu) {
         report = new StringBuilder();
 
         // Report should include today's date for future reference
         report.append(String.format("End of Day Report: %s%n", LocalDate.now()));
-
-        // Iterator it = menu.getMap().entrySet().iterator();
-        // while (it.hasNext()) {
-        //     report.append(String.format("%-30s %s%n",
-        //         menu.getItem(m).getName(),
-        //         menu.getItem(m).getOrderCount()
-        //     ));
-        // }
         
         for (String m : menu.keysSet()) {
             report.append(String.format("%-30s %s%n",
