@@ -50,6 +50,7 @@ public class ServerGUI extends JPanel implements Observer {
 
 		serverArea = new JTextArea();
 		serverArea.setEditable(false);
+		serverArea.setText("Waiting for orders...");
 		serverArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		Border border1 = BorderFactory.createTitledBorder("Server " + server.getNumber());
 		JScrollPane serverPane = new JScrollPane(serverArea);
@@ -71,7 +72,7 @@ public class ServerGUI extends JPanel implements Observer {
 		label.setBorder(margin);
 
 		// Default speed label value on init
-		label.setText(String.format("Serving Speed: %ds", Server.BASE_SPEED / 1000));
+		label.setText(String.format("Serving Speed: %ds/Item", Server.BASE_SPEED / 1000));
 
 		// add slider and slider label to a JPanel
 		controls.add(label);
@@ -110,7 +111,7 @@ public class ServerGUI extends JPanel implements Observer {
 
 	public void update() {
 		// Update speed label
-		label.setText(String.format("Serving Speed: %ds", server.getSpeed() / 1000));
+		label.setText(String.format("Serving Speed: %ds/Item", server.getSpeed() / 1000));
 
 		Optional<Customer> customer = server.getCurrentCustomer();
 
@@ -124,12 +125,17 @@ public class ServerGUI extends JPanel implements Observer {
 			currentOrder.append("   " + serving.getName() + "\n");
 			currentOrder.append("Ordered items: \n");
 			for (MenuItem item : serving.getOrder()) {
-				currentOrder.append("   " + item.getID() + "\n");
+				// capitalize the order name 
+				currentOrder.append("   " + Character.toUpperCase(item.getName().charAt(0)) + item.getName().substring(1) + "\n");
 			}
 
 			serverArea.setText(currentOrder.toString());
 		} else {
-			serverArea.setText("");
+			serverArea.setText("Waiting for customers...");
+		}
+		
+		if (server.isDone()) {
+			serverArea.setText("Task Complete");
 		}
 	}
 
